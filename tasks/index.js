@@ -1,7 +1,7 @@
-const npmStart = require('./NpmStart')
-const dockerStart = require('./DockerStart')
+const Platform = require('./Platform')
 
-module.exports = {
-  npmStart,
-  dockerStart
+module.exports = function tasks (program) {
+  return {
+    platform: new Platform(program)
+  }
 }

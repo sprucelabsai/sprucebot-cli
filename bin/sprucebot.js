@@ -13,34 +13,15 @@ const {
   description
 } = require('config')
 
-const {
-  npmStart,
-  dockerStart
- } = require('../tasks')
-
 /**
  * General tool options and usage help
  */
 program
   .version(version)
   .description(description)
-
-/**
- * Register the `npmStart` command
- * @namespace npmStart
- */
-program
-  .command('npmStart [args...]')
-  .description('Start any npm project')
-  .action(npmStart)
-
-/**
- * Register the `dockerStart` command
- * @namespace dockerStart
- */
-program
-  .command('dockerStart [args...]')
-  .description('Start any docker project')
-  .action(dockerStart)
+  // Commands are registered without .action callback. This tells `commander`
+  // that we use seperate executables in ./bin/ for sub-commands
+  // registering `platform` will execute `./bin/sprucebot-platform.js`
+  .command('platform [options]', 'Manage platform local init, start/stop, and deployment')
 
 program.parse(process.argv)

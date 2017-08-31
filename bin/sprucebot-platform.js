@@ -1,20 +1,12 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const yeoman = require('yeoman-environment')
 
-const Platform = require('../generators/Platform')
-
-const env = yeoman.createEnv()
+const platformInit = require('../actions/platform/init')
 
 program
   .command('init')
-  .action((...args) => {
-    console.log('initializing packages', args)
-    env.registerStub(Platform, 'sprucebot')
-
-    env.run('sprucebot', () => console.log('Done!'))
-  })
+  .action(platformInit)
 
 program
   .option('--dev', 'manage developer environment')

@@ -1,12 +1,12 @@
 const yeoman = require('yeoman-environment')
 const Platform = require('../../generators/platform')
 
-const env = yeoman.createEnv()
+const yo = yeoman.createEnv()
 
-module.exports = function init (...args) {
-  console.log('initializing packages')
+module.exports = function init (env, options) {
+  console.log('Initializing platform...')
 
-  env.registerStub(Platform, 'sprucebot')
+  yo.registerStub(Platform, 'sprucebot')
 
-  env.run('sprucebot', () => console.log('Done!'))
+  yo.run('sprucebot', () => console.log('Platform initialized!'))
 }

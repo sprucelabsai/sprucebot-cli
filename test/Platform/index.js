@@ -21,15 +21,16 @@ describe('Platform stdin', () => {
     })
   }
   it('`sprucebot platform` should be okay', () => {
-    runCommand()
+    return runCommand()
   })
 
   it('`sprucebot platform -h` should be okay', () => {
-    runCommand(['-h'])
+    return runCommand(['-h'])
   })
 
-  it('`sprucebot platform init` should be okay', () => {
-    runCommand(['init'])
+  xit('`sprucebot platform init` should be okay', () => {
+    // Need to figure out how to mock user input
+    return runCommand(['init'])
   })
 })
 

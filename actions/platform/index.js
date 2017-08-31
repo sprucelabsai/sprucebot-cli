@@ -9,20 +9,15 @@ function setup (argv) {
   const program = new Command()
 
   program
-    .command('init')
-    .action(platformInit)
+  .command('init [path]')
+  .action(platformInit)
 
   program
-    .option('--dev', 'manage developer environment')
+  .option('--dev', 'manage developer environment')
 
   program.parse(argv)
-
-  if (program.dev) {
-    // TODO inquire about github forks needed
-    console.log('Using developer mode')
-  }
 
   return program
 }
 
-module.exports = setup
+module.exports = argv => setup(argv)

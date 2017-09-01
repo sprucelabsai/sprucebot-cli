@@ -14,7 +14,8 @@
   "scripts": {
     "start": "node ./bin/sprucebot.js",
     "lint": "./node_modules/.bin/standard",
-    "test": "./node_modules/.bin/mocha \"./test/**/*.js\"",
+    "test": "./node_modules/.bin/_mocha -R spec ./test/** --recursive",
+    "cover": "istanbul cover --no-default-excludes --hook-run-in-context -x \"node_modules/**\" ./node_modules/.bin/_mocha -R spec ./test/** --recursive",
     "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test"
   },
@@ -28,6 +29,7 @@
     "chai": "^4.1.1",
     "command-line-test": "^1.0.10",
     "husky": "^0.14.3",
+    "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
     "standard": "^10.0.3"
   }

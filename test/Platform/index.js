@@ -11,19 +11,36 @@ const {
 
 const binFile = path.resolve(sprucebotProgram)
 
-describe('Platform', () => {
-  it('`sprucebot platform` should be okay', () => {
+const platform = require('../../actions/platform')
+
+describe('Platform stdin', () => {
+  function runCommand (argv = []) {
     const cliTest = new CliTest()
-    return cliTest.execFile(binFile).then(res => {
+    return cliTest.execFile(binFile, argv).then(res => {
       assert.isNull(res.error)
     })
+  }
+  it('`sprucebot platform` should be okay', () => {
+    runCommand()
   })
 
-  it('`sprucebot platform -h` gives a helping hand', () => {
-    const cliTest = new CliTest()
-    return cliTest.execFile(binFile, ['-h']).then(res => {
-      assert.isNull(res.error)
-      assert.include(res.stdout, 'Usage: sprucebot-platform [options] [command]')
-    })
+  it('`sprucebot platform -h` should be okay', () => {
+    runCommand(['-h'])
+  })
+
+  it('`sprucebot platform init` should be okay', () => {
+    runCommand(['init'])
+  })
+})
+
+describe('Platform', () => {
+  it('--dev', () => {
+    const program = platform(['sprucebot', 'platform', '--dev'])
+    assert.isTrue(program.dev)
+  })
+  it('init', () => {
+    platform(['sprucebot', 'platform', 'init'])
+    assert.ok(true)
+    // Test init files here
   })
 })

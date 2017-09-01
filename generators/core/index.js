@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const Generator = require('yeoman-generator')
 const config = require('config')
 
@@ -11,17 +12,34 @@ function captureRepo (name) {
   }
 }
 
+function directoryExists (path) {
+  return new Promise((resolve, reject) => {
+    fs.stat(path, (err, stats) => {
+      if (err) {
+        reject(new Error('Path does not exist'))
+      }
+      if (stats.isDirectory()) {
+        resolve(path)
+      } else {
+        reject(new Error('Path is not a directory'))
+      }
+    })
+  })
+}
+
 module.exports = class extends Generator {
-  initializing () { this.log('initializing') }
+  initializing () {
+    this.log('initializing')
+  }
   prompting () {
     this.log('prompting')
     return this.prompt([{
       type: 'input',
       name: 'path',
-      message: 'Where should we install it?',
-      default: this.destinationRoot()
+      message: 'Where should I install?',
+      default: path.resolve(this.destinationRoot() + '/sprucebot')
     },
-      captureRepo('core'),
+      captureRepo('platform'),
       captureRepo('api'),
       captureRepo('web')
     ]).then(answers => {
@@ -34,15 +52,31 @@ module.exports = class extends Generator {
   configuring () {
     this.log('configuring')
     this.log(this.answers)
-    this.log(this.sourceRoot())
     this.destinationRoot(this.answers.path)
   }
 
   writing () {
     this.log('writing')
-    this.spawnCommandSync('git', ['clone', this.answers.core, `${this.answers.path}/core`])
-    this.spawnCommandSync('git', ['clone', this.answers.web, `${this.answers.path}/web`])
-    this.spawnCommandSync('git', ['clone', this.answers.api, `${this.answers.path}/api`])
+    const pathPlatform = path.resolve(this.answers.path, 'platform')
+    const pathWeb = path.resolve(this.answers.path, 'web')
+    const pathApi = path.resolve(this.answers.path, 'api')
+    directoryExists()
+      .then(() => console.log(`${pathPlatform} already exists`))
+      .catch(() => this.spawnCommandSync('git', ['clone', this.answers.platform, pathPlatform]))
+    directoryExists()
+      .then(() => console.log(`${pathWeb} already exists`))
+      .catch(() => this.spawnCommandSync('git', ['clone', this.answers.platform, pathWeb]))
+    directoryExists()
+      .then(() => console.log(`${pathApi} already exists`))
+      .catch(() => this.spawnCommandSync('git', ['clone', this.answers.platform, pathApi]))
+  }
+
+  writingTemplates () {
+    this.fs.copyTpl(
+      this.templatePath('package.json'),
+      this.destinationPath('package.json'),
+      this.answers
+    )
   }
   end () { this.log('end') }
 }

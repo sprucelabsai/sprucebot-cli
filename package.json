@@ -8,17 +8,27 @@
   "license": "None",
   "preferGlobal": true,
   "bin": {
-    "sprucebot": "./bin/sprucebot.js"
+    "sprucebot": "./bin/sprucebot.js",
+    "sprucebotProgram": "./bin/sprucebot-platform.js"
   },
   "scripts": {
     "start": "node ./bin/sprucebot.js",
-    "test": "./node_modules/.bin/standard"
+    "lint": "./node_modules/.bin/standard",
+    "test": "./node_modules/.bin/mocha \"./test/**/*.js\"",
+    "precommit": "npm run lint",
+    "prepush": "npm run lint && npm run test"
   },
   "dependencies": {
     "commander": "^2.11.0",
-    "config": "^1.26.2"
+    "config": "^1.26.2",
+    "yeoman-environment": "^2.0.2",
+    "yeoman-generator": "^1.1.1"
   },
   "devDependencies": {
+    "chai": "^4.1.1",
+    "command-line-test": "^1.0.10",
+    "husky": "^0.14.3",
+    "mocha": "^3.5.0",
     "standard": "^10.0.3"
   }
 }

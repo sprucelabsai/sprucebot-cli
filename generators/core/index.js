@@ -13,15 +13,16 @@ function captureRepo (name) {
 }
 
 function directoryExists (path) {
-  return new Promise((resolve, reject) => {
+  // fs.stat requires a callback, so we have to Promise
+  return new Promise((resolve) => {
     fs.stat(path, (err, stats) => {
       if (err) {
-        reject(new Error('Path does not exist'))
+        return resolve(false)
       }
       if (stats.isDirectory()) {
-        resolve(path)
+        resolve(true)
       } else {
-        reject(new Error('Path is not a directory'))
+        resolve(false)
       }
     })
   })
@@ -37,7 +38,7 @@ module.exports = class extends Generator {
       type: 'input',
       name: 'path',
       message: 'Where should I install?',
-      default: path.resolve(this.destinationRoot() + '/sprucebot')
+      default: path.resolve(this.destinationRoot(), './sprucebot')
     },
       captureRepo('platform'),
       captureRepo('api'),
@@ -45,6 +46,7 @@ module.exports = class extends Generator {
     ]).then(answers => {
       this.answers = {
         ...answers,
+        appname: 'sprucebot',
         path: path.resolve(answers.path)
       }
     })
@@ -57,26 +59,32 @@ module.exports = class extends Generator {
 
   writing () {
     this.log('writing')
+
     const pathPlatform = path.resolve(this.answers.path, 'platform')
-    const pathWeb = path.resolve(this.answers.path, 'web')
     const pathApi = path.resolve(this.answers.path, 'api')
-    directoryExists()
-      .then(() => console.log(`${pathPlatform} already exists`))
-      .catch(() => this.spawnCommandSync('git', ['clone', this.answers.platform, pathPlatform]))
-    directoryExists()
-      .then(() => console.log(`${pathWeb} already exists`))
-      .catch(() => this.spawnCommandSync('git', ['clone', this.answers.platform, pathWeb]))
-    directoryExists()
-      .then(() => console.log(`${pathApi} already exists`))
-      .catch(() => this.spawnCommandSync('git', ['clone', this.answers.platform, pathApi]))
+    const pathWeb = path.resolve(this.answers.path, 'web')
+
+    this._cloneRepo(this.answers.platform, pathPlatform)
+    this._cloneRepo(this.answers.api, pathApi)
+    this._cloneRepo(this.answers.web, pathWeb)
   }
 
   writingTemplates () {
     this.fs.copyTpl(
-      this.templatePath('package.json'),
-      this.destinationPath('package.json'),
+      this.templatePath('./core/package.json'),
+      this.destinationPath('./package.json'),
       this.answers
     )
   }
+
   end () { this.log('end') }
+
+  async _cloneRepo (repo, path) {
+    const exists = await directoryExists(path)
+    if (exists) {
+      this.log(`Uh oh, looks like you already installed something at ${path}!`)
+    } else {
+      this.spawnCommandSync('git', ['clone', repo, path])
+    }
+  }
 }

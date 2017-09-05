@@ -82,7 +82,7 @@ module.exports = class extends Generator {
   async _cloneRepo (repo, path) {
     const exists = await directoryExists(path)
     if (exists) {
-      this.log(`Hey, it looks like you have already installed ${path}`)
+      this.log(`Uh oh, looks like you already installed something at ${path}!`)
     } else {
       this.spawnCommandSync('git', ['clone', repo, path])
     }

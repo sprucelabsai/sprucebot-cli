@@ -88,6 +88,21 @@ module.exports = class extends Generator {
     )
   }
 
+  writingLoopbackAlias () {
+    this.log('Writing loopback alias...')
+    this.fs.copy(
+      this.templatePath('./core/loopbackAlias'),
+      this.destinationPath('./loopbackAlias')
+    )
+
+    // Determine if our Loopback alias is already configured
+    const ifconf = this.spawnCommandSync('ifconfig', {})
+    if (ifconf.stdout && ifconf.stdout.toString().indexOf('10.200.10.1') < 0) {
+      this.log('Setting up LOOPBACK Alias. I will need your system password')
+      this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
+    }
+  }
+
   end () { this.log('end') }
 
   async _cloneRepo (repo, path) {

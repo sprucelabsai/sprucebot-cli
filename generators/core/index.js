@@ -3,15 +3,6 @@ const fs = require('fs')
 const Generator = require('yeoman-generator')
 const config = require('config')
 
-function captureRepo (name) {
-  return {
-    type: 'input',
-    name,
-    message: `What is the url for the ${name} git repository?`,
-    default: config.get(`platform.${name}`)
-  }
-}
-
 function directoryExists (path) {
   // fs.stat requires a callback, so we have to Promise
   return new Promise((resolve) => {
@@ -39,11 +30,12 @@ module.exports = class extends Generator {
       name: 'path',
       message: 'Where should I install?',
       default: path.resolve(this.destinationRoot(), './sprucebot')
-    },
-      captureRepo('platform'),
-      captureRepo('api'),
-      captureRepo('web')
-    ]).then(answers => {
+    }, {
+      type: 'input',
+      name: 'gitUser',
+      message: `What is your github username?`,
+      default: config.get('gitUser')
+    }]).then(answers => {
       this.answers = {
         ...answers,
         appname: 'sprucebot',
@@ -57,23 +49,42 @@ module.exports = class extends Generator {
     this.destinationRoot(this.answers.path)
   }
 
-  writing () {
+  writingRepos () {
     this.log('writing')
 
-    const pathPlatform = path.resolve(this.answers.path, 'platform')
     const pathApi = path.resolve(this.answers.path, 'api')
     const pathWeb = path.resolve(this.answers.path, 'web')
+    const gitBase = `git@github.com:${this.answers.gitUser}`
 
-    this._cloneRepo(this.answers.platform, pathPlatform)
-    this._cloneRepo(this.answers.api, pathApi)
-    this._cloneRepo(this.answers.web, pathWeb)
+    this._cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
+    this._cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
   }
 
   writingTemplates () {
+    this.log('writing templates')
     this.fs.copyTpl(
       this.templatePath('./core/package.json'),
       this.destinationPath('./package.json'),
       this.answers
+    )
+    this.fs.copyTpl(
+      this.templatePath('./core/docker-compose.yml'),
+      this.destinationPath('./docker-compose.yml'),
+      this.answers
+    )
+    this.fs.copy(
+      this.templatePath('./core/docker'),
+      this.destinationPath('./docker')
+    )
+
+    this.log('Writing .env files')
+    this.fs.copy(
+      this.destinationPath('./api/app/.env.example'),
+      this.destinationPath('./api/app/.env')
+    )
+    this.fs.copy(
+      this.destinationPath('./web/.env.example'),
+      this.destinationPath('./web/.env')
     )
   }
 

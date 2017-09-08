@@ -96,7 +96,6 @@ module.exports = class extends Generator {
       }
 
       const configured = lines.reduce((memo, line) => {
-        console.log(line)
         if (/sprucebot.com/.test(line[1])) {
           memo[line[1]] = true
         }

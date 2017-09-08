@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const Generator = require('yeoman-generator')
 const config = require('config')
+const hostile = require('hostile')
 
 function directoryExists (path) {
   // fs.stat requires a callback, so we have to Promise
@@ -88,22 +89,27 @@ module.exports = class extends Generator {
     )
   }
 
-  writingLoopbackAlias () {
-    this.log('Writing loopback alias...')
-    this.fs.copy(
-      this.templatePath('./core/loopbackAlias'),
-      this.destinationPath('./loopbackAlias')
-    )
+  end () {
+    hostile.get(false, (err, lines) => {
+      if (err) {
+        throw new Error('Uh oh, looks like I had an issue reading the hosts file')
+      }
 
-    // Determine if our Loopback alias is already configured
-    const ifconf = this.spawnCommandSync('ifconfig', {})
-    if (ifconf.stdout && ifconf.stdout.toString().indexOf('10.200.10.1') < 0) {
-      this.log('Setting up LOOPBACK Alias. I will need your system password')
-      this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
-    }
+      const configured = lines.reduce((memo, line) => {
+        console.log(line)
+        if (/sprucebot.com/.test(line[1])) {
+          memo[line[1]] = true
+        }
+        return memo
+      }, {})
+
+      if (!configured['local-api.sprucebot.com'] || !configured['local.sprucebot.com'] || !configured['local-devtools.sprucebot.com']) {
+        this.log('Hey it looks like you are missing your hosts config.')
+        this.log('I can help you configure it by running `sudo sprucebot platform configure`')
+      }
+    })
+    this.log('end')
   }
-
-  end () { this.log('end') }
 
   async _cloneRepo (repo, path) {
     const exists = await directoryExists(path)

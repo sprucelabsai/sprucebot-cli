@@ -4,9 +4,14 @@ const {
 } = require('commander')
 
 const platformInit = require('./init')
+const platformConfigure = require('./configure')
 
 function setup (argv) {
   const program = new Command()
+
+  program
+  .command('configure')
+  .action(platformConfigure)
 
   program
   .command('init [path]')

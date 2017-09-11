@@ -3,10 +3,10 @@ const Configure = require('../../generators/configure')
 
 const yo = yeoman.createEnv()
 
-module.exports = function init (env, options) {
+module.exports = function configure (env, options) {
   console.log('Configuring your environment...')
 
   yo.registerStub(Configure, 'sprucebot')
 
-  yo.run('sprucebot', () => console.log('Configure task finished!'))
+  yo.run('sprucebot')
 }

@@ -2,5 +2,12 @@ instrumentation:
     excludes: 
         - node_modules
 
+reporting:
+    watermarks:
+        statements: [80, 90]
+        functions: [80, 90]
+        branches: [80, 90]
+        lines: [80, 90]
+
 hooks:
     hook-run-in-context: false

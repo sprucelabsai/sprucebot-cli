@@ -1,10 +1,18 @@
+const path = require('path')
 const Generator = require('yeoman-generator')
 const hostile = require('hostile')
 
 module.exports = class extends Generator {
   initializing () {
     this.log('initializing')
-    if (process.getuid() !== 0) {
+    this.sourceRoot(path.join(__dirname, 'templates'))
+    if (!this.options.hostile) {
+      this.hostile = hostile
+    } else {
+      // Passing hostile as an argument allows us to stub it's api for unit tests
+      this.hostile = this.options.hostile
+    }
+    if (!this.options.sudoOverride && process.getuid() !== 0) {
       throw new Error('Generator needs root access to write hosts file')
     }
   }
@@ -12,8 +20,8 @@ module.exports = class extends Generator {
   configuring () {
     this.log('configuring')
     try {
-      const lines = hostile.getFile(this.templatePath('./configure/hosts'), false)
-      const setLines = hostile.get() // Parse current hosts file
+      const lines = this.hostile.getFile(this.templatePath('hosts'), false)
+      const setLines = this.hostile.get() // Parse current hosts file
       const missingLines = lines.filter(line => {
         // Determine if hostname is already set for this line
         return setLines.findIndex(l => l[1] === line[1]) === -1
@@ -21,18 +29,20 @@ module.exports = class extends Generator {
       if (missingLines.length) {
         missingLines.forEach(line => {
           this.log(`Adding host ${line[1]} to your hosts file`)
-          hostile.set(line[0], line[1])
+          this.hostile.set(line[0], line[1])
         })
+      } else {
+        this.log('Looks like your hosts file is setup properly')
       }
     } catch (e) {
-      this.log(`Uh oh, there was an error reading your hosts file`)
+      throw new Error(`Uh oh, there was an error reading your hosts file`)
     }
   }
 
   writingLoopbackAlias () {
     this.log('Writing loopback alias...')
     this.fs.copy(
-      this.templatePath('./core/loopbackAlias'),
+      this.templatePath('./loopbackAlias'),
       this.destinationPath('./loopbackAlias')
     )
   }

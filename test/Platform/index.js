@@ -42,6 +42,9 @@ describe('Platform', () => {
   it('init', () => {
     platform(['sprucebot', 'platform', 'init'])
     assert.ok(true)
-    // Test init files here
+  })
+  it('configure', () => {
+    platform(['sprucebot', 'platform', 'configure'])
+    assert.ok(true)
   })
 })

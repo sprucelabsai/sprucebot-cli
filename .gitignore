@@ -6,3 +6,4 @@ config/local.*
 # Built files
 coverage/
 sprucebot/
+__TEST__/

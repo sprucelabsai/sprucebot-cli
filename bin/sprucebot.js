@@ -10,6 +10,10 @@
 const {
   Command
 } = require('commander')
+const path = require('path')
+// Override the NODE_CONFIG DIR if not set
+// This allows us to use the cli from any directory
+process.env.NODE_CONFIG_DIR = process.env.NODE_CONFIG_DIR || path.join(__dirname, '../config')
 const {
   version,
   description

@@ -4,6 +4,7 @@ const path = require('path')
 const { assert } = require('chai')
 const { spy, stub } = require('sinon')
 const hostile = require('hostile')
+const config = require('config')
 
 const {
   rmdir,
@@ -12,6 +13,7 @@ const {
 const yoTest = require('yeoman-test')
 const yoAssert = require('yeoman-assert')
 
+const loopbackAlias = config.get('loopbackAlias')
 const TEMP = path.join(__dirname, '../../__TEST__')
 const generator = path.join(__dirname, '../../generators/core')
 
@@ -28,6 +30,7 @@ describe('Core Generator', () => {
       .then(() => {
         yoAssert.fileContent('package.json', '"name": "sprucebot"')
         yoAssert.fileContent('docker-compose.yml', 'version: \'3\'')
+        yoAssert.fileContent('docker-compose.yml', `hostcontainer:${loopbackAlias}`)
         yoAssert.file('docker/nginx/Dockerfile')
       })
   })

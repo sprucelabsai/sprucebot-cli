@@ -1,6 +1,9 @@
 const path = require('path')
 const Generator = require('yeoman-generator')
 const hostile = require('hostile')
+const config = require('config')
+
+const loopbackAlias = config.get('loopbackAlias')
 
 module.exports = class extends Generator {
   initializing () {
@@ -43,7 +46,8 @@ module.exports = class extends Generator {
     this.log('Writing loopback alias...')
     this.fs.copy(
       this.templatePath('./loopbackAlias'),
-      this.destinationPath('./loopbackAlias')
+      this.destinationPath('./loopbackAlias'),
+      { loopbackAlias }
     )
   }
 
@@ -51,7 +55,7 @@ module.exports = class extends Generator {
     this.log('Checking if Loopback Alias is setup properly...')
     // Determine if our Loopback alias is already configured
     const ifconf = this.spawnCommandSync('ifconfig', {})
-    if (ifconf.stdout && ifconf.stdout.toString().indexOf('10.200.10.1') < 0) {
+    if (ifconf.stdout && ifconf.stdout.toString().indexOf(loopbackAlias) < 0) {
       this.log('Setting up LOOPBACK Alias. I will need your system password')
       this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
     } else {

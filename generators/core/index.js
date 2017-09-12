@@ -7,6 +7,8 @@ const {
   fileExists
 } = require('../../utils/dir')
 
+const loopbackAlias = config.get('loopbackAlias')
+
 module.exports = class extends Generator {
   initializing () {
     this.log('initializing')
@@ -72,7 +74,10 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('docker-compose.yml'),
       this.destinationPath('./docker-compose.yml'),
-      this.answers
+      {
+        ...this.answers,
+        loopbackAlias
+      }
     )
     this.fs.copy(
       this.templatePath('docker'),

@@ -27,7 +27,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./docker/nginx/certs:/etc/nginx/certs
     extra_hosts:
-      - "hostcontainer:10.200.10.1"
+      - "hostcontainer:<%= loopbackAlias %>"
   api:
     build: ./api/
     privileged: true
@@ -42,7 +42,7 @@ services:
     ports:
       - "3005:3005"
     extra_hosts:
-      - "hostcontainer:10.200.10.1"
+      - "hostcontainer:<%= loopbackAlias %>"
   web:
     build: ./web/
     privileged: true
@@ -66,4 +66,4 @@ services:
       - "3001:3001"
       - "35729:35729"
     extra_hosts:
-      - "hostcontainer:10.200.10.1"
+      - "hostcontainer:<%= loopbackAlias %>"

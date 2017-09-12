@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+const path = require('path')
 const { assert } = require('chai')
 const { stub } = require('sinon')
 const hostile = require('hostile')
@@ -9,7 +10,19 @@ const yoAssert = require('yeoman-assert')
 // const generator = path.join(__dirname, '../../generators/configure')
 const generator = require('../../generators/configure')
 
+const TEMP = path.join(__dirname, '../../__TEST__')
+
 describe('Configure Generator', () => {
+  beforeEach(() => {
+    stub(hostile, 'set').returns()
+    stub(hostile, 'getFile').returns([['127.0.0.1', 'local.test.com']])
+    stub(hostile, 'get').returns([['127.0.0.1', 'test.local']])
+  })
+  afterEach(() => {
+    hostile.set.restore()
+    hostile.getFile.restore()
+    hostile.get.restore()
+  })
   it('requires sudo', () => {
     return yoTest.run(generator)
       .withOptions({ sudoOverride: false })
@@ -22,9 +35,6 @@ describe('Configure Generator', () => {
   })
 
   it('sets missing hosts overrides', () => {
-    stub(hostile, 'set').returns()
-    stub(hostile, 'getFile').returns([['127.0.0.1', 'local.test.com']])
-    stub(hostile, 'get').withArgs().returns([['127.0.0.1', 'test.local']])
     return yoTest.run(generator)
     .withOptions({ sudoOverride: true, hostile })
     .then(() => {
@@ -36,22 +46,21 @@ describe('Configure Generator', () => {
       console.error(e)
       assert.notOk(true, 'Generator should not have thrown exception')
     })
-    .then(() => {
-      hostile.set.restore()
-      hostile.getFile.restore()
-      hostile.get.restore()
-    })
   })
 
   it('sets loopback alias', () => {
     let gen
     return yoTest.run(generator)
-      .withOptions({ sudoOverride: true })
+      .withOptions({ sudoOverride: true, hostile })
       .on('ready', (_gen) => {
         gen = _gen
         gen.spawnCommandSync = stub()
-        .withArgs('ifconfig', {})
-        .returns({ stdout: '127.0.0.1' })
+        gen.spawnCommandSync
+          .withArgs('ifconfig', {})
+          .returns({ stdout: '127.0.0.1' })
+        gen.spawnCommandSync
+          .withArgs('bash', [path.join(TEMP, 'loopbackAlias/setupLoopbackAlias.sh')])
+          .returns(true)
       })
       .then(() => {
         yoAssert.file('loopbackAlias/loopbackAlias.sh')

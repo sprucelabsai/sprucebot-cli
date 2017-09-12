@@ -18,12 +18,14 @@ module.exports = class extends Generator {
       type: 'input',
       name: 'path',
       message: 'Where should I install?',
-      default: path.resolve(this.destinationRoot(), './sprucebot')
+      default: path.resolve(this.destinationRoot(), './sprucebot'),
+      store: true
     }, {
       type: 'input',
       name: 'gitUser',
       message: `What is your github username?`,
-      default: config.get('gitUser')
+      default: config.get('gitUser'),
+      store: true
     }]).then(answers => {
       this.answers = {
         ...answers,
@@ -34,7 +36,6 @@ module.exports = class extends Generator {
   }
   configuring () {
     this.log('configuring')
-    this.log(this.answers)
     this.destinationRoot(this.answers.path)
   }
 
@@ -95,9 +96,11 @@ module.exports = class extends Generator {
       if (!configured['local-api.sprucebot.com'] || !configured['local.sprucebot.com'] || !configured['local-devtools.sprucebot.com']) {
         this.log('Hey it looks like you are missing your hosts config.')
         this.log('I can help you configure it by running `sudo sprucebot platform configure`')
+      } else {
+        this.log('Looks like everything is setup properly.')
+        this.log('I can start the platform by running $ sprucebot platfrom start')
       }
     })
-    this.log('end')
   }
 
   _cloneRepo (repo, path) {

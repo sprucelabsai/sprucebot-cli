@@ -7,3 +7,6 @@ config/local.*
 coverage/
 sprucebot/
 __TEST__/
+
+# Yeoman config
+.yo-rc.json

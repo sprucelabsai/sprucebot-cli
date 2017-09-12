@@ -5,6 +5,7 @@ const {
 
 const platformInit = require('./init')
 const platformConfigure = require('./configure')
+const platformStart = require('./start')
 
 function setup (argv) {
   const program = new Command()
@@ -19,7 +20,8 @@ function setup (argv) {
   .action(platformInit)
 
   program
-  .option('--dev', 'manage developer environment')
+  .command('start [path]')
+  .action(platformStart)
 
   program.parse(argv)
 

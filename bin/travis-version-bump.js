@@ -18,16 +18,10 @@ function patch () {
   }
 }
 
-const rev = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
-
-const branch = rev.stdout
-  .toString()
-  .replace(/\s/g, '')
-
-switch (branch) {
+switch (process.env.TRAVIS_BRANCH) {
   case 'dev':
     patch()
     break
   default:
-    console.log('Version bump was ignored on branch %s', branch)
+    console.log('Version bump was ignored on branch %s', process.env.TRAVIS_BRANCH)
 }

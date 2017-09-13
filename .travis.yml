@@ -2,4 +2,4 @@ language: node_js
 before_script: 
   - npm link
 after_success: 
-  - ./bin/version-bump.js
+  - ./bin/travis-version-bump.js

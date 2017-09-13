@@ -103,7 +103,7 @@ module.exports = class extends Generator {
         this.log('I can help you configure it by running `sudo sprucebot platform configure`')
       } else {
         this.log('Looks like everything is setup properly.')
-        this.log('I can start the platform by running $ sprucebot platfrom start')
+        this.log('I can start the platform by running $ sprucebot platform start')
       }
     })
   }
@@ -113,7 +113,12 @@ module.exports = class extends Generator {
     if (exists) {
       this.log(`Uh oh, looks like you already installed something at ${path}!`)
     } else {
-      this.spawnCommandSync('git', ['clone', repo, path])
+      const cmd = this.spawnCommandSync('git', ['clone', repo, path])
+      if (!cmd.error) {
+        this.log('Cloned %s to %s', repo, path)
+      } else {
+        this.log('Uh oh, looks like there was a problem cloning %s', repo)
+      }
     }
   }
 }

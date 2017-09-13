@@ -56,7 +56,7 @@ describe('Configure Generator', () => {
       .withOptions({ sudoOverride: true, hostile })
       .on('ready', (_gen) => {
         gen = _gen
-        gen.spawnCommandSync = stub()
+        gen.spawnCommandSync = stub().returns({ error: null })
         gen.spawnCommandSync
           .withArgs('ifconfig', {})
           .returns({ stdout: '127.0.0.1' })
@@ -78,11 +78,9 @@ describe('Configure Generator', () => {
     }
   })
 
-  it('removes hosts and loopback alias', () => {
+  it('removes hosts configuration', () => {
     const context = { spawnCommandSync: spy() }
     generator.Remove.apply(context, [true])
-    assert.ok(hostile.remove.calledWith('local.test.com'))
-    assert.ok(context.spawnCommandSync.lastCall.args[0] === 'bash')
-    assert.include(context.spawnCommandSync.lastCall.args[1][0], 'removeLoopbackAlias.sh')
+    assert.ok(hostile.remove.calledWith('127.0.0.1', 'local.test.com'))
   })
 })

@@ -38,7 +38,7 @@ describe('Start generator', () => {
             path: null
           }
         })
-        gen.spawnCommandSync = stub()
+        gen.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
         assert.equal(gen.promptValues.path, dir)
@@ -59,7 +59,7 @@ describe('Start generator', () => {
             path: dir
           }
         })
-        gen.spawnCommandSync = stub()
+        gen.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
         assert.notOk(true, 'Generator should have thrown an error')
@@ -78,7 +78,7 @@ describe('Start generator', () => {
       .withOptions({ path: dir })
       .on('ready', _gen => {
         gen = _gen
-        gen.spawnCommandSync = stub()
+        gen.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
         assert.ok(gen.spawnCommandSync.calledWith('docker-compose', ['up'], {

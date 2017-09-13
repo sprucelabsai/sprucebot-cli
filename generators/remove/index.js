@@ -1,8 +1,10 @@
 const path = require('path')
 const Generator = require('yeoman-generator')
 
+const Configure = require('../configure')
+
 const {
-  fileExists
+  rmdir
 } = require('../../utils/dir')
 
 module.exports = class extends Generator {
@@ -29,19 +31,29 @@ module.exports = class extends Generator {
       ...this.promptValues,
       path: this.options.path || this.promptValues.path || answers.path
     }
+  }
 
-    if (!fileExists(path.join(this.promptValues.path, 'docker-compose.yml'))) {
-      throw new Error(`Uh oh, I can't find a valid docker-compose.yml in ${this.promptValues.path}`)
+  async removing () {
+    const answers = await this.prompt([{
+      type: 'confirm',
+      name: 'confirm',
+      message: `Are you sure you want to remove directory ${this.promptValues.path} and all of it's contents?`,
+      default: false
+    }, {
+      type: 'confirm',
+      name: 'confirmAlias',
+      message: 'Are you sure you want to remove network loopback alias and hosts configurations?',
+      default: false
+    }])
+
+    if (answers.confirm) {
+      rmdir(this.promptValues.path)
+      this.log(`${this.promptValues.path} removed!`)
     }
-  }
 
-  starting () {
-    this.spawnCommandSync('docker-compose', ['up'], {
-      cwd: this.promptValues.path
-    })
-  }
-
-  end () {
-    this.log('end')
+    if (answers.confirmAlias) {
+      Configure.Remove.apply(this, [this.options.sudoOverride])
+      this.log('Loopback alias and hosts configurations removed!')
+    }
   }
 }

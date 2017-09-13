@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 const path = require('path')
 const { assert } = require('chai')
-const { stub } = require('sinon')
+const { stub, spy } = require('sinon')
 const hostile = require('hostile')
 
 const yoTest = require('yeoman-test')
@@ -17,11 +17,13 @@ describe('Configure Generator', () => {
     stub(hostile, 'set').returns()
     stub(hostile, 'getFile').returns([['127.0.0.1', 'local.test.com']])
     stub(hostile, 'get').returns([['127.0.0.1', 'test.local']])
+    stub(hostile, 'remove').returns()
   })
   afterEach(() => {
     hostile.set.restore()
     hostile.getFile.restore()
     hostile.get.restore()
+    hostile.remove.restore()
   })
   it('requires sudo', () => {
     return yoTest.run(generator)
@@ -66,5 +68,21 @@ describe('Configure Generator', () => {
         yoAssert.file('loopbackAlias/loopbackAlias.sh')
         gen.spawnCommandSync.calledWith('ifconfig', {})
       })
+  })
+
+  it('remove throws without sudo', () => {
+    try {
+      generator.Remove()
+    } catch (e) {
+      assert.include(e.message, 'Generator needs root access to write hosts file')
+    }
+  })
+
+  it('removes hosts and loopback alias', () => {
+    const context = { spawnCommandSync: spy() }
+    generator.Remove.apply(context, [true])
+    assert.ok(hostile.remove.calledWith('local.test.com'))
+    assert.ok(context.spawnCommandSync.lastCall.args[0] === 'bash')
+    assert.include(context.spawnCommandSync.lastCall.args[1][0], 'removeLoopbackAlias.sh')
   })
 })

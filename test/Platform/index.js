@@ -51,4 +51,7 @@ describe('Platform', () => {
       assert.ok(true)
     }
   })
+  it('remove', () => {
+    platform(['sprucebot', 'platform', 'remove'])
+  })
 })

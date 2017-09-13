@@ -6,6 +6,19 @@ const config = require('config')
 const loopbackAlias = config.get('loopbackAlias')
 
 module.exports = class extends Generator {
+  static Remove (sudoOverride = false) {
+    if (!sudoOverride && process.getuid() !== 0) {
+      throw new Error('Generator needs root access to write hosts file')
+    }
+
+    const lines = hostile.getFile(path.join(__dirname, 'templates/hosts'), false)
+    lines.forEach(line => {
+      console.log('Removing host %s from hosts file', line[1])
+      hostile.remove(line[1])
+    })
+
+    this.spawnCommandSync('bash', [path.join(__dirname, 'templates/loopbackAlias/removeLoopbackAlias.sh')])
+  }
   initializing () {
     this.log('initializing')
     this.sourceRoot(path.join(__dirname, 'templates'))

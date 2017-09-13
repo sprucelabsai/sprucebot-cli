@@ -46,7 +46,7 @@ describe('Core Generator', () => {
       })
       .on('ready', generator => {
         gen = generator
-        generator.spawnCommandSync = spy()
+        generator.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
         // Assert on filesystem here
@@ -68,7 +68,7 @@ describe('Core Generator', () => {
         gitUser: 'sprucelabsai'
       })
       .on('ready', generator => {
-        generator.spawnCommandSync = spy()
+        generator.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
         // Assert on filesystem here

@@ -13,11 +13,9 @@ module.exports = class extends Generator {
 
     const lines = hostile.getFile(path.join(__dirname, 'templates/hosts'), false)
     lines.forEach(line => {
-      console.log('Removing host %s from hosts file', line[1])
-      hostile.remove(line[1])
+      console.log('Removing host %s %s from hosts file', line[0], line[1])
+      hostile.remove(line[0], line[1])
     })
-
-    this.spawnCommandSync('bash', [path.join(__dirname, 'templates/loopbackAlias/removeLoopbackAlias.sh')])
   }
   initializing () {
     this.log('initializing')
@@ -57,7 +55,7 @@ module.exports = class extends Generator {
 
   writingLoopbackAlias () {
     this.log('Writing loopback alias...')
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('./loopbackAlias'),
       this.destinationPath('./loopbackAlias'),
       { loopbackAlias }
@@ -67,12 +65,11 @@ module.exports = class extends Generator {
   loopbackAlias () {
     this.log('Checking if Loopback Alias is setup properly...')
     // Determine if our Loopback alias is already configured
-    const ifconf = this.spawnCommandSync('ifconfig', {})
-    if (ifconf.stdout && ifconf.stdout.toString().indexOf(loopbackAlias) < 0) {
-      this.log('Setting up LOOPBACK Alias. I will need your system password')
-      this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
-    } else {
+    const cmd = this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
+    if (!cmd.error) {
       this.log('Looks like your Loopback Alias is setup properly')
+    } else {
+      this.log('Uh oh, looks like there was an error', cmd.stderr.toString())
     }
   }
 

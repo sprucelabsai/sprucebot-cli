@@ -3,12 +3,12 @@ const {
   spawnSync
 } = require('child_process')
 
-function patch () {
+function patch (branch) {
   console.log('Running npm version patch')
   const patch = spawnSync('npm', ['version', 'patch', '-m', '"[skip ci] version patch"'])
 
   if (patch.status === 0) {
-    const push = spawnSync('git', ['push', '--follow-tags'])
+    const push = spawnSync('git', ['push', 'origin', `HEAD:${branch}`, '--follow-tags'])
 
     if (push.status !== 0) {
       throw new Error(push.stderr.toString())
@@ -20,7 +20,7 @@ function patch () {
 
 switch (process.env.TRAVIS_BRANCH) {
   case 'dev':
-    patch()
+    patch(process.env.TRAVIS_BRANCH)
     break
   default:
     console.log('Version bump was ignored on branch %s', process.env.TRAVIS_BRANCH)

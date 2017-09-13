@@ -14,4 +14,4 @@
 * Clone the repo to your local machine
 * Install dependencies `yarn install` or `npm install`
 * Create symlink in global folder `yarn link` or `npm link`
-* Reload your terminal and verify installation with `sprucebot -v`
+* Reload your terminal and verify installation with `sprucebot -V`

@@ -89,7 +89,7 @@ module.exports = class extends Generator {
   end () {
     hostile.get(false, (err, lines) => {
       if (err) {
-        this.env.error(chalk.bold.red('Oh sh**, I had an issue reading your hosts file. Google `Sprucebot host file` for help.'))
+        this.env.error(chalk.bold.red('Oh sh**, I had an issue reading your hosts file. Google `Sprucebot hosts file` for help.'))
       }
 
       const configured = lines.reduce((memo, line) => {

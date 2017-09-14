@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 const path = require('path')
 const { assert } = require('chai')
-const { spy, stub } = require('sinon')
+const { spy } = require('sinon')
 const {
   createDir,
   directoryExists
@@ -49,26 +49,6 @@ describe('Remove Generator', () => {
       })
       .then(() => {
         assert.notOk(directoryExists(dir))
-      })
-  })
-
-  it('spawns removeLoopbackAlias.sh', () => {
-    let gen
-    const dir = path.join(TEMP, 'testing')
-    return yoTest.run(generator)
-      .withPrompts({
-        confirm: false,
-        confirmHosts: false,
-        confirmAlias: true,
-        path: dir
-      })
-      .on('ready', _gen => {
-        gen = _gen
-        gen.spawnCommandSync = stub().returns({ error: null })
-      })
-      .then(() => {
-        assert.ok(gen.spawnCommandSync.lastCall.args[0] === 'bash')
-        assert.include(gen.spawnCommandSync.lastCall.args[1][0], 'removeLoopbackAlias.sh')
       })
   })
 })

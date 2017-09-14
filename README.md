@@ -19,7 +19,6 @@ Platform commands require the following packages to be installed and available t
 * `sudo sprucebot platform configure`
   * Setup dns and hosts configurations.
   * Adds `local.sprucebot.com`, `local-api.sprucebot.com`, and `local-devtools.sprucebot.com` to `hosts`
-  * Creates loopbackAlias from `config.loopbackAlias`
 * `sprucebot platform start`
   * Runs docker-compose from sprucebot build directory
   * Visit [Local Sprucebot](https://local.sprucebot.com) to verify platform is running properly

@@ -27,7 +27,7 @@ module.exports = class extends Generator {
       this.hostile = this.options.hostile
     }
     if (!this.options.sudoOverride && process.getuid() !== 0) {
-      this.env.error(chalk.bold.red('I needs root access to write hosts file!'))
+      this.env.error(chalk.bold.red('I need root access to write hosts file!'))
     }
   }
 

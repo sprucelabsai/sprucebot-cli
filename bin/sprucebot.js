@@ -31,7 +31,7 @@ function setup (argv) {
     // Commands are registered without .action callback. This tells `commander`
     // that we use seperate executables in ./bin/ for sub-commands
     // registering `platform` will execute `./bin/sprucebot-platform.js`
-    .command('platform [options]', 'Manage platform local init, start/stop, and deployment')
+    .command('platform [options]', 'Setup and deploy the Sprucebot platform.')
 
   program.parse(process.argv)
 }

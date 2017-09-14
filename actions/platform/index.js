@@ -17,7 +17,7 @@ function setup (argv) {
 
   program
   .command('init [path]')
-  .option('--skip-install', 'Skip git repository installations')
+  .option('--skip-install', 'Skip cloning repositories')
   .action(platformInit)
 
   program

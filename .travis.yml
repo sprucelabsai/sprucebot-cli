@@ -1,0 +1,5 @@
+language: node_js
+before_script: 
+  - npm link
+after_success: 
+  - ./bin/travis-version-bump.js

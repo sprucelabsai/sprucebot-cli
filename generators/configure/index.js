@@ -1,10 +1,32 @@
+const path = require('path')
 const Generator = require('yeoman-generator')
 const hostile = require('hostile')
+const config = require('config')
+
+const loopbackAlias = config.get('loopbackAlias')
 
 module.exports = class extends Generator {
+  static Remove (sudoOverride = false) {
+    if (!sudoOverride && process.getuid() !== 0) {
+      throw new Error('Generator needs root access to write hosts file')
+    }
+
+    const lines = hostile.getFile(path.join(__dirname, 'templates/hosts'), false)
+    lines.forEach(line => {
+      console.log('Removing host %s %s from hosts file', line[0], line[1])
+      hostile.remove(line[0], line[1])
+    })
+  }
   initializing () {
     this.log('initializing')
-    if (process.getuid() !== 0) {
+    this.sourceRoot(path.join(__dirname, 'templates'))
+    if (!this.options.hostile) {
+      this.hostile = hostile
+    } else {
+      // Passing hostile as an argument allows us to stub it's api for unit tests
+      this.hostile = this.options.hostile
+    }
+    if (!this.options.sudoOverride && process.getuid() !== 0) {
       throw new Error('Generator needs root access to write hosts file')
     }
   }
@@ -12,8 +34,8 @@ module.exports = class extends Generator {
   configuring () {
     this.log('configuring')
     try {
-      const lines = hostile.getFile(this.templatePath('./configure/hosts'), false)
-      const setLines = hostile.get() // Parse current hosts file
+      const lines = this.hostile.getFile(this.templatePath('hosts'), false)
+      const setLines = this.hostile.get() // Parse current hosts file
       const missingLines = lines.filter(line => {
         // Determine if hostname is already set for this line
         return setLines.findIndex(l => l[1] === line[1]) === -1
@@ -21,31 +43,33 @@ module.exports = class extends Generator {
       if (missingLines.length) {
         missingLines.forEach(line => {
           this.log(`Adding host ${line[1]} to your hosts file`)
-          hostile.set(line[0], line[1])
+          this.hostile.set(line[0], line[1])
         })
+      } else {
+        this.log('Looks like your hosts file is setup properly')
       }
     } catch (e) {
-      this.log(`Uh oh, there was an error reading your hosts file`)
+      throw new Error(`Uh oh, there was an error reading your hosts file`)
     }
   }
 
   writingLoopbackAlias () {
     this.log('Writing loopback alias...')
-    this.fs.copy(
-      this.templatePath('./core/loopbackAlias'),
-      this.destinationPath('./loopbackAlias')
+    this.fs.copyTpl(
+      this.templatePath('./loopbackAlias'),
+      this.destinationPath('./loopbackAlias'),
+      { loopbackAlias }
     )
   }
 
   loopbackAlias () {
     this.log('Checking if Loopback Alias is setup properly...')
     // Determine if our Loopback alias is already configured
-    const ifconf = this.spawnCommandSync('ifconfig', {})
-    if (ifconf.stdout && ifconf.stdout.toString().indexOf('10.200.10.1') < 0) {
-      this.log('Setting up LOOPBACK Alias. I will need your system password')
-      this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
-    } else {
+    const cmd = this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
+    if (!cmd.error) {
       this.log('Looks like your Loopback Alias is setup properly')
+    } else {
+      this.log('Uh oh, looks like there was an error', cmd.stderr.toString())
     }
   }
 

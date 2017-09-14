@@ -1,6 +1,5 @@
 .DS_Store
 node_modules/
-.vscode/
 config/local.*
 
 # ***** BEGIN INTELLIJ *****
@@ -30,4 +29,7 @@ atlassian-ide-plugin.xml
 # Built files
 coverage/
 sprucebot/
-/.gitignore
+__TEST__/
+
+# Yeoman config
+.yo-rc.json

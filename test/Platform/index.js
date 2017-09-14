@@ -35,13 +35,23 @@ describe('Platform stdin', () => {
 })
 
 describe('Platform', () => {
-  it('--dev', () => {
-    const program = platform(['sprucebot', 'platform', '--dev'])
-    assert.isTrue(program.dev)
-  })
   it('init', () => {
     platform(['sprucebot', 'platform', 'init'])
     assert.ok(true)
-    // Test init files here
+  })
+  it('configure', () => {
+    platform(['sprucebot', 'platform', 'configure'])
+    assert.ok(true)
+  })
+  it('start', () => {
+    try {
+      platform(['sprucebot', 'platform', 'start', 'this-will-fail'])
+    } catch (e) {
+      assert.include(e.message, 'Uh oh, I can\'t find a valid docker-compose.yml')
+      assert.ok(true)
+    }
+  })
+  it('remove', () => {
+    platform(['sprucebot', 'platform', 'remove'])
   })
 })

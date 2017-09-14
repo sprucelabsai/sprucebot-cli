@@ -1,5 +1,6 @@
 const path = require('path')
 const Generator = require('yeoman-generator')
+const chalk = require('chalk')
 
 const {
   fileExists
@@ -7,7 +8,6 @@ const {
 
 module.exports = class extends Generator {
   initializing () {
-    this.log('initializing')
     this.promptValues = this.config.get('promptValues') || {}
   }
 
@@ -31,7 +31,7 @@ module.exports = class extends Generator {
     }
 
     if (!fileExists(path.join(this.promptValues.path, 'docker-compose.yml'))) {
-      throw new Error(`Uh oh, I can't find a valid docker-compose.yml in ${this.promptValues.path}`)
+      this.env.error(chalk.bold.red(`Uh oh, I can't find a valid docker-compose.yml in ${this.promptValues.path}. Try Googling 'Sprucebot platform docker-compose'.`))
     }
   }
 

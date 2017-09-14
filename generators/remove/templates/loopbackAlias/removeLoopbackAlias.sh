@@ -5,4 +5,3 @@ sudo ifconfig lo0 delete <%= loopbackAlias %>
 sudo launchctl unload "/Library/LaunchDaemons/$LOOPBACK_PLIST"
 rm -rf /usr/local/etc/haircut
 rm "/Library/LaunchDaemons/$LOOPBACK_PLIST"
-echo "Finished removeLoopbackAlias"

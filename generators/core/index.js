@@ -2,6 +2,8 @@ const path = require('path')
 const Generator = require('yeoman-generator')
 const config = require('config')
 const hostile = require('hostile')
+const chalk = require('chalk')
+
 const {
   directoryExists,
   fileExists
@@ -11,21 +13,20 @@ const loopbackAlias = config.get('loopbackAlias')
 
 module.exports = class extends Generator {
   initializing () {
-    this.log('initializing')
     this.sourceRoot(path.join(__dirname, 'templates'))
   }
+
   prompting () {
-    this.log('prompting')
     return this.prompt([{
       type: 'input',
       name: 'path',
-      message: 'Where should I install?',
+      message: 'Install location',
       default: path.resolve(this.destinationRoot(), './sprucebot'),
       store: true
     }, {
       type: 'input',
       name: 'gitUser',
-      message: `What is your github username?`,
+      message: `Github username`,
       default: config.get('gitUser'),
       store: true
     }]).then(answers => {
@@ -36,14 +37,14 @@ module.exports = class extends Generator {
       }
     })
   }
+
   configuring () {
-    this.log('configuring')
     this.destinationRoot(this.answers.path)
   }
 
   writingRepos () {
     if (this.options['skip-install'] !== true) {
-      this.log('Writing repositories')
+      this.log('Cloning platform repositories...')
 
       const pathApi = path.resolve(this.answers.path, 'api')
       const pathWeb = path.resolve(this.answers.path, 'web')
@@ -52,7 +53,7 @@ module.exports = class extends Generator {
       this._cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
       this._cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
 
-      this.log('Writing .env files')
+      this.log('Writing .env files...')
       fileExists(this.destinationPath('./api/app/.env.example')) && this.fs.copy(
         this.destinationPath('./api/app/.env.example'),
         this.destinationPath('./api/app/.env')
@@ -65,7 +66,7 @@ module.exports = class extends Generator {
   }
 
   writingTemplates () {
-    this.log('writing templates')
+    this.log('Populating and copying templates...')
     this.fs.copyTpl(
       this.templatePath('package.json'),
       this.destinationPath('./package.json'),
@@ -88,7 +89,7 @@ module.exports = class extends Generator {
   end () {
     hostile.get(false, (err, lines) => {
       if (err) {
-        this.log('Uh oh, looks like I had an issue reading the hosts file')
+        this.env.error(chalk.bold.red('Oh sh**, I had an issue reading your hosts file. Google `Sprucebot host file` for help.'))
       }
 
       const configured = lines.reduce((memo, line) => {
@@ -99,11 +100,11 @@ module.exports = class extends Generator {
       }, {})
 
       if (!configured['local-api.sprucebot.com'] || !configured['local.sprucebot.com'] || !configured['local-devtools.sprucebot.com']) {
-        this.log('Hey it looks like you are missing your hosts config.')
-        this.log('I can help you configure it by running `sudo sprucebot platform configure`')
+        this.log(chalk.green(`Sweet! We're almost done! Last step is configuring your host file.`))
+        this.log(chalk.yellow('Don\'t sweat it though, just run `sudo sprucebot platform configure`'))
       } else {
-        this.log('Looks like everything is setup properly.')
-        this.log('I can start the platform by running $ sprucebot platform start')
+        this.log(chalk.green('Heck yeah! I double checked and everything looks good.'))
+        this.log(chalk.yellow('Run `sprucebot platform start`  🌲🤖'))
       }
     })
   }
@@ -111,13 +112,13 @@ module.exports = class extends Generator {
   _cloneRepo (repo, path) {
     const exists = directoryExists(path)
     if (exists) {
-      this.log(`Uh oh, looks like you already installed something at ${path}!`)
+      this.log(chalk.magenta(`Oh snap, looks like you already installed something at ${path}! Skipping for now.`))
     } else {
       const cmd = this.spawnCommandSync('git', ['clone', repo, path])
       if (!cmd.error) {
-        this.log('Cloned %s to %s', repo, path)
+        this.log(chalk.green(`Finished cloning ${repo} to ${path}.`))
       } else {
-        this.log('Uh oh, looks like there was a problem cloning %s', repo)
+        this.log(chalk.bold.red(`Uh oh, looks like there was a problem cloning ${repo}.`))
       }
     }
   }

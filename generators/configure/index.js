@@ -49,6 +49,18 @@ module.exports = class extends Generator {
     }
   }
 
+  writeCertificate () {
+    const destination = this.destinationPath('cert/barbershop.ca.crt')
+    this.fs.copy(
+      this.templatePath('barbershop.ca.crt'),
+      destination
+    )
+  }
+
+  certificate () {
+    this.spawnCommandSync('security', ['add-trusted-cert', '-d', '-r', 'trustRoot', '-k', '/Library/Keychains/System.keychain', `${this.destinationPath('cert/barbershop.ca.crt')}`])
+  }
+
   end () {
     this.log(chalk.green('Heck yeah! Everything looks good.'))
     this.log(chalk.yellow('Run `sprucebot platform start`  🌲🤖'))

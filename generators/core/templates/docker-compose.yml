@@ -11,13 +11,11 @@ services:
       POSTGRES_DB: docker_db
   redis:
     # Image includes EXPOSE 6379
-    network_mode: bridge
     image: redis
     container_name: sprucebot_redis
     ports:
       - "6379:6379"
   nginx:
-    network_mode: bridge
     build: ./docker/nginx/
     container_name: sprucebot_nginx
     ports:
@@ -26,8 +24,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./docker/nginx/certs:/etc/nginx/certs
-    extra_hosts:
-      - "hostcontainer:<%= loopbackAlias %>"
   api:
     build: ./api/
     privileged: true
@@ -41,8 +37,6 @@ services:
       - SHELL=/bin/bash
     ports:
       - "3005:3005"
-    extra_hosts:
-      - "hostcontainer:<%= loopbackAlias %>"
   web:
     build: ./web/
     privileged: true
@@ -65,5 +59,3 @@ services:
       - "3000:3000"
       - "3001:3001"
       - "35729:35729"
-    extra_hosts:
-      - "hostcontainer:<%= loopbackAlias %>"

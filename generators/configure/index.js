@@ -1,10 +1,7 @@
 const path = require('path')
 const Generator = require('yeoman-generator')
 const hostile = require('hostile')
-const config = require('config')
 const chalk = require('chalk')
-
-const loopbackAlias = config.get('loopbackAlias')
 
 module.exports = class extends Generator {
   static Remove (sudoOverride = false) {
@@ -49,26 +46,6 @@ module.exports = class extends Generator {
       }
     } catch (e) {
       this.env.error(chalk.bold.red(`Uh oh, I couldn't read your hosts file. Try Googling 'Sprucebot platform hosts'`))
-    }
-  }
-
-  writingLoopbackAlias () {
-    this.log('Writing loopback alias...')
-    this.fs.copyTpl(
-      this.templatePath('./loopbackAlias'),
-      this.destinationPath('./loopbackAlias'),
-      { loopbackAlias }
-    )
-  }
-
-  loopbackAlias () {
-    this.log('Checking if Loopback Alias is setup properly...')
-    // Determine if our Loopback alias is already configured
-    const cmd = this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/setupLoopbackAlias.sh')])
-    if (!cmd.error) {
-      this.log(chalk.green('Looks like your Loopback Alias is setup properly'))
-    } else {
-      this.log(chalk.bold.red(`Uh oh, looks like there was an error setting up the loopback address: ${cmd.stderr.toString()}`))
     }
   }
 

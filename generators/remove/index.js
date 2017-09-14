@@ -1,11 +1,8 @@
 const path = require('path')
 const Generator = require('yeoman-generator')
-const config = require('config')
 const chalk = require('chalk')
 
 const Configure = require('../configure')
-
-const loopbackAlias = config.get('loopbackAlias')
 
 const {
   rmdir
@@ -50,11 +47,6 @@ module.exports = class extends Generator {
       name: 'confirmHosts',
       message: 'Remove hosts entries?',
       default: false
-    }, {
-      type: 'confirm',
-      name: 'confirmAlias',
-      message: 'Remove loopback alias configurations?',
-      default: false
     }])
 
     if (answers.confirmHosts) {
@@ -64,20 +56,6 @@ module.exports = class extends Generator {
       } catch (e) {
         this.log(chalk.bold.red(`Crap, removing host entries failed. ${e.message}.`))
         this.log(chalk.bold.yellow('Try running as root.'))
-      }
-    }
-
-    if (answers.confirmAlias) {
-      this.fs.copyTpl(
-        this.templatePath('loopbackAlias/removeLoopbackAlias.sh'),
-        this.destinationPath('./loopbackAlias/removeLoopbackAlias.sh'),
-        {loopbackAlias}
-      )
-      const cmd = this.spawnCommandSync('bash', [this.destinationPath('./loopbackAlias/removeLoopbackAlias.sh')])
-      if (!cmd.error) {
-        this.log(chalk.green('Boom! Loopback alias removed!'))
-      } else {
-        this.log(chalk.bold.red('Sh**, looks like there was an error removing loopback alias.'))
       }
     }
 

@@ -12,41 +12,21 @@ const {
 module.exports = class extends Generator {
   initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-  }
-
-  prompting () {
-    return this.prompt([{
-      type: 'input',
-      name: 'path',
-      message: 'Install location',
-      default: path.resolve(this.destinationRoot(), './sprucebot'),
-      store: true
-    }, {
-      type: 'input',
-      name: 'gitUser',
-      message: `Github username`,
-      default: config.get('gitUser'),
-      store: true
-    }]).then(answers => {
-      this.answers = {
-        ...answers,
-        appname: 'sprucebot',
-        path: path.resolve(answers.path)
-      }
-    })
+    this.composeWith(require.resolve('../base'), this.options)
   }
 
   configuring () {
-    this.destinationRoot(this.answers.path)
+    this.promptValues = this.config.get('promptValues')
+    this.destinationRoot(this.promptValues.path)
   }
 
   writingRepos () {
     if (this.options['skip-install'] !== true) {
       this.log('Cloning platform repositories...')
 
-      const pathApi = path.resolve(this.answers.path, 'api')
-      const pathWeb = path.resolve(this.answers.path, 'web')
-      const gitBase = `git@github.com:${this.answers.gitUser}`
+      const pathApi = path.resolve(this.promptValues.path, 'api')
+      const pathWeb = path.resolve(this.promptValues.path, 'web')
+      const gitBase = `git@github.com:${this.promptValues.gitUser}`
 
       this._cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
       this._cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
@@ -68,17 +48,17 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('package.json'),
       this.destinationPath('./package.json'),
-      this.answers
+      this.promptValues
     )
     this.fs.copyTpl(
       this.templatePath('docker-compose.yml'),
       this.destinationPath('./docker-compose.yml'),
-      this.answers
+      this.promptValues
     )
     this.fs.copyTpl(
       this.templatePath('hosts'),
       this.destinationPath('./hosts'),
-      this.answers
+      this.promptValues
     )
     this.fs.copy(
       this.templatePath('docker'),

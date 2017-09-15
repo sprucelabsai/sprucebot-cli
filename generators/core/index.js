@@ -114,6 +114,7 @@ module.exports = class extends Generator {
     if (exists) {
       this.log(`Oh snap, looks like you already installed something at ${path}! Skipping for now.`)
     } else {
+      // TODO - Make sure this halts when github public key is missing
       const cmd = this.spawnCommandSync('git', ['clone', repo, path])
       if (!cmd.error) {
         this.log(chalk.green(`Finished cloning ${repo} to ${path}.`))

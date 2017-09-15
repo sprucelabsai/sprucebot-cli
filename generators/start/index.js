@@ -36,6 +36,12 @@ module.exports = class extends Generator {
   }
 
   starting () {
+    this.spawnCommandSync('docker-compose', ['down'], {
+      cwd: this.promptValues.path
+    })
+    this.spawnCommandSync('docker-compose', ['build'], {
+      cwd: this.promptValues.path
+    })
     this.spawnCommandSync('docker-compose', ['up'], {
       cwd: this.promptValues.path
     })

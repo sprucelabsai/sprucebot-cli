@@ -16,15 +16,18 @@ const TEMP = path.join(__dirname, '../../__TEST__')
 const generator = path.join(__dirname, '../../generators/core')
 
 describe('Core Generator', () => {
+  const sprucebot = path.join(TEMP, 'sprucebot')
+  const promptValues = {
+    appname: 'sprucebot',
+    path: sprucebot,
+    gitUser: 'sprucelabsai'
+  }
   beforeEach(() => {
     rmdir(TEMP)
   })
   it('runs with prompts', () => {
     return yoTest.run(generator)
-      .withPrompts({
-        path: path.join(TEMP, 'sprucebot'),
-        gitUser: 'sprucelabsai'
-      })
+      .withLocalConfig({promptValues})
       .then(() => {
         yoAssert.fileContent('package.json', '"name": "sprucebot"')
         yoAssert.fileContent('docker-compose.yml', 'version: \'3\'')
@@ -34,13 +37,9 @@ describe('Core Generator', () => {
 
   it('Syncs git repositories', () => {
     let gen
-    const sprucebot = path.join(TEMP, 'sprucebot')
     return yoTest.run(generator)
+      .withLocalConfig({promptValues})
       .withOptions({'skip-install': false})
-      .withPrompts({
-        path: sprucebot,
-        gitUser: 'sprucelabsai'
-      })
       .on('ready', generator => {
         gen = generator
         generator.spawnCommandSync = stub().returns({error: null})
@@ -53,17 +52,13 @@ describe('Core Generator', () => {
   })
 
   it('Copies .env examples', () => {
-    const sprucebot = path.join(TEMP, 'sprucebot')
     createDir(path.join(sprucebot, 'web'))
     createDir(path.join(sprucebot, 'api/app'))
     fs.writeFileSync(path.join(sprucebot, 'web/.env.example'), 'TEST=true')
     fs.writeFileSync(path.join(sprucebot, 'api/app/.env.example'), 'TEST=true')
     return yoTest.run(generator)
+      .withLocalConfig({promptValues})
       .withOptions({'skip-install': false})
-      .withPrompts({
-        path: sprucebot,
-        gitUser: 'sprucelabsai'
-      })
       .on('ready', generator => {
         generator.spawnCommandSync = stub().returns({error: null})
       })
@@ -76,7 +71,6 @@ describe('Core Generator', () => {
 
   it('checks if hosts file is properly configured', () => {
     let gen
-    const sprucebot = path.join(TEMP, 'sprucebot')
 
     function get (arg, callback) {
       callback(null, [
@@ -86,10 +80,7 @@ describe('Core Generator', () => {
 
     stub(hostile, 'get').callsFake(get)
     return yoTest.run(generator)
-      .withPrompts({
-        path: sprucebot,
-        gitUser: 'sprucelabsai'
-      })
+      .withLocalConfig({promptValues})
       .on('ready', (_gen) => {
         gen = _gen
         gen.log = spy()

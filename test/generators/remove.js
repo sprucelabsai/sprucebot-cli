@@ -19,11 +19,13 @@ describe('Remove Generator', () => {
     const dir = path.join(TEMP, 'test')
     createDir(dir)
     return yoTest.run(generator)
+      .withLocalConfig({promptValues: {
+        path: dir
+      }})
       .withPrompts({
         confirm: false,
         confirmHosts: false,
-        confirmAlias: false,
-        path: ''
+        confirmAlias: false
       })
       .on('ready', _gen => {
         gen = _gen
@@ -40,12 +42,14 @@ describe('Remove Generator', () => {
     createDir(dir)
     assert.ok(directoryExists(dir))
     return yoTest.run(generator)
+      .withLocalConfig({promptValues: {
+        path: dir
+      }})
       .withOptions({ sudoOverride: true })
       .withPrompts({
         confirm: true,
         confirmHosts: false,
-        confirmAlias: false,
-        path: dir
+        confirmAlias: false
       })
       .then(() => {
         assert.notOk(directoryExists(dir))

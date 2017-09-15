@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+const path = require('path')
 const {assert} = require('chai')
 const {stub, spy} = require('sinon')
 const hostile = require('hostile')
@@ -7,6 +8,13 @@ const yoTest = require('yeoman-test')
 
 // const generator = path.join(__dirname, '../../generators/configure')
 const generator = require('../../generators/configure')
+
+const TEMP = path.join(__dirname, '../../__TEST__')
+
+const promptValues = {
+  path: TEMP,
+  gitUser: 'test'
+}
 
 describe('Configure Generator', () => {
   beforeEach(() => {
@@ -23,6 +31,7 @@ describe('Configure Generator', () => {
   })
   it('requires sudo', () => {
     return yoTest.run(generator)
+      .withLocalConfig({ promptValues })
       .withOptions({sudoOverride: false})
       .then(() => {
         assert.notOk(true, 'Generator should have thrown exception')
@@ -34,6 +43,7 @@ describe('Configure Generator', () => {
 
   it('sets missing hosts overrides', () => {
     return yoTest.run(generator)
+      .withLocalConfig({ promptValues })
       .withOptions({sudoOverride: true, hostile})
       .then(() => {
         assert.ok(hostile.getFile.called)

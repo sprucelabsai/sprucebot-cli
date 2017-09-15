@@ -10,29 +10,9 @@ const {
 
 module.exports = class extends Generator {
   initializing () {
-    this.promptValues = this.config.get('promptValues') || {}
+    this.composeWith(require.resolve('../base'), this.options)
+    this.promptValues = this.config.get('promptValues')
     this.sourceRoot(path.join(__dirname, 'templates'))
-  }
-
-  async prompting () {
-    const prompts = []
-
-    if (!this.options.path && !this.promptValues.path) {
-      prompts.push({
-        type: 'input',
-        name: 'path',
-        message: 'I\'m having trouble finding the docker-compose.yml file',
-        default: path.resolve(this.destinationRoot(), './sprucebot'),
-        store: true
-      })
-    }
-
-    const answers = await this.prompt(prompts)
-    this.promptValues = {
-      ...this.promptValues,
-      path: this.options.path || this.promptValues.path || answers.path
-    }
-
     this.destinationRoot(this.promptValues.path)
   }
 

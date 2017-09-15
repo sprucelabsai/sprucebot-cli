@@ -27,38 +27,18 @@ describe('Start generator', () => {
     rmdir(dir)
   })
 
-  it('prompts if path not previously set', () => {
-    let gen
-    return yoTest.run(generator)
-      .withPrompts({ path: dir })
-      .on('ready', _gen => {
-        gen = _gen
-        _gen.config.set({
-          promptValues: {
-            path: null
-          }
-        })
-        gen.spawnCommandSync = stub().returns({ error: null })
-      })
-      .then(() => {
-        assert.equal(gen.promptValues.path, dir)
-      })
-  })
-
   it('throws if no valid docker-compose.yml', () => {
     const dir = path.join(TEMP, 'sprucebot')
     rmdir(dir)
     createDir(dir)
     let gen
     return yoTest.run(generator)
+      .withLocalConfig({promptValues: {
+        path: dir
+      }})
       .withPrompts({ path: dir })
       .on('ready', _gen => {
         gen = _gen
-        _gen.config.set({
-          promptValues: {
-            path: dir
-          }
-        })
         gen.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
@@ -75,7 +55,9 @@ describe('Start generator', () => {
     fs.writeFileSync(path.join(dir, 'docker-compose.yml'), 'version: 3')
     let gen
     return yoTest.run(generator)
-      .withOptions({ path: dir })
+      .withLocalConfig({promptValues: {
+        path: dir
+      }})
       .on('ready', _gen => {
         gen = _gen
         gen.spawnCommandSync = stub().returns({ error: null })

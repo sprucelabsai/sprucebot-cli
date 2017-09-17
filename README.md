@@ -1,22 +1,43 @@
 # sprucebot-cli
-A super simple cli
+A wicked powerful, yet amazingly easy to use command line app for Sprucebot development.
 
-# Prerequisites
-* Access to github.com repositories is controled via ssh. You will need to add your public key to github.com to be able to read project dependencies. More information can be found [here](https://help.github.com/articles/connecting-to-github-with-ssh/)
+# Skills Development
+### Prerequisites
+* TBD
+
+### Installation
+* ~~`yarn add -g sprucebot-cli` or `npm install -g sprucebot-cli`~~
+
+### Commands
+
+* `sprucebot skill create "[Skill Name]"`
+  * TBD
+* `sprucebot skill listen [eventName]`
+  * Adds a listener to your skill.
+* `sprucebot skill ignore [eventName]`
+  * TBD
+
+### Developer Guidelines
+* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
+
+#  Platform Development
+### Prerequisites
+* Access to github.com repositories is controlled via ssh. You will need to add your public key to github.com to be able to read project dependencies. More information can be found [here](https://help.github.com/articles/connecting-to-github-with-ssh/)
 * [Docker For Mac](https://www.docker.com/docker-mac) Should be installed on the host machine
 * [Git](https://git-scm.com)
 * [bash](https://www.gnu.org/software/bash/)
 
-# Installation
+### Installation
 * ~~`yarn add -g sprucebot-cli` or `npm install -g sprucebot-cli`~~
 * Clone the repo to your local machine `git clone git@github.com:sprucelabsai/sprucebot-cli.git`
 * Install dependencies `yarn install` or `npm install`
 * Create symlink in global folder `yarn link` or `npm link`
 * Reload your terminal and verify installation with `sprucebot -V`
-## Developer Setup
-* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for alternative installation methods
 
-# Platform Commands
+### Developer Guidelines
+* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around platform development.
+
+### Commands
 
 * `sprucebot platform init`
   * *REQUIRED* You need to fork `com-sprucebot-api` and `com-sprucebot-hello` projects

@@ -15,7 +15,13 @@ sure your skill promotes human-to-human connection.
 
 
 # Skills Development
-Skills are how you give Sprucebot new... well, skills. In order to
+Skills are how you give me new... well, skills. A skill is really analogous to
+an app. It needs to be fully featured and create a real world experience people remember.
+Keep in mind as you're out saving small business that the thing that makes
+brick-and-mortar unique is the fact that real people are interacting with one another.
+
+It's the ultimate social network, and with your skills giving me the power to
+facilitate amazing experiences, e-commerce doesn't stand a chance. 🌲🤖
 
 ### Prerequisites
 * TBD
@@ -36,6 +42,7 @@ Skills are how you give Sprucebot new... well, skills. In order to
 * See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
 
 #  Platform Development
+This section is only relevant if you've been given permission to work directly on my core systems.
 ### Prerequisites
 * Access to github.com repositories is controlled via ssh. You will need to add your public key to github.com to be able to read project dependencies. More information can be found [here](https://help.github.com/articles/connecting-to-github-with-ssh/)
 * [Docker For Mac](https://www.docker.com/docker-mac) Should be installed on the host machine

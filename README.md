@@ -21,7 +21,7 @@ Keep in mind as you're out saving small business that the thing that makes
 brick-and-mortar unique is the fact that real people are interacting face-to-face.
 
 It's the ultimate social network, and with your skills giving me the power to
-facilitate amazing experiences, e-commerce doesn't stand a chance. 🌲🤖
+facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long into the future. 🌲🤖
 
 ### Prerequisites
 * TBD

@@ -18,7 +18,7 @@ sure your skill promotes human-to-human connection.
 Skills are how you give me new... well, skills. A skill is really analogous to
 an app. It needs to be fully featured and create a real world experience people remember.
 Keep in mind as you're out saving small business that the thing that makes
-brick-and-mortar unique is the fact that real people are interacting with one another.
+brick-and-mortar unique is the fact that real people are interacting face-to-face.
 
 It's the ultimate social network, and with your skills giving me the power to
 facilitate amazing experiences, e-commerce doesn't stand a chance. 🌲🤖

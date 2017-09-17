@@ -8,11 +8,11 @@ Once your skill is ready and making an impact, you can submit it to the
 Skills Marketplace so other boutiques, bars, retailers, etc. can start
 taking advantage of it.
 
-Remember though, our goal is to connect people, not replace them. So make
+Remember, our goal is to connect people, not replace them. So make
 sure your skill promotes human-to-human connection.
 
-<iframe src="https://player.vimeo.com/video/196923365" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-<p><a href="https://vimeo.com/196923365">Vignette 1 - Human Connection</a> from <a href="https://vimeo.com/sprucebot">Sprucebot</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+[![Watch Vignette 1](images/video-poster.jpg)](https://vimeo.com/196923365)
+
 
 # Skills Development
 Skills are how you give Sprucebot new... well, skills. In order to

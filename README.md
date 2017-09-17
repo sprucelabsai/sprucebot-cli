@@ -1,7 +1,22 @@
 # sprucebot-cli
-A wicked powerful, yet amazingly easy to use command line app for Sprucebot development.
+Hey, I'm Sprucebot! This CLI was designed to give you the tools you need
+to help brick-and-mortar businesses thrive in the Internet age. Once I'm
+up and running in a store, you'll be able to react to real world events, such
+as guests entering or leaving.
+
+Once your skill is ready and making an impact, you can submit it to the
+Skills Marketplace so other boutiques, bars, retailers, etc. can start
+taking advantage of it.
+
+Remember though, our goal is to connect people, not replace them. So make
+sure your skill promotes human-to-human connection.
+
+<iframe src="https://player.vimeo.com/video/196923365" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<p><a href="https://vimeo.com/196923365">Vignette 1 - Human Connection</a> from <a href="https://vimeo.com/sprucebot">Sprucebot</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
 
 # Skills Development
+Skills are how you give Sprucebot new... well, skills. In order to
+
 ### Prerequisites
 * TBD
 

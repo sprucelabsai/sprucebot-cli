@@ -1,5 +1,5 @@
 # Skills Contributions
-In order to ensure the best experience possible for small business owners, we need to make sure we are disciplined in
+In order to ensure the best experience possible for all brick-and-mortar business owners, we need to make sure we are disciplined in how we design, build, and deploy skills.
 * TBD
 
 # Platform Contributions

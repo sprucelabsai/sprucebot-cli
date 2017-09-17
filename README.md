@@ -43,9 +43,10 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 
 #  Platform Development
 This section is only relevant if you've been given permission to work directly on my core systems.
+
 ### Prerequisites
-* Access to github.com repositories is controlled via ssh. You will need to add your public key to github.com to be able to read project dependencies. More information can be found [here](https://help.github.com/articles/connecting-to-github-with-ssh/)
-* [Docker For Mac](https://www.docker.com/docker-mac) Should be installed on the host machine
+* Access to the platform repositories
+* [Docker For Mac](https://www.docker.com/docker-mac)
 * [Git](https://git-scm.com)
 * [bash](https://www.gnu.org/software/bash/)
 

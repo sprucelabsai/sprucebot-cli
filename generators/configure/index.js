@@ -67,6 +67,6 @@ module.exports = class extends Generator {
 
   end () {
     this.log(chalk.green('Heck yeah! Everything looks good.'))
-    this.log(chalk.yellow('Run `sprucebot platform start`  🌲🤖'))
+    this.log(chalk.yellow('Run `sprucebot platform start`  🌲 🤖'))
   }
 }

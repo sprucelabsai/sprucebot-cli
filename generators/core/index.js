@@ -84,7 +84,7 @@ module.exports = class extends Generator {
         this.log(chalk.yellow('Don\'t sweat it though, just run `sudo sprucebot platform configure`'))
       } else {
         this.log(chalk.green('Heck yeah! I double checked and everything looks good.'))
-        this.log(chalk.yellow('Run `sprucebot platform start`  🌲🤖'))
+        this.log(chalk.yellow('Run `sprucebot platform start`  🌲 🤖'))
       }
     })
   }
@@ -99,7 +99,7 @@ module.exports = class extends Generator {
       if (!cmd.error) {
         this.log(chalk.green(`Finished cloning ${repo} to ${path}.`))
       } else {
-        this.log(chalk.bold.red(`Uh oh, looks like there was a problem cloning ${repo}.`))
+        this.log(chalk.bold.red(`CRAP, looks like there was a problem cloning ${repo}.`))
       }
     }
   }

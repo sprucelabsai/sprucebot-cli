@@ -10,6 +10,7 @@ module.exports = async function init (path, options) {
 
   yo.run('sprucebot', {
     path,
+    resetPrompt: options.resetPrompt,
     'skip-install': !!options.skipInstall
   })
 

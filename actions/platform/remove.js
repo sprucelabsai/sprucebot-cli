@@ -6,5 +6,8 @@ const yo = yeoman.createEnv()
 module.exports = function remove (path, options) {
   yo.registerStub(Remove, 'sprucebot')
 
-  yo.run('sprucebot', {path})
+  yo.run('sprucebot', {
+    path,
+    resetPrompt: options.resetPrompt
+  })
 }

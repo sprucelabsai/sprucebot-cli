@@ -3,3 +3,11 @@ before_script:
   - npm link
 after_success: 
   - ./bin/travis-version-bump.js
+addons:
+  apt:
+    sources:
+      # Nodegit dependency fix
+      - ubuntu-toolchain-r-test
+    packages:
+      # Nodegit dependency fix
+      - libstdc++-4.9-dev

@@ -7,6 +7,7 @@ const platformInit = require('./init')
 const platformConfigure = require('./configure')
 const platformStart = require('./start')
 const platformRemove = require('./remove')
+const platformVersion = require('./version')
 
 function setup (argv) {
   const program = new Command()
@@ -18,7 +19,12 @@ function setup (argv) {
   program
   .command('init [path]')
   .option('--skip-install', 'Skip cloning repositories')
+  .option('-s --select-version', 'Wanna select a version? Cool, add --select-version flag')
   .action(platformInit)
+
+  program
+  .command('version')
+  .action(platformVersion)
 
   program
   .command('start [path]')

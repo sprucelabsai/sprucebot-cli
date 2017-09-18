@@ -63,6 +63,7 @@ This section is only relevant if you've been given permission to work directly o
 ### Commands
 
 * `sprucebot platform init`
+  * Use option `--select-version` to checkout specific versions once cloned
   * *REQUIRED* You need to fork `com-sprucebot-api` and `com-sprucebot-hello` projects
   * Clones platform repositories and setup local docker build
   * Creates docker-compose build directory
@@ -77,3 +78,5 @@ This section is only relevant if you've been given permission to work directly o
   * Asks user to `rm -rf sprucebot/*`
   * Asks user to remove `loopback` alias
   * Asks user to remove `hosts` redirects (`*.sprucebot.com`)
+* `sprucebot platform version`
+  * Launch the interactive version select prompt

@@ -37,7 +37,7 @@ module.exports = class extends Generator {
     })
 
     this.promptValues = {
-      ...this.config.get('promptValues') || {},
+      ...this.options.resetPrompt ? {} : (this.config.get('promptValues') || {}),
       ...parseOptions(this.options)
     }
   }

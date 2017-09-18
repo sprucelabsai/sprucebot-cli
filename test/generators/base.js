@@ -85,4 +85,27 @@ describe('Base generator', () => {
         })
       })
   })
+
+  it('prompts with --reset-prompts', () => {
+    let gen
+    return yoTest.run(generator)
+      .withLocalConfig({
+        promptValues: {
+          path: 'test',
+          gitUser: 'sprucelabs'
+        }
+      })
+      .withOptions({
+        resetPrompt: true
+      })
+      .on('ready', _gen => {
+        gen = _gen
+        spy(gen, 'prompt')
+      })
+      .then(() => {
+        assert.strictEqual(gen.prompt.lastCall.args[0].length, 2)
+        assert.strictEqual(gen.prompt.lastCall.args[0][0].name, 'path')
+        assert.strictEqual(gen.prompt.lastCall.args[0][1].name, 'gitUser')
+      })
+  })
 })

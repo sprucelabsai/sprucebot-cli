@@ -20,18 +20,22 @@ function setup (argv) {
   .command('init [path]')
   .option('--skip-install', 'Skip cloning repositories')
   .option('-s --select-version', 'Wanna select a version? Cool, add --select-version flag')
+  .option('-r --reset-prompt', 'Reset previously saved prompts')
   .action(platformInit)
 
   program
   .command('version')
+  .option('-r --reset-prompt', 'Reset previously saved prompts')
   .action(platformVersion)
 
   program
   .command('start [path]')
+  .option('-r --reset-prompt', 'Reset previously saved prompts')
   .action(platformStart)
 
   program
   .command('remove [path]')
+  .option('-r --reset-prompt', 'Reset previously saved prompts')
   .action(platformRemove)
 
   program.parse(argv)

@@ -13,9 +13,9 @@ const yoTest = require('yeoman-test')
 const yoAssert = require('yeoman-assert')
 
 const TEMP = path.join(__dirname, '../../__TEST__')
-const generator = path.join(__dirname, '../../generators/core')
+const generator = path.join(__dirname, '../../generators/init')
 
-describe('Core Generator', () => {
+describe('Init Generator', () => {
   const sprucebot = path.join(TEMP, 'sprucebot')
   const promptValues = {
     appname: 'sprucebot',

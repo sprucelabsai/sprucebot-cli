@@ -56,6 +56,7 @@ module.exports = class extends Generator {
       for (let service of services) {
         this.spawnCommandSync('docker', ['rmi', docker.services[service].container_name])
       }
+      this.log(chalk.green('Bam! Removed docker images!'))
     }
   }
 }

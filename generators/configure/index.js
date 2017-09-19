@@ -61,7 +61,8 @@ module.exports = class extends Generator {
     )
   }
 
-  certificate () {
+  install () {
+    // Install phase can expect the file system to be written
     this.spawnCommandSync('security', ['add-trusted-cert', '-d', '-r', 'trustRoot', '-k', '/Library/Keychains/System.keychain', `${this.destinationPath('cert/barbershop.ca.crt')}`])
   }
 

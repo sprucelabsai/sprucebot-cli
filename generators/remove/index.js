@@ -1,7 +1,9 @@
 const path = require('path')
-const Generator = require('yeoman-generator')
+const fs = require('fs')
 const chalk = require('chalk')
+const yaml = require('js-yaml')
 
+const Generator = require('../base')
 const Configure = require('../configure')
 
 const {
@@ -9,10 +11,9 @@ const {
 } = require('../../utils/dir')
 
 module.exports = class extends Generator {
-  initializing () {
-    this.composeWith(require.resolve('../base'), this.options)
-    this.promptValues = this.config.get('promptValues')
+  async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
+    this.promptValues = await this.getPromptValues()
     this.destinationRoot(this.promptValues.path)
   }
 
@@ -26,6 +27,11 @@ module.exports = class extends Generator {
       type: 'confirm',
       name: 'confirmHosts',
       message: 'Remove hosts entries?',
+      default: false
+    }, {
+      type: 'confirm',
+      name: 'confirmDocker',
+      message: 'Clean docker containers?',
       default: false
     }])
 
@@ -42,6 +48,14 @@ module.exports = class extends Generator {
     if (answers.confirm) {
       rmdir(this.promptValues.path)
       this.log(chalk.green(`${this.promptValues.path} removed!`))
+    }
+
+    if (answers.confirmDocker) {
+      const docker = yaml.safeLoad(fs.readFileSync(this.destinationPath('docker-compose.yml'), 'utf8'))
+      const services = Object.keys(docker.services)
+      for (let service of services) {
+        this.spawnCommandSync('docker', ['rmi', docker.services[service].container_name])
+      }
     }
   }
 }

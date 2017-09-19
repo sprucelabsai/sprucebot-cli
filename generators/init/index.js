@@ -1,8 +1,9 @@
 const path = require('path')
-const Generator = require('yeoman-generator')
 const config = require('config')
 const hostile = require('hostile')
 const chalk = require('chalk')
+
+const Generator = require('../base')
 
 const {
   directoryExists,
@@ -10,13 +11,9 @@ const {
 } = require('../../utils/dir')
 
 module.exports = class extends Generator {
-  initializing () {
+  async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-    this.composeWith(require.resolve('../base'), this.options)
-  }
-
-  configuring () {
-    this.promptValues = this.config.get('promptValues')
+    this.promptValues = await this.getPromptValues()
     this.destinationRoot(this.promptValues.path)
   }
 

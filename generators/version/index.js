@@ -1,17 +1,14 @@
 const path = require('path')
 const chalk = require('chalk')
-const Generator = require('yeoman-generator')
 const config = require('config')
 const Git = require('nodegit')
 
-module.exports = class extends Generator {
-  initializing () {
-    this.sourceRoot(path.join(__dirname, 'templates'))
-    this.composeWith(require.resolve('../base'), this.options)
-  }
+const Generator = require('../base')
 
-  configuring () {
-    this.promptValues = this.config.get('promptValues')
+module.exports = class extends Generator {
+  async initializing () {
+    this.sourceRoot(path.join(__dirname, 'templates'))
+    this.promptValues = await this.getPromptValues()
     this.destinationRoot(this.promptValues.path)
   }
 

@@ -29,19 +29,17 @@ function parseOptions (options) {
 }
 
 module.exports = class extends Generator {
-  initializing () {
+  async getPromptValues () {
     this.config.defaults({
       promptValues: {
         appname: 'sprucebot'
       }
     })
-
     this.promptValues = {
       ...this.options.resetPrompt ? {} : (this.config.get('promptValues') || {}),
       ...parseOptions(this.options)
     }
-  }
-  async prompting () {
+
     const active = []
     if (!this.promptValues.path) {
       prompts.path.default = path.resolve(this.destinationRoot(), './sprucebot')
@@ -58,13 +56,12 @@ module.exports = class extends Generator {
       active.push(prompts.gitUser)
     }
 
-    return this.prompt(active).then((answers) => {
-      this.promptValues = {
-        ...this.config.get('promptValues'),
-        ...parseOptions(this.options),
-        ...answers
-      }
-      this.config.set('promptValues', this.promptValues)
-    })
+    const answers = await this.prompt(active)
+    const promptValues = {
+      ...this.promptValues,
+      ...answers
+    }
+    this.config.set('promptValues', promptValues)
+    return promptValues
   }
 }

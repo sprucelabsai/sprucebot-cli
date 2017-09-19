@@ -1,7 +1,8 @@
 const path = require('path')
-const Generator = require('yeoman-generator')
 const hostile = require('hostile')
 const chalk = require('chalk')
+
+const Generator = require('../base')
 
 module.exports = class extends Generator {
   static Remove (sudoOverride = false) {
@@ -15,8 +16,10 @@ module.exports = class extends Generator {
       hostile.remove(line[0], line[1])
     })
   }
-  initializing () {
-    this.composeWith(require.resolve('../base'), this.options)
+  async initializing () {
+    this.sourceRoot(path.join(__dirname, 'templates'))
+    this.promptValues = await this.getPromptValues()
+    this.destinationRoot(this.promptValues.path)
 
     if (!this.options.hostile) {
       this.hostile = hostile
@@ -30,9 +33,6 @@ module.exports = class extends Generator {
   }
 
   configuring () {
-    this.promptValues = this.config.get('promptValues')
-    this.sourceRoot(path.join(__dirname, 'templates'))
-    this.destinationRoot(this.promptValues.path)
     try {
       const lines = this.hostile.getFile(this.templatePath('hosts'), false)
       const setLines = this.hostile.get() // Parse current hosts file

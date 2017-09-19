@@ -1,11 +1,11 @@
 const yeoman = require('yeoman-environment')
-const Core = require('../../generators/core')
+const Init = require('../../generators/init')
 const Version = require('../../generators/version')
 
 const yo = yeoman.createEnv()
 
 module.exports = async function init (path, options) {
-  yo.registerStub(Core, 'sprucebot')
+  yo.registerStub(Init, 'sprucebot')
   yo.registerStub(Version, 'sprucebot:version')
 
   yo.run('sprucebot', {

@@ -76,7 +76,7 @@ This section is only relevant if you've been given permission to work directly o
 * `sudo sprucebot platform remove`
   * Allows for the removal of platform specific files and configurations
   * Asks user to `rm -rf sprucebot/*`
-  * Asks user to remove `loopback` alias
   * Asks user to remove `hosts` redirects (`*.sprucebot.com`)
+  * Asks user to remove Docker images
 * `sprucebot platform version`
   * Launch the interactive version select prompt

@@ -11,6 +11,8 @@ app.prepare()
 .then(() => {
   createServer((req, res) => {
     const parsedUrl = parse(req.url, true)
+
+    // Render the route using next.js route handling
     handle(req, res, parsedUrl)
   })
   .listen(port, (err) => {

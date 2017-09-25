@@ -8,7 +8,5 @@ module.exports = function configure (options) {
 
   yo.registerStub(Configure, 'sprucebot')
 
-  yo.run('sprucebot', {
-    resetPrompt: options.resetPrompt
-  })
+  yo.run('sprucebot')
 }

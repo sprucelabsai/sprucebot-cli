@@ -1,9 +1,8 @@
 const path = require('path')
-const config = require('config')
 const hostile = require('hostile')
 const chalk = require('chalk')
-
-const Generator = require('../base')
+const defaultConfig = require('config')
+const Generator = require('yeoman-generator')
 
 const {
   directoryExists,
@@ -11,9 +10,50 @@ const {
 } = require('../../utils/dir')
 
 module.exports = class extends Generator {
+  constructor (args, ops) {
+    super(args, ops)
+    // Questions we ask before init
+    this._prompts = {
+      path: {
+        type: 'input',
+        name: 'path',
+        message: 'Install location',
+        default: null,
+        store: true
+      },
+      gitUser: {
+        type: 'input',
+        name: 'gitUser',
+        message: `Github username`,
+        default: null,
+        store: true
+      }
+    }
+  }
+
   async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-    this.promptValues = await this.getPromptValues()
+    let cliPath = path.resolve(__dirname, '..', '..')
+    if (cliPath === this.destinationRoot()) {
+      this.env.error(chalk.bold.red('You cannot run `sprucebot platform init` from inside the sprucebot-cli directory.'))
+    }
+  }
+
+  async prompting () {
+    const active = []
+
+    // Default destination
+    this._prompts.path.default = path.resolve(this.destinationRoot(), './sprucebot')
+    active.push(this._prompts.path)
+
+    // Attempt to read the github username configured on system to set as default
+    try {
+      this._prompts.gitUser.default = await this.user.github.username()
+    } catch (e) {
+    }
+    active.push(this._prompts.gitUser)
+
+    this.promptValues = await this.prompt(active)
     this.destinationRoot(this.promptValues.path)
   }
 
@@ -25,8 +65,8 @@ module.exports = class extends Generator {
       const pathWeb = path.resolve(this.promptValues.path, 'web')
       const gitBase = `git@github.com:${this.promptValues.gitUser}`
 
-      this._cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
-      this._cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
+      this._cloneRepo(`${gitBase}/${defaultConfig.repositories.api}`, pathApi)
+      this._cloneRepo(`${gitBase}/${defaultConfig.repositories.web}`, pathWeb)
 
       this.log('Writing .env files...')
       fileExists(this.destinationPath('./api/app/.env.example')) && this.fs.copy(
@@ -45,7 +85,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('package.json'),
       this.destinationPath('./package.json'),
-      this.promptValues
+      {...this.promptValues, appname: defaultConfig.appname}
     )
     this.fs.copyTpl(
       this.templatePath('docker-compose.yml'),
@@ -60,6 +100,18 @@ module.exports = class extends Generator {
     this.fs.copy(
       this.templatePath('docker'),
       this.destinationPath('./docker')
+    )
+    this.fs.copy(
+      this.templatePath('backups'),
+      this.destinationPath('./backups')
+    )
+    this.fs.copy(
+      this.templatePath('wait-for-postgres.sh'),
+      this.destinationPath('./wait-for-postgres.sh')
+    )
+    this.fs.copy(
+      this.templatePath('.yo-rc.json'),
+      this.destinationPath('./.yo-rc.json')
     )
   }
 
@@ -76,12 +128,15 @@ module.exports = class extends Generator {
         return memo
       }, {})
 
+      // Help dev cd to correct directory
+      let dir = path.basename(this.promptValues.path)
+
       if (!configured['local-api.sprucebot.com'] || !configured['local.sprucebot.com'] || !configured['local-devtools.sprucebot.com']) {
         this.log(chalk.green(`Sweet! We're almost done! Last step is configuring your host file.`))
-        this.log(chalk.yellow('Don\'t sweat it though, just run `sudo sprucebot platform configure`'))
+        this.log(chalk.yellow(`Don't` + ' sweat it though, run `cd ' + dir + ' && sudo sprucebot platform configure`'))
       } else {
         this.log(chalk.green('Heck yeah! I double checked and everything looks good.'))
-        this.log(chalk.yellow('Run `sprucebot platform start`  🌲 🤖'))
+        this.log(chalk.yellow('Run `cd ' + dir + ' && sprucebot platform start`  🌲 🤖'))
       }
     })
   }

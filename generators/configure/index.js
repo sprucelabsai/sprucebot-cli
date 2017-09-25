@@ -2,7 +2,7 @@ const path = require('path')
 const hostile = require('hostile')
 const chalk = require('chalk')
 
-const Generator = require('../base')
+const Generator = require('yeoman-generator')
 
 module.exports = class extends Generator {
   static Remove (sudoOverride = false) {
@@ -16,10 +16,9 @@ module.exports = class extends Generator {
       hostile.remove(line[0], line[1])
     })
   }
+
   async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-    this.promptValues = await this.getPromptValues()
-    this.destinationRoot(this.promptValues.path)
 
     if (!this.options.hostile) {
       this.hostile = hostile
@@ -53,7 +52,7 @@ module.exports = class extends Generator {
     }
   }
 
-  writeCertificate () {
+  writing () {
     const destination = this.destinationPath('cert/barbershop.ca.crt')
     this.fs.copy(
       this.templatePath('barbershop.ca.crt'),
@@ -64,6 +63,12 @@ module.exports = class extends Generator {
   install () {
     // Install phase can expect the file system to be written
     this.spawnCommandSync('security', ['add-trusted-cert', '-d', '-r', 'trustRoot', '-k', '/Library/Keychains/System.keychain', `${this.destinationPath('cert/barbershop.ca.crt')}`])
+
+    // Build composer
+    // Bring down just to be safe
+    this.spawnCommandSync('docker-compose', ['down'])
+    this.spawnCommandSync('docker-compose', ['build'])
+    this.config.set('did-build', true)
   }
 
   end () {

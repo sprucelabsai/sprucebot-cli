@@ -3,7 +3,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
 
-const Generator = require('../base')
+const Generator = require('yeoman-generator')
 const Configure = require('../configure')
 
 const {
@@ -13,8 +13,6 @@ const {
 module.exports = class extends Generator {
   async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-    this.promptValues = await this.getPromptValues()
-    this.destinationRoot(this.promptValues.path)
   }
 
   async removing () {
@@ -47,7 +45,7 @@ module.exports = class extends Generator {
 
     if (answers.confirm) {
       rmdir(this.promptValues.path)
-      this.log(chalk.green(`${this.promptValues.path} removed!`))
+      // this.log(chalk.green(`${this.promptValues.path} removed!`))
     }
 
     if (answers.confirmDocker) {

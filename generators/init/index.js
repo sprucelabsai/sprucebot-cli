@@ -114,14 +114,6 @@ module.exports = class extends Generator {
       this.destinationPath('./docker')
     )
     this.fs.copy(
-      this.templatePath('backups'),
-      this.destinationPath('./backups')
-    )
-    this.fs.copy(
-      this.templatePath('wait-for-postgres.sh'),
-      this.destinationPath('./wait-for-postgres.sh')
-    )
-    this.fs.copy(
       this.templatePath('.yo-rc.json'),
       this.destinationPath('./.yo-rc.json')
     )

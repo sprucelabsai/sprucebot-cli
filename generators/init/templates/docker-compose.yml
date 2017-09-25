@@ -3,6 +3,8 @@ services:
   postgres:
     image: mdillon/postgis:9.5
     container_name: sprucebot_postgres
+    networks:
+      - bridge
     ports:
       - "5432:5432"
     environment:
@@ -13,17 +15,26 @@ services:
     # Image includes EXPOSE 6379
     image: redis
     container_name: sprucebot_redis
+    networks:
+      - bridge
     ports:
       - "6379:6379"
   nginx:
     build: ./docker/nginx/
     container_name: sprucebot_nginx
+    networks:
+      - bridge
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./docker/nginx/certs:/etc/nginx/certs
+    networks:
+      bridge:
+        aliases:
+          - local-api.sprucebot.com
+          - local.sprucebot.com
   api:
     build: ./api/
     privileged: true
@@ -37,6 +48,8 @@ services:
       - SHELL=/bin/bash
     ports:
       - "3005:3005"
+    networks:
+      - bridge
   web:
     build: ./web/
     privileged: true
@@ -55,7 +68,13 @@ services:
       - "./web/webpack:/src/webpack"
     environment:
       - SHELL=/bin/bash
+    networks:
+      - bridge
     ports:
       - "3000:3000"
       - "3001:3001"
       - "35729:35729"
+
+networks:
+  bridge:
+    driver: bridge

@@ -21,22 +21,30 @@ services:
   nginx:
     build: ./docker/nginx/
     container_name: sprucebot_nginx
+    networks:
+      - bridge
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./docker/nginx/certs:/etc/nginx/certs
+    networks:
+      bridge:
+        aliases:
+          - local-api.sprucebot.com
+          - local.sprucebot.com
   api:
     build: ./api/
     privileged: true
     container_name: sprucebot_api
+    networks:
+      - bridge
     volumes:
       - "./api/app:/src/app"
       - "./api/.babelrc:/src/.babelrc"
       - "./api/.eslintrc:/src/.eslintrc"
       - "./api/.jsbeautifyrc:/src/.jsbeautifyrc"
-      - "./wait-for-postrges.sh:/src/wait-for-postrges.sh"
     environment:
       - SHELL=/bin/bash
     ports:
@@ -46,6 +54,8 @@ services:
     build: ./web/
     privileged: true
     container_name: sprucebot_web
+    networks:
+      - bridge
     volumes:
       - "./web/.eslintignore:/src/.eslintignore"
       - "./web/.eslintrc:/src/.eslintrc"
@@ -60,11 +70,12 @@ services:
       - "./web/webpack:/src/webpack"
     environment:
       - SHELL=/bin/bash
-    networks:
-      - bridge
     ports:
       - "3000:3000"
       - "3001:3001"
       - "35729:35729"
     extra_hosts:
       - "local-api.sprucebot.com:10.200.10.1"
+networks:
+  bridge:
+    driver: bridge

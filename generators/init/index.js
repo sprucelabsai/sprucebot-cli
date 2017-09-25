@@ -104,11 +104,6 @@ module.exports = class extends Generator {
       this.destinationPath('./docker-compose.yml'),
       this.promptValues
     )
-    this.fs.copyTpl(
-      this.templatePath('hosts'),
-      this.destinationPath('./hosts'),
-      this.promptValues
-    )
     this.fs.copy(
       this.templatePath('docker'),
       this.destinationPath('./docker')

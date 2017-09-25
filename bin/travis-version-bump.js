@@ -18,7 +18,7 @@ function patch (branch) {
   }
 }
 
-if (process.env.TRAVIS_PULL_REQUEST === 'false') {
+if (process.env.TRAVIS_PULL_REQUEST !== 'false') {
   // We don't want to version bump on PRs
   process.exit(0)
 }

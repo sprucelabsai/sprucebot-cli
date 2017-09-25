@@ -18,6 +18,11 @@ function patch (branch) {
   }
 }
 
+if (process.env.TRAVIS_PULL_REQUEST === false) {
+  // We don't want to version bump on PRs
+  process.exit(0)
+}
+
 switch (process.env.TRAVIS_BRANCH) {
   case 'dev':
     patch(process.env.TRAVIS_BRANCH)

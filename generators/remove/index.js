@@ -19,7 +19,7 @@ module.exports = class extends Generator {
     const answers = await this.prompt([{
       type: 'confirm',
       name: 'confirm',
-      message: `Are you sure you want me to delete ${this.promptValues.path} and all of it's contents?`,
+      message: `Are you sure you want me to delete ${this.destinationPath()} and all of it's contents?`,
       default: false
     }, {
       type: 'confirm',
@@ -44,8 +44,9 @@ module.exports = class extends Generator {
     }
 
     if (answers.confirm) {
-      rmdir(this.promptValues.path)
-      // this.log(chalk.green(`${this.promptValues.path} removed!`))
+      const dir = this.destinationPath()
+      rmdir(dir)
+      this.log(chalk.green(`${dir} removed!`))
     }
 
     if (answers.confirmDocker) {

@@ -42,18 +42,30 @@ module.exports = class extends Generator {
   async prompting () {
     const active = []
 
+    this.promptValues = {
+      path: this.options.path,
+      gitUser: this.options.gitUser
+    }
+
     // Default destination
-    this._prompts.path.default = path.resolve(this.destinationRoot(), './sprucebot')
-    active.push(this._prompts.path)
+    if (!this.promptValues.path) {
+      this._prompts.path.default = path.resolve(this.destinationRoot(), './sprucebot')
+      active.push(this._prompts.path)
+    }
 
     // Attempt to read the github username configured on system to set as default
-    try {
-      this._prompts.gitUser.default = await this.user.github.username()
-    } catch (e) {
+    if (!this.promptValues.gitUser) {
+      try {
+        this._prompts.gitUser.default = await this.user.github.username()
+      } catch (e) {
+      }
+      active.push(this._prompts.gitUser)
     }
-    active.push(this._prompts.gitUser)
 
-    this.promptValues = await this.prompt(active)
+    if (active.length > 0) {
+      const values = await this.prompt(active)
+      this.promptValues = Object.assign(this.promptValues, values)
+    }
     this.destinationRoot(this.promptValues.path)
   }
 

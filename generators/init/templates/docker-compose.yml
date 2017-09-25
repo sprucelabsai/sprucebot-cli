@@ -3,6 +3,8 @@ services:
   postgres:
     image: mdillon/postgis:9.5
     container_name: sprucebot_postgres
+    networks:
+      - bridge
     ports:
       - "5432:5432"
     environment:
@@ -34,7 +36,6 @@ services:
       - "./api/.babelrc:/src/.babelrc"
       - "./api/.eslintrc:/src/.eslintrc"
       - "./api/.jsbeautifyrc:/src/.jsbeautifyrc"
-      - "./api/.sequelizerc:/src/.sequelizerc"
       - "./wait-for-postrges.sh:/src/wait-for-postrges.sh"
     environment:
       - SHELL=/bin/bash
@@ -59,6 +60,8 @@ services:
       - "./web/webpack:/src/webpack"
     environment:
       - SHELL=/bin/bash
+    networks:
+      - bridge
     ports:
       - "3000:3000"
       - "3001:3001"

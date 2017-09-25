@@ -3,7 +3,7 @@ const chalk = require('chalk')
 const config = require('config')
 const Git = require('nodegit')
 
-const Generator = require('../base')
+const Generator = require('yeoman-generator')
 
 module.exports = class extends Generator {
   async initializing () {

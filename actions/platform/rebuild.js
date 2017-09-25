@@ -1,12 +1,10 @@
 const yeoman = require('yeoman-environment')
-const Remove = require('../../generators/remove')
+const Rebuild = require('../../generators/rebuild')
 
 const yo = yeoman.createEnv()
 
 module.exports = function remove (path, options) {
-  yo.registerStub(Remove, 'sprucebot')
+  yo.registerStub(Rebuild, 'sprucebot')
 
-  yo.run('sprucebot', {
-    path
-  })
+  yo.run('sprucebot')
 }

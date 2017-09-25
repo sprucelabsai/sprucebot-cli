@@ -28,15 +28,9 @@ describe('Start generator', () => {
   })
 
   it('throws if no valid docker-compose.yml', () => {
-    const dir = path.join(TEMP, 'sprucebot')
-    rmdir(dir)
-    createDir(dir)
     let gen
     return yoTest.run(generator)
-      .withLocalConfig({promptValues: {
-        path: dir
-      }})
-      .withPrompts({ path: dir })
+      .inTmpDir()
       .on('ready', _gen => {
         gen = _gen
         gen.spawnCommandSync = stub().returns({ error: null })
@@ -45,27 +39,22 @@ describe('Start generator', () => {
         assert.notOk(true, 'Generator should have thrown an error')
       })
       .catch(e => {
-        assert.include(e.message, `Uh oh, I can't find a valid docker-compose.yml in ${dir}`)
+        assert.match(e.message, /I can't find a valid docker-compose.yml/)
       })
   })
 
   it('spawns docker-compose command', () => {
-    const dir = path.join(TEMP, 'sprucebot')
-    createDir(dir)
-    fs.writeFileSync(path.join(dir, 'docker-compose.yml'), 'version: 3')
     let gen
     return yoTest.run(generator)
-      .withLocalConfig({promptValues: {
-        path: dir
-      }})
+      .inTmpDir(dir => {
+        fs.writeFileSync(path.join(dir, 'docker-compose.yml'), 'version: 3')
+      })
       .on('ready', _gen => {
         gen = _gen
         gen.spawnCommandSync = stub().returns({ error: null })
       })
       .then(() => {
-        assert.ok(gen.spawnCommandSync.calledWith('docker-compose', ['up'], {
-          cwd: dir
-        }))
+        assert.ok(gen.spawnCommandSync.calledWith('docker-compose', ['up']))
       })
   })
 })

@@ -17,7 +17,7 @@ usage ()
     echo './restore.sh -h <host> -d <database name> -u <user> -p <password> -r <remote host> -l <local host>'
     echo ""
     echo "Example:"
-    echo './restor. -h "1234.amazonaws.com" -d heroku_1234 -u user1234 -p pw1234 -l "localhost"'
+    echo './restore.sh -h "1234.amazonaws.com" -d heroku_1234 -u user1234 -p pw1234 -l "localhost"'
     echo ""
     parameters
     echo ""

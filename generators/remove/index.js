@@ -3,7 +3,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
 
-const Generator = require('../base')
+const Generator = require('yeoman-generator')
 const Configure = require('../configure')
 
 const {
@@ -13,15 +13,13 @@ const {
 module.exports = class extends Generator {
   async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-    this.promptValues = await this.getPromptValues()
-    this.destinationRoot(this.promptValues.path)
   }
 
   async removing () {
     const answers = await this.prompt([{
       type: 'confirm',
       name: 'confirm',
-      message: `Are you sure you want me to delete ${this.promptValues.path} and all of it's contents?`,
+      message: `Are you sure you want me to delete ${this.destinationPath()} and all of it's contents?`,
       default: false
     }, {
       type: 'confirm',
@@ -46,8 +44,9 @@ module.exports = class extends Generator {
     }
 
     if (answers.confirm) {
-      rmdir(this.promptValues.path)
-      this.log(chalk.green(`${this.promptValues.path} removed!`))
+      const dir = this.destinationPath()
+      rmdir(dir)
+      this.log(chalk.green(`${dir} removed!`))
     }
 
     if (answers.confirmDocker) {

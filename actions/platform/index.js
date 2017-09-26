@@ -6,37 +6,43 @@ const {
 const platformInit = require('./init')
 const platformConfigure = require('./configure')
 const platformStart = require('./start')
+const platformBuild = require('./rebuild')
 const platformRemove = require('./remove')
 const platformVersion = require('./version')
+const platformOwnerCreate = require('./ownerCreate')
 
 function setup (argv) {
   const program = new Command()
 
   program
-  .command('configure')
-  .action(platformConfigure)
+    .command('configure')
+    .action(platformConfigure)
 
   program
-  .command('init [path]')
-  .option('--skip-install', 'Skip cloning repositories')
-  .option('-s --select-version', 'Wanna select a version? Cool, add --select-version flag')
-  .option('-r --reset-prompt', 'Reset previously saved prompts')
-  .action(platformInit)
+    .command('init [path]')
+    .option('--skip-install', 'Skip cloning repositories')
+    .option('-s --select-version', 'Wanna select a version? Cool, add --select-version flag')
+    .action(platformInit)
 
   program
-  .command('version')
-  .option('-r --reset-prompt', 'Reset previously saved prompts')
-  .action(platformVersion)
+    .command('version')
+    .action(platformVersion)
 
   program
-  .command('start [path]')
-  .option('-r --reset-prompt', 'Reset previously saved prompts')
-  .action(platformStart)
+    .command('start [path]')
+    .action(platformStart)
 
   program
-  .command('remove [path]')
-  .option('-r --reset-prompt', 'Reset previously saved prompts')
-  .action(platformRemove)
+    .command('rebuild [path]')
+    .action(platformBuild)
+
+  program
+    .command('remove [path]')
+    .action(platformRemove)
+
+  program
+    .command('owner:create [cellphone]')
+    .action(platformOwnerCreate)
 
   program.parse(argv)
 

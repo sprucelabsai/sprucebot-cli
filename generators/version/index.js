@@ -8,8 +8,6 @@ const Generator = require('yeoman-generator')
 module.exports = class extends Generator {
   async initializing () {
     this.sourceRoot(path.join(__dirname, 'templates'))
-    this.promptValues = await this.getPromptValues()
-    this.destinationRoot(this.promptValues.path)
   }
 
   async writing () {
@@ -23,7 +21,7 @@ module.exports = class extends Generator {
     }), {})
     const prompts = []
     for (let repo of Object.keys(repositories)) {
-      const repository = await Git.Repository.open(path.join(this.promptValues.path, repo))
+      const repository = await Git.Repository.open(path.join(this.destinationPath(), repo))
       const reference = await repository.getCurrentBranch()
       const versions = await Git.Tag.list(repository)
       repositories[repo].repository = repository

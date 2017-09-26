@@ -1,5 +1,6 @@
 const path = require('path')
 const hostile = require('hostile')
+const config = require('config')
 const chalk = require('chalk')
 const defaultConfig = require('config')
 const Generator = require('yeoman-generator')
@@ -25,7 +26,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'gitUser',
         message: `Github username`,
-        default: null,
+        default: config.get('gitUser'),
         store: true
       }
     }
@@ -49,7 +50,7 @@ module.exports = class extends Generator {
 
     // Default destination
     if (!this.promptValues.path) {
-      this._prompts.path.default = path.resolve(this.destinationRoot(), './sprucebot')
+      this._prompts.path.default = this.destinationRoot()
       active.push(this._prompts.path)
     }
 
@@ -132,10 +133,10 @@ module.exports = class extends Generator {
 
       if (!configured['local-api.sprucebot.com'] || !configured['local.sprucebot.com'] || !configured['local-devtools.sprucebot.com']) {
         this.log(chalk.green(`Sweet! We're almost done! Last step is configuring your host file.`))
-        this.log(chalk.yellow(`Don't` + ' sweat it though, run `cd ' + dir + ' && sudo sprucebot platform configure`'))
+        this.log(chalk.yellow(`Don't sweat it though, run \`cd ${dir} && sudo sprucebot platform configure\``))
       } else {
         this.log(chalk.green('Heck yeah! I double checked and everything looks good.'))
-        this.log(chalk.yellow('Run `cd ' + dir + ' && sprucebot platform start`  🌲 🤖'))
+        this.log(chalk.yellow(`Run \`cd ${dir} && sprucebot platform start\`  🌲 🤖`))
       }
     })
   }

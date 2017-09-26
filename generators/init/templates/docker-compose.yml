@@ -16,13 +16,13 @@ services:
   redis:
     image: redis
     container_name: sprucebot_redis
+    networks:
+      - bridge
     ports:
       - "6379:6379"
   nginx:
     build: ./docker/nginx/
     container_name: sprucebot_nginx
-    networks:
-      - bridge
     ports:
       - "80:80"
       - "443:443"
@@ -42,6 +42,7 @@ services:
       - bridge
     volumes:
       - "./api/app:/src/app"
+      - "./api/dev:/src/dev"
       - "./api/.babelrc:/src/.babelrc"
       - "./api/.eslintrc:/src/.eslintrc"
       - "./api/.jsbeautifyrc:/src/.jsbeautifyrc"
@@ -74,8 +75,6 @@ services:
       - "3000:3000"
       - "3001:3001"
       - "35729:35729"
-    extra_hosts:
-      - "local-api.sprucebot.com:10.200.10.1"
 networks:
   bridge:
     driver: bridge

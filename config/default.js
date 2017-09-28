@@ -8,7 +8,7 @@ module.exports = {
   description,
   gitUser: 'sprucelabsai',
   repositories: {
-    web: 'com-sprucebot-hello',
+    web: 'com-sprucebot-web',
     api: 'com-sprucebot-api'
   }
 }

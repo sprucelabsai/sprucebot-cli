@@ -41,6 +41,7 @@ services:
     container_name: sprucebot_api
     volumes:
       - "./api/app:/src/app"
+      - "./api/dev:/src/dev"
       - "./api/.babelrc:/src/.babelrc"
       - "./api/.eslintrc:/src/.eslintrc"
       - "./api/.jsbeautifyrc:/src/.jsbeautifyrc"

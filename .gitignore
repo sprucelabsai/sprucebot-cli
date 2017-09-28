@@ -28,8 +28,4 @@ atlassian-ide-plugin.xml
 
 # Built files
 coverage/
-sprucebot/
 __TEST__/
-
-# Yeoman config
-.yo-rc.json

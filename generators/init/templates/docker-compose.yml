@@ -11,8 +11,9 @@ services:
       POSTGRES_PASSWORD: barbershop123
       POSTGRES_USER: barbershopio
       POSTGRES_DB: docker_db
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
   redis:
-    # Image includes EXPOSE 6379
     image: redis
     container_name: sprucebot_redis
     networks:
@@ -22,8 +23,6 @@ services:
   nginx:
     build: ./docker/nginx/
     container_name: sprucebot_nginx
-    networks:
-      - bridge
     ports:
       - "80:80"
       - "443:443"
@@ -39,6 +38,8 @@ services:
     build: ./api/
     privileged: true
     container_name: sprucebot_api
+    networks:
+      - bridge
     volumes:
       - "./api/app:/src/app"
       - "./api/dev:/src/dev"
@@ -49,12 +50,13 @@ services:
       - SHELL=/bin/bash
     ports:
       - "3005:3005"
-    networks:
-      - bridge
+      - "4005:4005"
   web:
     build: ./web/
     privileged: true
     container_name: sprucebot_web
+    networks:
+      - bridge
     volumes:
       - "./web/.eslintignore:/src/.eslintignore"
       - "./web/.eslintrc:/src/.eslintrc"
@@ -69,13 +71,10 @@ services:
       - "./web/webpack:/src/webpack"
     environment:
       - SHELL=/bin/bash
-    networks:
-      - bridge
     ports:
       - "3000:3000"
       - "3001:3001"
       - "35729:35729"
-
 networks:
   bridge:
     driver: bridge

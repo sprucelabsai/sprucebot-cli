@@ -6,6 +6,7 @@ const {
 module.exports = {
   version,
   description,
+  appname: 'sprucebot',
   gitUser: 'sprucelabsai',
   repositories: {
     web: 'com-sprucebot-web',

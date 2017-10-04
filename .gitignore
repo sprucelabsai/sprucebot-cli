@@ -29,3 +29,4 @@ atlassian-ide-plugin.xml
 # Built files
 coverage/
 __TEST__/
+.vscode/

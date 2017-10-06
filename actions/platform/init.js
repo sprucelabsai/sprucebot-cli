@@ -60,7 +60,6 @@ async function cloneRepo (repo, localPath) {
     try {
       spawnSync('git', ['clone', repo, localPath], {stdio: 'inherit', env: process.env})
       console.log(chalk.green(`Finished cloning ${repo} to ${localPath}.`))
-      console.log(chalk.yellow('I can\'t setup your project .env yet. You need to follow the project README for now ☝️'))
     } catch (e) {
       console.error(e)
       console.log(chalk.bold.red(`CRAP, looks like there was a problem cloning ${repo}.`))

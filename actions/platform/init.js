@@ -7,7 +7,8 @@ const inquirer = require('inquirer')
 const hostile = require('hostile')
 
 const {
-  directoryExists
+  directoryExists,
+  fileExists
 } = require('../../utils/dir')
 
 async function prompt (options) {
@@ -35,14 +36,18 @@ async function prompt (options) {
 
 async function writeRepos (installPath, gitUser) {
   console.log('writing repos...', installPath, gitUser)
+  const gitBase = `git@github.com:${gitUser}`
+  const pathDev = path.resolve(installPath, 'dev-services')
   const pathApi = path.resolve(installPath, 'api')
   const pathWeb = path.resolve(installPath, 'web')
-  const pathDev = path.resolve(installPath, 'dev-services')
-  const gitBase = `git@github.com:${gitUser}`
 
+  cloneRepo(`${gitBase}/${config.get('repositories.dev-services')}`, pathDev)
   cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
   cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
-  cloneRepo(`${gitBase}/${config.get('repositories.dev-services')}`, pathDev)
+
+  yarnInstall(installPath)
+  yarnInstall(pathApi)
+  yarnInstall(pathWeb)
 }
 
 async function cloneRepo (repo, localPath) {
@@ -53,10 +58,9 @@ async function cloneRepo (repo, localPath) {
   // TODO - Make sure this halts when github public key is missing
 
     try {
-      spawnSync('git', ['clone', repo, localPath])
+      spawnSync('git', ['clone', repo, localPath], {stdio: 'inherit', env: process.env})
       console.log(chalk.green(`Finished cloning ${repo} to ${localPath}.`))
       console.log(chalk.yellow('I can\'t setup your project .env yet. You need to follow the project README for now ☝️'))
-      console.log(chalk.yellow(`I can't install dependencies either. Better run \`cd ${localPath} && yarn install\` ☝️`))
     } catch (e) {
       console.error(e)
       console.log(chalk.bold.red(`CRAP, looks like there was a problem cloning ${repo}.`))
@@ -71,6 +75,17 @@ async function copyFile (fromFile, toFile) {
   } catch (e) {
     console.error(e)
     console.log(chalk.bold.red(`CRAP, I had trouble copying your ecosystem file ${fromFile}`))
+  }
+}
+
+async function yarnInstall (cwd) {
+  try {
+    spawnSync('nvm', ['use'], {cwd, stdio: 'inherit', env: process.env})
+    spawnSync('yarn', ['install', '--ignore-engines'], {cwd, stdio: 'inherit', env: process.env})
+    console.log(chalk.green('Successfully installed project dependencies'), cwd)
+  } catch (e) {
+    console.error(e)
+    console.log(chalk.bold.red(`Crap, I had trouble installing with yarn ${cwd}`))
   }
 }
 
@@ -99,6 +114,22 @@ module.exports = async function init (localPath, options) {
   const packageTo = path.resolve(promptValues.installPath, './package.json')
   await copyFile(packageFrom, packageTo)
 
+  const webEnvFrom = path.resolve(promptValues.installPath, './web/.env.example')
+  const webEnvTo = path.resolve(promptValues.installPath, './web/.env')
+  if (!fileExists(webEnvTo)) {
+    await copyFile(webEnvFrom, webEnvTo)
+  } else {
+    console.warn(chalk.yellow(`Careful. An .env already exists in ${webEnvTo}. Proceed with caution...`))
+  }
+
+  const apiEnvFrom = path.resolve(promptValues.installPath, './api/app/.env.example')
+  const apiEnvTo = path.resolve(promptValues.installPath, './api/app/.env')
+  if (!fileExists(apiEnvTo)) {
+    await copyFile(apiEnvFrom, apiEnvTo)
+  } else {
+    console.warn(chalk.yellow(`Careful. An .env already exists in ${apiEnvTo}. Proceed with caution...`))
+  }
+
   hostile.get(false, (err, lines) => {
     if (err) {
       console.error(chalk.bold.red('Oh sh**, I had an issue reading your hosts file. Google `Sprucebot hosts file` for help.'))
@@ -106,7 +137,7 @@ module.exports = async function init (localPath, options) {
     }
 
     const configured = lines.reduce((memo, line) => {
-      if (/sprucebot.com/.test(line[1])) {
+      if (/sprucebot/.test(line[1])) {
         memo[line[1]] = true
       }
       return memo
@@ -115,7 +146,13 @@ module.exports = async function init (localPath, options) {
     // Help dev cd to correct directory
     let dir = path.basename(promptValues.installPath)
 
-    if (!configured['local-api.sprucebot.com'] || !configured['local.sprucebot.com'] || !configured['local-devtools.sprucebot.com']) {
+    if (
+      !configured['local-api.sprucebot.com'] ||
+      !configured['local.sprucebot.com'] ||
+      !configured['local-devtools.sprucebot.com'] ||
+      !configured['sprucebot_postgres'] ||
+      !configured['sprucebot_redis']
+    ) {
       console.log(chalk.green(`Sweet! We're almost done! Last step is configuring your host file.`))
       console.log(chalk.yellow(`Don't sweat it though, run \`cd ${dir} && sudo sprucebot platform configure\``))
     } else {

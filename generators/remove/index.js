@@ -4,7 +4,6 @@ const chalk = require('chalk')
 const yaml = require('js-yaml')
 
 const Generator = require('yeoman-generator')
-const Configure = require('../configure')
 
 const {
   rmdir
@@ -34,13 +33,13 @@ module.exports = class extends Generator {
     }])
 
     if (answers.confirmHosts) {
-      try {
-        Configure.Remove.apply(this, [this.options.sudoOverride])
-        this.log(chalk.green('Bam! Hosts entries removed!'))
-      } catch (e) {
-        this.log(chalk.bold.red(`Crap, removing host entries failed. ${e.message}.`))
-        this.log(chalk.bold.yellow('Try running as root.'))
-      }
+      // try {
+      //   Configure.Remove.apply(this, [this.options.sudoOverride])
+      //   this.log(chalk.green('Bam! Hosts entries removed!'))
+      // } catch (e) {
+      //   this.log(chalk.bold.red(`Crap, removing host entries failed. ${e.message}.`))
+      //   this.log(chalk.bold.yellow('Try running as root.'))
+      // }
     }
 
     if (answers.confirm) {

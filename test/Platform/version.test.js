@@ -1,5 +1,5 @@
 /* eslint-env mocha */
 describe('version command', () => {
-  xit('defaults to HEAD')
-  xit('lists tags')
+  test.skip('defaults to HEAD')
+  test.skip('lists tags')
 })

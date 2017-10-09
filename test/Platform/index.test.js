@@ -1,6 +1,5 @@
-/* eslint-env mocha */
+/* eslint-env jest */
 const path = require('path')
-const { assert } = require('chai')
 const CliTest = require('command-line-test')
 
 const {
@@ -12,22 +11,24 @@ const {
 const binFile = path.resolve(sprucebotProgram)
 
 describe('Platform stdin', () => {
-  function runCommand (argv = []) {
+  const runCommand = (argv = []) => {
     const cliTest = new CliTest()
-    return cliTest.execFile(binFile, argv).then(res => {
-      assert.isNull(res.error)
+    return cliTest.exec(binFile, argv).then(res => {
+      expect(res.error).toBeNull()
     })
   }
-  it('`sprucebot platform` should be okay', () => {
+  test('`sprucebot platform` should be okay', () => {
     return runCommand()
   })
 
-  it('`sprucebot platform -h` should be okay', () => {
+  test('`sprucebot platform -h` should be okay', () => {
     return runCommand(['-h'])
   })
 
-  xit('`sprucebot platform init` should be okay', () => {
+  test('`sprucebot platform init` should be okay', async () => {
     // Need to figure out how to mock user input
-    return runCommand(['init'])
+    const output = await runCommand(['init'])
+
+    console.log(output)
   })
 })

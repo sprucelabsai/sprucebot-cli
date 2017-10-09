@@ -25,7 +25,7 @@ function setup (argv) {
     .action(platformInit)
 
   program
-    .command('version')
+    .command('version [path]')
     .action(platformVersion)
 
   program

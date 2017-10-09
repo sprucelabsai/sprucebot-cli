@@ -1,15 +1,11 @@
-const path = require('path')
 const chalk = require('chalk')
 const {spawnSync} = require('child_process')
 const {
-  fileExists
+  isProjectInstalled
 } = require('../../utils/dir')
 
-module.exports = function start (optPath, options) {
-  const ecosystem = path.join(process.cwd(), './ecosystem.config.js')
-  if (!fileExists(ecosystem)) {
-    console.error(chalk.red.bold(`Crap! I can't find a valid ecosystem.config.js in ${ecosystem}`))
-  }
+module.exports = function start (installPath = process.cwd(), options) {
+  if (!isProjectInstalled(installPath)) throw new Error('Halting...')
 
   const cmd = spawnSync('yarn', ['run', 'start'], {cwd: process.cwd(), stdio: 'inherit'})
 

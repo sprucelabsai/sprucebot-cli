@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const chalk = require('chalk')
 
 /**
  * Recursively remove dir and containing files/folders
@@ -49,7 +50,7 @@ exports.directoryExists = function directoryExists (path) {
   }
 }
 
-exports.fileExists = function fileExists (path) {
+const fileExists = exports.fileExists = function fileExists (path) {
   let stats
   try {
     stats = fs.statSync(path)
@@ -58,4 +59,18 @@ exports.fileExists = function fileExists (path) {
     // Path is not a file
     return false
   }
+}
+
+/**
+ * Returns true if process.cwd is the base path of a valid install ecosystem
+ * @returns {boolean}
+ */
+exports.isProjectInstalled = function isProjectInstalled (installPath) {
+  const ecosystem = path.join(installPath, './ecosystem.config.js')
+  if (!fileExists(ecosystem)) {
+    console.error(chalk.red.bold(`Crap! I can't find a valid ecosystem.config.js in ${ecosystem}`))
+    console.log('Make sure you are in the directory created by `sprucebot platform init`')
+    return false
+  }
+  return true
 }

@@ -1,10 +1,10 @@
-const yeoman = require('yeoman-environment')
-const Rebuild = require('../../generators/rebuild')
-
-const yo = yeoman.createEnv()
+const { spawnSync } = require('child_process')
+const chalk = require('chalk')
 
 module.exports = function remove (path, options) {
-  yo.registerStub(Rebuild, 'sprucebot')
+  spawnSync('docker-compose', ['down'])
+  spawnSync('docker-compose', ['build'])
 
-  yo.run('sprucebot')
+  console.log(chalk.green('Everything is built and ready! 💪'))
+  console.log(chalk.yellow('Run `sprucebot platform start`  🌲 🤖'))
 }

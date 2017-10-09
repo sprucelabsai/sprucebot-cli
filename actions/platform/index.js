@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-const {
-  Command
-} = require('commander')
+const { Command } = require('commander')
 
 const platformInit = require('./init')
 const platformConfigure = require('./configure')
@@ -11,42 +9,33 @@ const platformRemove = require('./remove')
 const platformVersion = require('./version')
 const platformOwnerCreate = require('./ownerCreate')
 
-function setup (argv) {
-  const program = new Command()
+function setup(argv) {
+	const program = new Command()
 
-  program
-    .command('configure')
-    .action(platformConfigure)
+	program.command('configure').action(platformConfigure)
 
-  program
-    .command('init [path]')
-    .option('--skip-install', 'Skip cloning repositories')
-    .option('-s --select-version', 'Wanna select a version? Cool, add --select-version flag')
-    .action(platformInit)
+	program
+		.command('init [path]')
+		.option('--skip-install', 'Skip cloning repositories')
+		.option(
+			'-s --select-version',
+			'Wanna select a version? Cool, add --select-version flag'
+		)
+		.action(platformInit)
 
-  program
-    .command('version [path]')
-    .action(platformVersion)
+	program.command('version [path]').action(platformVersion)
 
-  program
-    .command('start [path]')
-    .action(platformStart)
+	program.command('start [path]').action(platformStart)
 
-  program
-    .command('rebuild [path]')
-    .action(platformBuild)
+	program.command('rebuild [path]').action(platformBuild)
 
-  program
-    .command('remove [path]')
-    .action(platformRemove)
+	program.command('remove [path]').action(platformRemove)
 
-  program
-    .command('owner:create [cellphone]')
-    .action(platformOwnerCreate)
+	program.command('owner:create [cellphone]').action(platformOwnerCreate)
 
-  program.parse(argv)
+	program.parse(argv)
 
-  return program
+	return program
 }
 
 module.exports = argv => setup(argv)

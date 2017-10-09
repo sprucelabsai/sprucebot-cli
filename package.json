@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node ./bin/sprucebot.js",
-    "lint": "./node_modules/.bin/standard",
+    "lint": "./node_modules/.bin/eslint --fix '**/**/*{.js,.scss}'",
     "test": "./node_modules/.bin/jest --coverage",
     "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test"
@@ -34,10 +34,13 @@
   },
   "devDependencies": {
     "command-line-test": "^1.0.10",
+    "eslint": "^4.8.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
     "husky": "^0.14.3",
     "jest": "^21.2.1",
+    "prettier": "^1.7.4",
     "sinon": "^3.2.1",
-    "standard": "^10.0.3",
     "yeoman-assert": "^3.0.0",
     "yeoman-test": "^1.7.0"
   }

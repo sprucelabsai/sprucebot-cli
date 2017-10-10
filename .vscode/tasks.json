@@ -19,9 +19,10 @@
     },
     {
       "taskName": "Test Open File",
-      "type": "shell",
-      "command": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "type": "process",
+      "command": "node",
       "args": [
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
         "${file}"
       ],
       "problemMatcher": []

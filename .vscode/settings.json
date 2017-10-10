@@ -1,6 +1,5 @@
 {
-  "eslint.enable": false,
-  "standard.enable": true,
+  "eslint.enable": true,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,

@@ -64,7 +64,10 @@ This section is only relevant if you've been given permission to work directly o
 
 * `sprucebot platform init`
   * Use option `--select-version` to checkout specific versions once cloned
-  * *REQUIRED* You need to fork `com-sprucebot-api` and `com-sprucebot-hello` projects
+  * *REQUIRED* You need to fork the following projects:
+    * `com-sprucebot-api`
+    * `com-sprucebot-web`
+    * `sprucebot-dev-services`
   * Clones platform repositories and setup local docker build
   * Creates docker-compose build directory
 * `sudo sprucebot platform configure`

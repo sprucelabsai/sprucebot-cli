@@ -33,7 +33,7 @@ describe('Configure Generator', () => {
       })
   })
 
-  it('sets missing hosts overrides', () => {
+  xit('sets missing hosts overrides', () => {
     return yoTest.run(generator)
       .withOptions({sudoOverride: true, hostile})
       .then(() => {

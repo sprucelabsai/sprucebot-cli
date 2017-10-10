@@ -11,7 +11,7 @@ taking advantage of it.
 Remember, our goal is to connect people, not replace them. So make
 sure your skill promotes human-to-human connection.
 
-[![Watch Vignette 1](images/video-poster.jpg)](https://vimeo.com/196923365)
+[![Watch Vignette 1](images/video-poster.jpg?raw=true)](https://vimeo.com/196923365)
 
 
 # Skills Development

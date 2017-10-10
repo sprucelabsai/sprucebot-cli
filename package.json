@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node ./bin/sprucebot.js",
     "lint": "./node_modules/.bin/eslint --fix '**/**/*{.js,.scss}'",
-    "test": "./node_modules/.bin/jest --coverage",
+    "test": "./node_modules/.bin/jest --coverage --silent",
     "precommit": "npm run lint",
     "prepush": "npm run lint && npm run test"
   },
@@ -43,5 +43,14 @@
     "sinon": "^3.2.1",
     "yeoman-assert": "^3.0.0",
     "yeoman-test": "^1.7.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/config/"
+    ],
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**"
+    ]
   }
 }

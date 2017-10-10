@@ -19,11 +19,11 @@
     },
     {
       "taskName": "Test Open File",
-      "type": "shell",
-      "command": "${workspaceRoot}/node_modules/.bin/jest",
+      "type": "process",
+      "command": "node",
       "args": [
-        "${file}",
-        "--coverage"
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "${file}"
       ],
       "problemMatcher": []
     },

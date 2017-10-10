@@ -5,7 +5,7 @@ const hostile = require('hostile')
 const inquirer = require('inquirer')
 
 const {
-  fileExists
+  isProjectInstalled
 } = require('../../utils/dir')
 
 async function prompt (options) {
@@ -83,10 +83,7 @@ async function setupCertificates () {
 
 module.exports = async function configure (options) {
   console.log('Configuring your environment...')
-  if (!fileExists('./ecosystem.config.js')) {
-    console.error('Can\'t you must run this command from your `sprucebot` directory')
-    throw new Error('Halting...')
-  }
+  if (!isProjectInstalled(process.cwd())) throw new Error('Halting...')
 
   const answers = await prompt()
 

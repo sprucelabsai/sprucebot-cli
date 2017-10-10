@@ -6,6 +6,8 @@ const { spawnSync } = require('child_process')
 const inquirer = require('inquirer')
 const hostile = require('hostile')
 
+const checkoutVersion = require('./version')
+
 const {
   directoryExists,
   fileExists
@@ -88,7 +90,7 @@ async function yarnInstall (cwd) {
   }
 }
 
-module.exports = async function init (localPath, options) {
+module.exports = async function init (installPath = `${process.cwd()}/sprucebot`, options) {
   // TODO - Add --select-version option support
   const cliPath = path.resolve(__dirname, '..', '..')
   if (cliPath === process.cwd()) {
@@ -96,14 +98,17 @@ module.exports = async function init (localPath, options) {
     throw new Error('Halting...')
   }
 
-  const installPath = localPath || (`${process.cwd()}/sprucebot`)
-
   const promptValues = await prompt({
     installPath,
     gitUser: config.get('gitUser')
   })
 
   await writeRepos(promptValues.installPath, promptValues.gitUser)
+
+  // Same as `sprucebot platform version` command
+  if (options.selectVersion) {
+    await checkoutVersion(promptValues.installPath, options)
+  }
 
   const ecoFrom = path.resolve(promptValues.installPath, './dev-services/ecosystem.config.js')
   const ecoTo = path.resolve(promptValues.installPath, './ecosystem.config.js')

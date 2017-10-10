@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-describe('Init generator', () => {
+describe('init command', () => {
   xit('prompts when options are missing', () => {
   })
 

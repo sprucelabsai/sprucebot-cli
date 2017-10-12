@@ -6,9 +6,8 @@ const inquirer = require('inquirer')
 
 const { isProjectInstalled } = require('../../utils/dir')
 
-process.on('unhandledrejection', e => console.error(e))
-
 module.exports = async function version(installPath = process.cwd(), options) {
+	console.log('Hello!', installPath)
 	if (!isProjectInstalled(installPath)) throw new Error('Halting...')
 
 	const repositoriesConfig = config.get('repositories')

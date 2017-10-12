@@ -4,6 +4,7 @@ const chalk = require('chalk')
 
 /**
  * Recursively remove dir and containing files/folders
+ * Because Node's rmdir is not recursive
  * @param {string} dirPath base path to recursively remove
  */
 exports.rmdir = function rmdir(dirPath) {

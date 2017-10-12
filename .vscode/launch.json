@@ -7,11 +7,15 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Debug Open File",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
-        "${file}",
-        "--coverage"
+        "${file}"
+      ],
+      "skipFiles": [
+        "node_modules",
+        "async_hooks.js",
+        "inspector_async_hooks.js"
       ]
     }
   ]

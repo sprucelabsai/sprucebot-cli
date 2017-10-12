@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const config = require('config')
 const chalk = require('chalk')
-const { spawnSync } = require('child_process')
+const childProcess = require('child_process')
 const inquirer = require('inquirer')
 const hostile = require('hostile')
 
@@ -11,25 +11,30 @@ const checkoutVersion = require('./version')
 const { directoryExists, fileExists } = require('../../utils/dir')
 
 async function prompt(options) {
-	const prompts = [
-		{
+	const prompts = []
+
+	if (!options.installPath) {
+		prompts.push({
 			type: 'input',
 			name: 'installPath',
 			message: 'Install location (absolute path)',
-			default: options.installPath,
-			store: true
-		},
-		{
+			default: `${process.cwd()}/sprucebot`
+		})
+	}
+
+	if (!options.gitUser) {
+		prompts.push({
 			type: 'input',
 			name: 'gitUser',
 			message: `Github username. (Developers should use their own. Othewise default is fine.)`,
-			default: options.gitUser,
-			store: true
-		}
-	]
+			default: config.get('gitUser')
+		})
+	}
 
-	const values = await inquirer.prompt(prompts)
-
+	const values = {
+		...options,
+		...(await inquirer.prompt(prompts))
+	}
 	if (!path.isAbsolute(values.installPath)) {
 		throw new Error(
 			`Woops, I can only install in an absolute installPath. You supplied ${values.installPath}`
@@ -45,7 +50,10 @@ async function writeRepos(installPath, gitUser) {
 	const pathApi = path.resolve(installPath, 'api')
 	const pathWeb = path.resolve(installPath, 'web')
 
-	cloneRepo(`${gitBase}/${config.get('repositories.dev-services')}`, pathDev)
+	cloneRepo(
+		`${gitBase}/${config.get('repositories.dev-services')}`,
+		installPath
+	)
 	cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
 	cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
 
@@ -62,15 +70,14 @@ async function cloneRepo(repo, localPath) {
 		)
 	} else {
 		// TODO - Make sure this halts when github public key is missing
+		const cmd = childProcess.spawnSync('git', ['clone', repo, localPath], {
+			stdio: 'inherit',
+			env: process.env
+		})
 
-		try {
-			spawnSync('git', ['clone', repo, localPath], {
-				stdio: 'inherit',
-				env: process.env
-			})
+		if (cmd.status === 0) {
 			console.log(chalk.green(`Finished cloning ${repo} to ${localPath}.`))
-		} catch (e) {
-			console.error(e)
+		} else {
 			console.log(
 				chalk.bold.red(`CRAP, looks like there was a problem cloning ${repo}.`)
 			)
@@ -93,29 +100,30 @@ async function copyFile(fromFile, toFile) {
 }
 
 async function yarnInstall(cwd) {
-	try {
-		spawnSync('nvm', ['use'], { cwd, stdio: 'inherit', env: process.env })
-		spawnSync('yarn', ['install', '--ignore-engines'], {
-			cwd,
-			stdio: 'inherit',
-			env: process.env
-		})
+	childProcess.spawnSync('nvm', ['use'], {
+		cwd,
+		stdio: 'inherit',
+		env: process.env
+	})
+	const cmd = childProcess.spawnSync('yarn', ['install', '--ignore-engines'], {
+		cwd,
+		stdio: 'inherit',
+		env: process.env
+	})
+
+	if (cmd.status === 0) {
 		console.log(chalk.green('Successfully installed project dependencies'), cwd)
-	} catch (e) {
-		console.error(e)
+	} else {
 		console.log(
 			chalk.bold.red(`Crap, I had trouble installing with yarn ${cwd}`)
 		)
 	}
 }
 
-module.exports = async function init(
-	installPath = `${process.cwd()}/sprucebot`,
-	options
-) {
+const init = (module.exports = async function init(installPath, options = {}) {
 	// TODO - Add --select-version option support
 	const cliPath = path.resolve(__dirname, '..', '..')
-	if (cliPath === process.cwd()) {
+	if (cliPath === process.cwd() && process.env.NODE_ENV !== 'test') {
 		console.error(
 			chalk.bold.red(
 				'You cannot run `sprucebot platform init` from inside the sprucebot-cli directory.'
@@ -126,7 +134,7 @@ module.exports = async function init(
 
 	const promptValues = await prompt({
 		installPath,
-		gitUser: config.get('gitUser')
+		gitUser: options.gitUser
 	})
 
 	await writeRepos(promptValues.installPath, promptValues.gitUser)
@@ -135,20 +143,6 @@ module.exports = async function init(
 	if (options.selectVersion) {
 		await checkoutVersion(promptValues.installPath, options)
 	}
-
-	const ecoFrom = path.resolve(
-		promptValues.installPath,
-		'./dev-services/ecosystem.config.js'
-	)
-	const ecoTo = path.resolve(promptValues.installPath, './ecosystem.config.js')
-	await copyFile(ecoFrom, ecoTo)
-
-	const packageFrom = path.resolve(
-		promptValues.installPath,
-		'./dev-services/package.json'
-	)
-	const packageTo = path.resolve(promptValues.installPath, './package.json')
-	await copyFile(packageFrom, packageTo)
 
 	const webEnvFrom = path.resolve(
 		promptValues.installPath,
@@ -226,4 +220,6 @@ module.exports = async function init(
 			)
 		}
 	})
-}
+})
+
+init.spawnSync = childProcess.spawnSync

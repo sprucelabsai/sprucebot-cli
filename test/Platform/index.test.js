@@ -14,9 +14,7 @@ const TEMP = config.get('TEMP')
 beforeEach(() => {
 	createDir(TEMP)
 })
-afterEach(() => {
-	rmdir(TEMP)
-})
+afterEach(() => {})
 const runCommand = async (argv = []) => {
 	const cliTest = new CliTest()
 	return await cliTest.execFile(binFile, argv, { cwd: TEMP })

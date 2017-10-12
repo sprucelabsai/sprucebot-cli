@@ -27,7 +27,7 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 * TBD
 
 ### Installation
-* ~~`yarn add -g sprucebot-cli` or `npm install -g sprucebot-cli`~~
+* ~~`yarn add -g sprucebot-cli`~~
 
 ### Commands
 

@@ -51,10 +51,10 @@ This section is only relevant if you've been given permission to work directly o
 * [bash](https://www.gnu.org/software/bash/)
 
 ### Installation
-* ~~`yarn add -g sprucebot-cli` or `npm install -g sprucebot-cli`~~
+* ~~`yarn add -g sprucebot-cli`~~
 * Clone the repo to your local machine `git clone git@github.com:sprucelabsai/sprucebot-cli.git`
-* Install dependencies `yarn install` or `npm install`
-* Create symlink in global folder `yarn link` or `npm link`
+* Install dependencies `yarn install`
+* Create symlink in global folder `yarn link`
 * Reload your terminal and verify installation with `sprucebot -V`
 
 ### Developer Guidelines

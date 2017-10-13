@@ -12,6 +12,7 @@ module.exports = {
 	repositories: {
 		web: 'com-sprucebot-web',
 		api: 'com-sprucebot-api',
-		'dev-services': 'sprucebot-dev-services'
+		'dev-services': 'sprucebot-dev-services',
+		'sprucebot-relay': 'sprucebot-relay'
 	}
 }

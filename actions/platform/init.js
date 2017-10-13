@@ -49,6 +49,7 @@ async function writeRepos(installPath, gitUser) {
 	const pathDev = path.resolve(installPath, 'dev-services')
 	const pathApi = path.resolve(installPath, 'api')
 	const pathWeb = path.resolve(installPath, 'web')
+	const pathRelay = path.resolve(installPath, 'sprucebot-relay')
 
 	cloneRepo(
 		`${gitBase}/${config.get('repositories.dev-services')}`,
@@ -56,10 +57,15 @@ async function writeRepos(installPath, gitUser) {
 	)
 	cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
 	cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
+	cloneRepo(
+		`${gitBase}/${config.get('repositories.sprucebot-relay')}`,
+		pathRelay
+	)
 
 	yarnInstall(installPath)
 	yarnInstall(pathApi)
 	yarnInstall(pathWeb)
+	yarnInstall(pathRelay)
 }
 
 async function cloneRepo(repo, localPath) {
@@ -120,6 +126,47 @@ async function yarnInstall(cwd) {
 	}
 }
 
+async function writeEnvs(installPath) {
+	const webEnvFrom = path.resolve(installPath, './web/.env.example')
+	const webEnvTo = path.resolve(installPath, './web/.env')
+	if (!fileExists(webEnvTo)) {
+		await copyFile(webEnvFrom, webEnvTo)
+	} else {
+		console.warn(
+			chalk.yellow(
+				`Careful. An .env already exists in ${webEnvTo} Proceed with caution...`
+			)
+		)
+	}
+
+	const apiEnvFrom = path.resolve(installPath, './api/app/.env.example')
+	const apiEnvTo = path.resolve(installPath, './api/app/.env')
+	if (!fileExists(apiEnvTo)) {
+		await copyFile(apiEnvFrom, apiEnvTo)
+	} else {
+		console.warn(
+			chalk.yellow(
+				`Careful. An .env already exists in ${apiEnvTo} Proceed with caution...`
+			)
+		)
+	}
+
+	const relayEnvFrom = path.resolve(
+		installPath,
+		'./sprucebot-relay/.env.sample'
+	)
+	const relayEnvTo = path.resolve(installPath, './sprucebot-relay/.env')
+	if (!fileExists(relayEnvTo)) {
+		await copyFile(relayEnvFrom, relayEnvTo)
+	} else {
+		console.warn(
+			chalk.yellow(
+				`Careful. An .env already exists in ${relayEnvTo} Proceed with caution...`
+			)
+		)
+	}
+}
+
 const init = (module.exports = async function init(installPath, options = {}) {
 	// TODO - Add --select-version option support
 	const cliPath = path.resolve(__dirname, '..', '..')
@@ -144,35 +191,21 @@ const init = (module.exports = async function init(installPath, options = {}) {
 		await checkoutVersion(promptValues.installPath, options)
 	}
 
-	const webEnvFrom = path.resolve(
+	const ecoFrom = path.resolve(
 		promptValues.installPath,
-		'./web/.env.example'
+		'./dev-services/ecosystem.config.js'
 	)
-	const webEnvTo = path.resolve(promptValues.installPath, './web/.env')
-	if (!fileExists(webEnvTo)) {
-		await copyFile(webEnvFrom, webEnvTo)
-	} else {
-		console.warn(
-			chalk.yellow(
-				`Careful. An .env already exists in ${webEnvTo}. Proceed with caution...`
-			)
-		)
-	}
+	const ecoTo = path.resolve(promptValues.installPath, './ecosystem.config.js')
+	await copyFile(ecoFrom, ecoTo)
 
-	const apiEnvFrom = path.resolve(
+	const packageFrom = path.resolve(
 		promptValues.installPath,
-		'./api/app/.env.example'
+		'./dev-services/package.json'
 	)
-	const apiEnvTo = path.resolve(promptValues.installPath, './api/app/.env')
-	if (!fileExists(apiEnvTo)) {
-		await copyFile(apiEnvFrom, apiEnvTo)
-	} else {
-		console.warn(
-			chalk.yellow(
-				`Careful. An .env already exists in ${apiEnvTo}. Proceed with caution...`
-			)
-		)
-	}
+	const packageTo = path.resolve(promptValues.installPath, './package.json')
+	await copyFile(packageFrom, packageTo)
+
+	await writeEnvs(promptValues.installPath)
 
 	hostile.get(false, (err, lines) => {
 		if (err) {

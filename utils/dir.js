@@ -12,7 +12,7 @@ exports.rmdir = function rmdir(dirPath) {
 		fs.readdirSync(dirPath).forEach(function(entry) {
 			var entryPath = path.join(dirPath, entry)
 			if (fs.lstatSync(entryPath).isDirectory()) {
-				rmdir(entryPath)
+				return rmdir(entryPath)
 			} else {
 				fs.unlinkSync(entryPath)
 			}

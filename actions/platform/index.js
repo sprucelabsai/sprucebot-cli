@@ -12,7 +12,6 @@ const platformOwnerCreate = require('./ownerCreate')
 function setup(argv) {
 	const program = new Command()
 
-	console.log(argv)
 	program.command('configure').action(platformConfigure)
 
 	program

@@ -1,50 +1,82 @@
 /* eslint-env jest */
 const config = require('config')
 const path = require('path')
-const CliTest = require('command-line-test')
+const { spawnSync } = require('child_process')
 
 const { createDir, rmdir } = require('../../utils/dir')
 
 const { bin: { sprucebotProgram } } = require('../../package.json')
 
 const binFile = path.resolve(sprucebotProgram)
+const program = require('../../actions/platform/index')
 
 const TEMP = config.get('TEMP')
 
-beforeEach(() => {
-	createDir(TEMP)
-})
-afterEach(() => {})
-const runCommand = async (argv = []) => {
-	const cliTest = new CliTest()
-	return await cliTest.execFile(binFile, argv, { cwd: TEMP })
-}
+const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout))
+// Override the NODE_CONFIG DIR if not set
+// This allows us to use the cli from any directory
+process.env.NODE_CONFIG_DIR =
+	process.env.NODE_CONFIG_DIR || path.join(__dirname, '../../config')
 
-test('`sprucebot platform -h` should be okay', async () => {
-	const output = await runCommand(['-h'])
-	expect(output.error).toBeNull()
-	expect(output.stdout).toContain('Usage: sprucebot-platform')
+describe('Platform bin execution', () => {
+	beforeAll(() => sleep(1000))
+	beforeEach(() => {
+		createDir(TEMP)
+	})
+	afterEach(() => {
+		rmdir(TEMP)
+	})
+
+	const runCommand = (argv = []) => {
+		return spawnSync(binFile, argv, { cwd: TEMP })
+	}
+
+	test('`sprucebot platform -h` should be okay', () => {
+		const output = runCommand(['-h'])
+		expect(output.stderr.toString()).toEqual('')
+		expect(output.stdout.toString()).toContain('Usage: sprucebot-platform')
+		expect(output.status).toEqual(0)
+	})
+
+	test('`sprucebot platform init` should be okay', () => {
+		// Need to figure out how to mock user input
+		const output = runCommand(['init'])
+		expect(output.stderr.toString()).toEqual('')
+		expect(output.status).toEqual(null)
+	})
+
+	test('`sprucebot platform configure` should be okay', () => {
+		const output = runCommand(['configure'])
+		expect(output.stderr.toString()).toContain(
+			"Crap! I can't find a valid ecosystem.config.js"
+		)
+		expect(output.status).toEqual(0)
+	})
+
+	test('`sprucebot platform start` should be okay', () => {
+		const output = runCommand(['start'])
+		expect(output.stderr.toString()).toContain(
+			"Crap! I can't find a valid ecosystem.config.js"
+		)
+	})
+
+	test('`sprucebot platform version` should be okay', () => {
+		const output = runCommand(['version'])
+		expect(output.stderr.toString()).toContain(
+			"Crap! I can't find a valid ecosystem.config.js"
+		)
+		expect(output.status).toEqual(0)
+	})
 })
 
-test('`sprucebot platform init` should be okay', async () => {
-	// Need to figure out how to mock user input
-	const output = await runCommand(['init'])
-	expect(output.error).toBeNull()
-})
-
-test('`sprucebot platform configure` should be okay', async () => {
-	const output = await runCommand(['configure'])
-	expect(output.error).toBeNull()
-})
-
-test('`sprucebot platform start` should be okay', async () => {
-	const output = await runCommand(['start'])
-	expect(output.error.message).toContain(
-		"Crap! I can't find a valid ecosystem.config.js"
-	)
-})
-
-test('`sprucebot platform version` should be okay', async () => {
-	const output = await runCommand(['version'])
-	expect(output.error).toBeNull()
+describe('Platform commander configuration', () => {
+	test('program contains expected commands', () => {
+		program(['node', sprucebotProgram]).commands.forEach(command => {
+			expect(command._name).toEqual(
+				expect.stringMatching(
+					/configure|init|version|start|rebuild|remove|owner:create/
+				)
+			)
+		})
+	})
 })

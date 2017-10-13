@@ -1,10 +1,14 @@
 /* eslint-env jest */
 const fs = require('fs')
+const path = require('path')
 const config = require('config')
 const inquirer = require('inquirer')
 const childProcess = require('child_process')
+const { Remote, Repository } = require('nodegit')
+const hostile = require('hostile')
 jest.mock('child_process')
 jest.mock('inquirer')
+jest.mock('hostile')
 const initAction = require('../../actions/platform/init')
 const { rmdir } = require('../../utils/dir')
 
@@ -12,28 +16,32 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at:', p, 'reason:', reason)
 })
 
+const repositories = config.get('repositories')
 const TEMP = config.get('TEMP')
 const cwd = process.cwd()
+
 beforeEach(() => {
-	rmdir(TEMP)
 	if (!fs.existsSync(TEMP)) fs.mkdirSync(TEMP)
 	process.chdir(TEMP)
 	inquirer.prompt.mockClear()
 	childProcess.spawnSync.mockClear()
+	expect(jest.isMockFunction(childProcess.spawnSync)).toBeTruthy()
 })
 afterEach(() => {
+	rmdir(TEMP)
 	process.chdir(cwd)
 })
 afterAll(() => {
 	jest.unmock('inquirer')
 	jest.unmock('child_process')
+	jest.unmock('hostile')
 })
 
-test.only('prompts when options are missing', async () => {
+test('prompts when options are missing', async () => {
 	await initAction()
 	expect(inquirer.prompt).toHaveBeenCalledWith([
 		{
-			default: `${process.cwd()}/sprucebot`,
+			default: `${TEMP}/sprucebot`,
 			message: 'Install location (absolute path)',
 			name: 'installPath',
 			type: 'input'
@@ -46,26 +54,92 @@ test.only('prompts when options are missing', async () => {
 			type: 'input'
 		}
 	])
-	expect(childProcess.spawnSync === initAction.spawnSync).toBeTruthy()
 	expect(childProcess.spawnSync).toHaveBeenCalled()
 })
 
-test('uses options if provided', async () => {
-	const installPath = `${TEMP}/spTeset`
+test('Does not clone if directory exists', async () => {
+	const installPath = `${TEMP}/spExists`
+	fs.mkdirSync(installPath)
+	// init checks if repo dir exists
+	repositories.forEach(repo => fs.mkdirSync(path.join(installPath, repo.path)))
+
+	const oldLog = console.log
+	console.log = jest.fn()
 	await initAction(installPath, { gitUser: 'test' })
-	expect(inquirer.prompt).toHaveBeenCalledWith([])
-	expect(jest.isMockFunction(childProcess.spawnSync)).toBeTruthy()
-	expect(childProcess.spawnSync).toHaveBeenCalled()
+
+	repositories.forEach(repo =>
+		expect(console.log).toHaveBeenCalledWith(
+			expect.stringContaining(
+				`Oh snap, looks like you already installed something at ${path.join(
+					installPath,
+					repo.path
+				)}`
+			)
+		)
+	)
+
+	console.log = oldLog
 })
 
-test.skip('runs with prompts', () => {})
+describe('Successful run', () => {
+	const installPath = `${TEMP}/spTeset`
 
-test.skip('Syncs git repositories', () => {})
+	beforeEach(async () => {
+		rmdir(installPath)
+		await initAction(installPath, { gitUser: 'test' })
+		expect(fs.existsSync(installPath)).toBeTruthy()
+		expect(inquirer.prompt).toHaveBeenCalledWith([])
+	})
 
-test.skip('Fails when repo 404', () => {})
+	test('Syncs git repositories', () => {
+		repositories.forEach(repo => {
+			const repoUrl = `git@github.com:${config.get('gitUser')}/${repo.name}`
+			expect(childProcess.spawnSync).toHaveBeenCalledWith(
+				'git',
+				['clone', repoUrl, path.join(installPath, repo.path)],
+				{
+					stdio: 'inherit',
+					env: process.env
+				}
+			)
+		})
+	})
 
-test.skip('sets git remote upstream', () => {})
+	test('sets git remote upstream', async () => {
+		await Promise.all(
+			repositories.map(async repo => {
+				const repository = await Repository.open(
+					path.join(installPath, repo.path)
+				)
+				const remotes = await Remote.list(repository)
+				expect(remotes).toEqual(expect.arrayContaining(['origin', 'upstream']))
+			})
+		)
+	})
 
-test.skip('Copies .env examples', () => {})
+	test('Copies .env examples', () => {
+		expect(fs.existsSync(path.join(installPath, 'web/.env'))).toBeTruthy()
+		expect(fs.existsSync(path.join(installPath, 'api/app/.env'))).toBeTruthy()
+		expect(
+			fs.existsSync(path.join(installPath, 'sprucebot-relay/.env'))
+		).toBeTruthy()
+	})
 
-test.skip('checks if hosts file is properly configured', () => {})
+	test('Installs yarn dependencies', () => {
+		repositories.forEach(repo => {
+			expect(childProcess.spawnSync).toHaveBeenCalledWith(
+				'yarn',
+				['install', '--ignore-engines'],
+				{
+					cwd: path.join(installPath, repo.path),
+					env: process.env,
+					stdio: 'inherit'
+				}
+			)
+		})
+	})
+
+	test('checks if hosts file is properly configured', () => {
+		expect(hostile.get).toHaveBeenCalled()
+	})
+})

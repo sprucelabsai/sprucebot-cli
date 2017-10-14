@@ -10,7 +10,7 @@ jest.mock('child_process')
 jest.mock('inquirer')
 jest.mock('hostile')
 const initAction = require('../../actions/platform/init')
-const { rmdir } = require('../../utils/dir')
+const { rmdir, createDir } = require('../../utils/dir')
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at:', p, 'reason:', reason)
@@ -21,15 +21,15 @@ const TEMP = config.get('TEMP')
 const cwd = process.cwd()
 
 beforeEach(() => {
-	if (!fs.existsSync(TEMP)) fs.mkdirSync(TEMP)
+	createDir(TEMP)
 	process.chdir(TEMP)
 	inquirer.prompt.mockClear()
 	childProcess.spawnSync.mockClear()
 	expect(jest.isMockFunction(childProcess.spawnSync)).toBeTruthy()
 })
 afterEach(() => {
-	rmdir(TEMP)
 	process.chdir(cwd)
+	rmdir(TEMP)
 })
 afterAll(() => {
 	jest.unmock('inquirer')
@@ -61,10 +61,19 @@ test('Does not clone if directory exists', async () => {
 	const installPath = `${TEMP}/spExists`
 	fs.mkdirSync(installPath)
 	// init checks if repo dir exists
-	repositories.forEach(repo => fs.mkdirSync(path.join(installPath, repo.path)))
+	for (let repo of repositories) {
+		const cpyPath = path.join(installPath, repo.path)
+		childProcess.spawnSync(
+			'git',
+			['clone', `git@github.com:sprucelabsai/${repo.name}`, cpyPath],
+			{
+				cwd: installPath
+			}
+		)
+	}
 
 	const oldLog = console.log
-	console.log = jest.fn()
+	console.log = jest.fn((...args) => oldLog(...args))
 	await initAction(installPath, { gitUser: 'test' })
 
 	repositories.forEach(repo =>
@@ -106,15 +115,13 @@ describe('Successful run', () => {
 	})
 
 	test('sets git remote upstream', async () => {
-		await Promise.all(
-			repositories.map(async repo => {
-				const repository = await Repository.open(
-					path.join(installPath, repo.path)
-				)
-				const remotes = await Remote.list(repository)
-				expect(remotes).toEqual(expect.arrayContaining(['origin', 'upstream']))
-			})
-		)
+		for (let repo of repositories) {
+			const repository = await Repository.open(
+				path.join(installPath, repo.path)
+			)
+			const remotes = await Remote.list(repository)
+			expect(remotes).toEqual(expect.arrayContaining(['origin', 'upstream']))
+		}
 	})
 
 	test('Copies .env examples', () => {

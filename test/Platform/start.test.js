@@ -17,9 +17,9 @@ beforeAll(() => {
 	expect(jest.isMockFunction(childProcess.spawnSync)).toBeTruthy()
 })
 afterAll(() => {
-	rmdir(TEMP)
-	process.chdir(cwd)
 	jest.unmock('child_process')
+	process.chdir(cwd)
+	rmdir(TEMP)
 })
 test('throws if no valid ecosystem.config.js file', () => {
 	expect(() => startAction(TEMP)).toThrowError()

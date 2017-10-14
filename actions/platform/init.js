@@ -95,20 +95,18 @@ async function writeRepos(installPath, gitUser) {
 	const gitBase = 'git@github.com:'
 	const repositories = config.get('repositories')
 
-	await Promise.all(
-		repositories.map(async repo => {
-			const repoPath = path.resolve(installPath, repo.path)
-			const upstream = `${gitBase}${config.get('gitUser')}/${repo.name}`
-			const origin = `${gitBase}${gitUser}/${repo.name}`
-			await cloneRepo(upstream, repoPath)
+	for (let repo of repositories) {
+		const repoPath = path.resolve(installPath, repo.path)
+		const upstream = `${gitBase}${config.get('gitUser')}/${repo.name}`
+		const origin = `${gitBase}${gitUser}/${repo.name}`
+		await cloneRepo(upstream, repoPath)
 
-			if (upstream !== origin) {
-				await updateRepoRemote(repoPath, origin, upstream)
-			}
+		if (upstream !== origin) {
+			await updateRepoRemote(repoPath, origin, upstream)
+		}
 
-			return yarnInstall(repoPath)
-		})
-	)
+		await yarnInstall(repoPath)
+	}
 }
 
 async function cloneRepo(repo, localPath) {
@@ -138,7 +136,11 @@ async function updateRepoRemote(repoPath, origin, upstream) {
 	try {
 		repo = await Repository.open(repoPath)
 	} catch (e) {
-		repo = await Repository.init(repoPath, 0)
+		if (process.env.NODE_ENV === 'test') {
+			repo = await Repository.init(repoPath, 0)
+		} else {
+			throw new Error(e)
+		}
 	}
 	if (repo) {
 		await Remote.delete(repo, 'origin').catch(() => {})

@@ -13,11 +13,10 @@ exports.rmdir = function rmdir(dirPath) {
 			var entryPath = path.join(dirPath, entry)
 			if (fs.lstatSync(entryPath).isDirectory()) {
 				return rmdir(entryPath)
-			} else {
-				fs.unlinkSync(entryPath)
 			}
+			return fs.unlinkSync(entryPath)
 		})
-		fs.rmdirSync(dirPath)
+		return fs.rmdirSync(dirPath)
 	}
 }
 
@@ -26,7 +25,7 @@ exports.rmdir = function rmdir(dirPath) {
  * @param {string} dir the directory path to create
  */
 exports.createDir = function createDir(dir) {
-	dir.split(path.sep).reduce((parent, child) => {
+	return dir.split(path.sep).reduce((parent, child) => {
 		const curDir = path.join(parent, child)
 		if (!fs.existsSync(curDir)) {
 			fs.mkdirSync(curDir)

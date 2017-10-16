@@ -10,7 +10,7 @@ const { bin: { sprucebotProgram } } = require('../../package.json')
 const binFile = path.resolve(sprucebotProgram)
 const program = require('../../actions/platform/index')
 
-const TEMP = config.get('TEMP')
+const TEMP = `${config.get('TEMP')}/index.test`
 
 const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout))
 // Override the NODE_CONFIG DIR if not set
@@ -19,13 +19,13 @@ process.env.NODE_CONFIG_DIR =
 	process.env.NODE_CONFIG_DIR || path.join(__dirname, '../../config')
 
 describe('Platform bin execution', () => {
-	beforeAll(() => sleep(1000))
 	beforeEach(() => {
 		createDir(TEMP)
 	})
-	afterEach(() => {
-		rmdir(TEMP)
-	})
+	afterAll(() => rmdir(TEMP))
+	// Sleep because these are running after each `test()` finishes
+	// TODO determine why spawnSync doesn't seem to be sync
+	afterEach(() => sleep(100))
 
 	const runCommand = (argv = []) => {
 		return spawnSync(binFile, argv, { cwd: TEMP })
@@ -50,7 +50,7 @@ describe('Platform bin execution', () => {
 		expect(output.stderr.toString()).toContain(
 			"Crap! I can't find a valid ecosystem.config.js"
 		)
-		expect(output.status).toEqual(0)
+		expect(output.status).toEqual(1)
 	})
 
 	test('`sprucebot platform start` should be okay', () => {
@@ -58,6 +58,7 @@ describe('Platform bin execution', () => {
 		expect(output.stderr.toString()).toContain(
 			"Crap! I can't find a valid ecosystem.config.js"
 		)
+		expect(output.status).toEqual(1)
 	})
 
 	test('`sprucebot platform version` should be okay', () => {
@@ -65,7 +66,7 @@ describe('Platform bin execution', () => {
 		expect(output.stderr.toString()).toContain(
 			"Crap! I can't find a valid ecosystem.config.js"
 		)
-		expect(output.status).toEqual(0)
+		expect(output.status).toEqual(1)
 	})
 })
 

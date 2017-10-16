@@ -8,7 +8,7 @@ jest.mock('child_process')
 
 const { rmdir, createDir } = require('../../utils/dir')
 
-const TEMP = config.get('TEMP')
+const TEMP = `${config.get('TEMP')}/start.test`
 const cwd = process.cwd()
 
 beforeAll(() => {
@@ -21,8 +21,9 @@ afterAll(() => {
 	process.chdir(cwd)
 	rmdir(TEMP)
 })
+
 test('throws if no valid ecosystem.config.js file', () => {
-	expect(() => startAction(TEMP)).toThrowError()
+	return expect(() => startAction(TEMP)).toThrowError()
 })
 
 test('spawns npm start command', () => {

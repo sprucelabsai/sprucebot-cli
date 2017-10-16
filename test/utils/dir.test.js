@@ -11,7 +11,7 @@ const {
 	isProjectInstalled
 } = require('../../utils/dir')
 
-const TEMP = config.get('TEMP')
+const TEMP = `${config.get('TEMP')}/dir.test`
 
 describe('Directory Utility Functions', () => {
 	afterAll(() => {

@@ -18,6 +18,7 @@ module.exports = async function version(installPath = process.cwd(), options) {
 		const reference = await repository.getCurrentBranch()
 		const versions = await Git.Tag.list(repository)
 		repo.versions = versions
+		repo.repository = repository
 		if (!versions.length) {
 			versions.push(reference.name())
 			console.log(
@@ -31,7 +32,7 @@ module.exports = async function version(installPath = process.cwd(), options) {
 		}
 		prompts.push({
 			type: 'list',
-			name: `${repo}Version`,
+			name: `${repo.name}Version`,
 			message: `Select the version to use for ${repo.name}`,
 			choices: versions
 		})
@@ -39,17 +40,11 @@ module.exports = async function version(installPath = process.cwd(), options) {
 
 	return inquirer.prompt(prompts).then(async answers => {
 		for (let repo of repositories) {
-			console.log(
-				`Checkout out ${repositories[repo].name}:${answers[
-					`${repo}Version`
-				]}...`
-			)
-			await repositories[repo].repository.checkoutBranch(
-				answers[`${repo}Version`]
-			)
-			console.log(
-				`Finished ${repositories[repo].name}:${answers[`${repo}Version`]}`
-			)
+			const version = `${repo.name}Version`
+			console.log(`Checkout out ${repo.name}:${answers[version]}...`)
+			await repo.repository.checkoutBranch(answers[version])
+			console.log(`Finished ${repo.name}:${answers[version]}`)
 		}
+		return answers
 	})
 }

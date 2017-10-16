@@ -24,7 +24,9 @@ const catchActionErrors = action => {
 function setup(argv) {
 	const program = new Command()
 
-	program.command('configure').action(catchActionErrors(platformConfigure))
+	program
+		.command('configure [path]')
+		.action(catchActionErrors(platformConfigure))
 
 	program
 		.command('init [path]')

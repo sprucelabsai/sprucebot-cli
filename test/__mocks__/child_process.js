@@ -20,6 +20,7 @@ function spawnSync(cmd, argv, { cwd = process.cwd() }) {
 						stderr: error
 					}
 			}
+		case 'sh':
 		case 'yarn':
 			break
 		default:

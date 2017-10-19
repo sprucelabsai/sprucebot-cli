@@ -70,6 +70,13 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 ### Developer Guidelines
 * See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
 
+# Simulating Sprucebot Access Point
+When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
+
+* `sprucebot ap start`
+
+Once the AP (access point) simulator is running, you can press different keys to simulate events.
+
 #  Platform Development
 This section is only relevant if you've been given permission to work directly on my core systems.
 

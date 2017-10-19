@@ -5,6 +5,7 @@ keypress(process.stdin)
 
 let connection
 let controller
+// Defaulting to Taylor's info for now.
 const eventData = {
 	apId: '6F42B9D0-8160-40C2-B442-95B7F573362F',
 	macAddress: 'e0:5:3d:ei:24:f0',
@@ -23,11 +24,11 @@ class Controller {
 	}
 
 	onError(err) {
-		console.log('connection error', err)
+		console.log(chalk.bold.red('connection error'), err)
 	}
 
 	onTimeout() {
-		console.log('connection to api dropped')
+		console.log(chalk.bold.red('connection to api dropped'))
 	}
 
 	onKeyPress(ch, key) {

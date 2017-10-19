@@ -7,11 +7,22 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "test",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
         "${file}",
         "--coverage"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "ap simulator",
+      "program": "${workspaceRoot}/bin/sprucebot.js",
+      "protocol": "inspector",
+      "args": [
+        "ap",
+        "start"
       ]
     }
   ]

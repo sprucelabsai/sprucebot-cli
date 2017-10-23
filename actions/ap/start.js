@@ -9,7 +9,8 @@ let controller
 const eventData = {
 	apId: '6F42B9D0-8160-40C2-B442-95B7F573362F',
 	macAddress: 'e0:5:3d:ei:24:f0',
-	ipAddress: '192.168.2.95'
+	ipAddress: '192.168.2.95',
+	force: true
 }
 
 class Controller {

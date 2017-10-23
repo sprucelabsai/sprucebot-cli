@@ -29,17 +29,53 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 ### Installation
 * ~~`yarn add -g sprucebot-cli`~~
 
-### Commands
+### Skill Commands
 
 * `sprucebot skill create "[Skill Name]"`
-  * TBD
-* `sprucebot skill listen [eventName]`
-  * Adds a listener to your skill.
-* `sprucebot skill ignore [eventName]`
-  * TBD
+  * Creates a directory called: skill-${skill-name}
+  * Everything is lowercased. [^a-z0-9] are converted to dashes "`-`"
+  * All commands require you to be in the skill's directory
+  * `cd skill-${skill-name}`
+* `sprucebot skill listen [event-name]`
+  * Adds a listener to your skill. 
+  * Events are lower cased, seperated by dashes "`-`"
+  * Creates `./events/event-name.js`
+  * Core Events: 
+    * did-enter
+    * did-leave
+    * ~~will-message~~
+    * ~~did-message~~
+    * ~~will-update-profile~~
+    * ~~did-update-profile~~
+  * Custom events are namespaced, such as `vip:will-send`
+    * Creates `./events/vip/will-send.js`
+    * Jump in and start editing
+* `sprucebot skill ignore [event-name]`
+  * Removes a listener and moves the callback file.
+  * `./events/did-enter.js` -> `./events/disabled/did-enter.js`
+* `sprucebot skill [get|post|patch|delete] "[route/path]"`
+  * Sets up a callback and returns instructions with stub for implimentation
+  * Example: 
+  * `sprucebot skill get "/admin/:someVariable/test"`<br />
+      Route created. <br />
+      Add this to your desired controller (or create one) inside `./controllers/${anything}.js`<br />
+      modules.export = {<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;"get /admin/:someVariable/test": (sb, req, res) {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('hello world', req.params.someVariable)<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;}<br />
+      }
+* `sprucebot skill route "[route/path]" [path/to/page.js]`
+  * Creates a react route and corresponding page stubbed with a React component
 
 ### Developer Guidelines
 * See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
+
+# Simulating Sprucebot Access Point
+When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
+
+* `sprucebot ap start`
+
+Once the AP (access point) simulator is running, you can press different keys to simulate events.
 
 #  Platform Development
 This section is only relevant if you've been given permission to work directly on my core systems.
@@ -60,7 +96,8 @@ This section is only relevant if you've been given permission to work directly o
 ### Developer Guidelines
 * See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around platform development.
 
-### Commands
+
+### Platform Commands
 
 * `sprucebot platform init`
   * Use option `--select-version` to checkout specific versions once cloned

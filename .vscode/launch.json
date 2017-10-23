@@ -25,6 +25,17 @@
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "skipFiles": [
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "ap simulator",
+      "program": "${workspaceRoot}/bin/sprucebot.js",
+      "protocol": "inspector",
+      "args": [
+        "ap",
+        "start"
+      ]
     }
   ]
 }

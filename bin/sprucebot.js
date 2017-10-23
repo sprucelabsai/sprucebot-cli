@@ -29,6 +29,7 @@ function setup(argv) {
 		// registering `platform` will execute `./bin/sprucebot-platform.js`
 		.command('platform [options]', 'Setup and deploy the Sprucebot platform')
 		.command('skill [options]', 'Create and edit Sprucebot skills')
+		.command('ap [options]', 'Simulate a Sprucebot AP locally')
 
 	program.parse(process.argv)
 }

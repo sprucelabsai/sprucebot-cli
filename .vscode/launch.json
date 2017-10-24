@@ -7,11 +7,23 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "test",
+      "name": "Test Debug File",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
-        "${file}",
-        "--coverage"
+        "${file}"
+      ],
+      "skipFiles": [
+        "node_modules",
+        "async_hooks.js",
+        "inspector_async_hooks.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test Debug All",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "skipFiles": [
       ]
     },
     {

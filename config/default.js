@@ -1,7 +1,7 @@
 const path = require('path')
 const { version, description } = require('../package.json')
 
-const TEMP = path.join(__dirname, '../../__TEMP__')
+const TEMP = path.join(__dirname, '../__TEST__')
 
 module.exports = {
 	version,
@@ -9,10 +9,22 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
-	repositories: {
-		web: 'com-sprucebot-web',
-		api: 'com-sprucebot-api',
-		'dev-services': 'sprucebot-dev-services',
-		'sprucebot-relay': 'sprucebot-relay'
-	}
+	repositories: [
+		{
+			name: 'com-sprucebot-web',
+			path: './web'
+		},
+		{
+			name: 'com-sprucebot-api',
+			path: './api'
+		},
+		{
+			name: 'sprucebot-dev-services',
+			path: './sprucebot-dev-services'
+		},
+		{
+			name: 'sprucebot-relay',
+			path: './sprucebot-relay'
+		}
+	]
 }

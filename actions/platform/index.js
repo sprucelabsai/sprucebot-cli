@@ -9,10 +9,24 @@ const platformRemove = require('./remove')
 const platformVersion = require('./version')
 const platformOwnerCreate = require('./ownerCreate')
 
+const catchActionErrors = action => {
+	async function wrapper(...args) {
+		try {
+			await action(...args)
+		} catch (e) {
+			console.error(e.stack)
+			process.exitCode = 1
+		}
+	}
+	return wrapper
+}
+
 function setup(argv) {
 	const program = new Command()
 
-	program.command('configure').action(platformConfigure)
+	program
+		.command('configure [path]')
+		.action(catchActionErrors(platformConfigure))
 
 	program
 		.command('init [path]')
@@ -21,17 +35,19 @@ function setup(argv) {
 			'-s --select-version',
 			'Wanna select a version? Cool, add --select-version flag'
 		)
-		.action(platformInit)
+		.action(catchActionErrors(platformInit))
 
-	program.command('version [path]').action(platformVersion)
+	program.command('version [path]').action(catchActionErrors(platformVersion))
 
-	program.command('start [path]').action(platformStart)
+	program.command('start [path]').action(catchActionErrors(platformStart))
 
-	program.command('rebuild [path]').action(platformBuild)
+	program.command('rebuild [path]').action(catchActionErrors(platformBuild))
 
-	program.command('remove [path]').action(platformRemove)
+	program.command('remove [path]').action(catchActionErrors(platformRemove))
 
-	program.command('owner:create [cellphone]').action(platformOwnerCreate)
+	program
+		.command('owner:create [cellphone]')
+		.action(catchActionErrors(platformOwnerCreate))
 
 	program.parse(argv)
 

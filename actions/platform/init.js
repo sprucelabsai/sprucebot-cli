@@ -2,34 +2,86 @@ const path = require('path')
 const fs = require('fs-extra')
 const config = require('config')
 const chalk = require('chalk')
-const { spawnSync } = require('child_process')
+const childProcess = require('child_process')
 const inquirer = require('inquirer')
 const hostile = require('hostile')
+const { Remote, Repository } = require('nodegit')
 
 const checkoutVersion = require('./version')
 
 const { directoryExists, fileExists } = require('../../utils/dir')
 
+module.exports = async function init(installPath, options = {}) {
+	const cliPath = path.resolve(__dirname, '..', '..')
+	if (cliPath === process.cwd() && process.env.NODE_ENV !== 'test') {
+		console.error(
+			chalk.bold.red(
+				'You cannot run `sprucebot platform init` from inside the sprucebot-cli directory.'
+			)
+		)
+		throw new Error('Halting...')
+	}
+
+	const promptValues = await prompt({
+		installPath,
+		gitUser: options.gitUser
+	})
+
+	await writeRepos(promptValues.installPath, promptValues.gitUser)
+
+	// Same as `sprucebot platform version` command
+	if (options.selectVersion) {
+		await checkoutVersion(promptValues.installPath, options)
+	}
+
+	const devServicesPath = config
+		.get('repositories')
+		.find(repo => repo.name === 'sprucebot-dev-services').path
+	const ecoFrom = path.resolve(
+		promptValues.installPath,
+		`${devServicesPath}/ecosystem.config.js`
+	)
+	const ecoTo = path.resolve(promptValues.installPath, './ecosystem.config.js')
+	await copyFile(ecoFrom, ecoTo)
+
+	const packageFrom = path.resolve(
+		promptValues.installPath,
+		`${devServicesPath}/package.json`
+	)
+	const packageTo = path.resolve(promptValues.installPath, './package.json')
+	await copyFile(packageFrom, packageTo)
+
+	await writeEnvs(promptValues.installPath)
+
+	await checkHostile(promptValues)
+}
+
 async function prompt(options) {
-	const prompts = [
-		{
+	const prompts = []
+
+	if (!options.installPath) {
+		prompts.push({
 			type: 'input',
 			name: 'installPath',
 			message: 'Install location (absolute path)',
-			default: options.installPath,
-			store: true
-		},
-		{
+			default: `${process.cwd()}/sprucebot`
+		})
+	}
+
+	if (!options.gitUser) {
+		prompts.push({
 			type: 'input',
 			name: 'gitUser',
 			message: `Github username. (Developers should use their own. Othewise default is fine.)`,
-			default: options.gitUser,
-			store: true
-		}
-	]
+			default: config.get('gitUser')
+		})
+	}
 
-	const values = await inquirer.prompt(prompts)
-
+	const answers = await inquirer.prompt(prompts)
+	const values = {
+		...options,
+		...answers
+	}
 	if (!path.isAbsolute(values.installPath)) {
 		throw new Error(
 			`Woops, I can only install in an absolute installPath. You supplied ${values.installPath}`
@@ -40,24 +92,21 @@ async function prompt(options) {
 
 async function writeRepos(installPath, gitUser) {
 	console.log('writing repos...', installPath, gitUser)
-	const gitBase = `git@github.com:${gitUser}`
-	const pathDev = path.resolve(installPath, 'dev-services')
-	const pathApi = path.resolve(installPath, 'api')
-	const pathWeb = path.resolve(installPath, 'web')
-	const pathRelay = path.resolve(installPath, 'sprucebot-relay')
+	const gitBase = 'git@github.com:'
+	const repositories = config.get('repositories')
 
-	cloneRepo(`${gitBase}/${config.get('repositories.dev-services')}`, pathDev)
-	cloneRepo(`${gitBase}/${config.get('repositories.api')}`, pathApi)
-	cloneRepo(`${gitBase}/${config.get('repositories.web')}`, pathWeb)
-	cloneRepo(
-		`${gitBase}/${config.get('repositories.sprucebot-relay')}`,
-		pathRelay
-	)
+	for (let repo of repositories) {
+		const repoPath = path.resolve(installPath, repo.path)
+		const upstream = `${gitBase}${config.get('gitUser')}/${repo.name}`
+		const origin = `${gitBase}${gitUser}/${repo.name}`
+		await cloneRepo(upstream, repoPath)
 
-	yarnInstall(installPath)
-	yarnInstall(pathApi)
-	yarnInstall(pathWeb)
-	yarnInstall(pathRelay)
+		if (upstream !== origin) {
+			await updateRepoRemote(repoPath, origin, upstream)
+		}
+
+		await yarnInstall(repoPath)
+	}
 }
 
 async function cloneRepo(repo, localPath) {
@@ -67,20 +116,41 @@ async function cloneRepo(repo, localPath) {
 			`Oh snap, looks like you already installed something at ${localPath}! Skipping for now.`
 		)
 	} else {
-		// TODO - Make sure this halts when github public key is missing
+		const cmd = childProcess.spawnSync('git', ['clone', repo, localPath], {
+			stdio: 'inherit',
+			env: process.env
+		})
 
-		try {
-			spawnSync('git', ['clone', repo, localPath], {
-				stdio: 'inherit',
-				env: process.env
-			})
+		if (cmd.status === 0) {
 			console.log(chalk.green(`Finished cloning ${repo} to ${localPath}.`))
-		} catch (e) {
-			console.error(e)
+		} else {
 			console.log(
 				chalk.bold.red(`CRAP, looks like there was a problem cloning ${repo}.`)
 			)
 		}
+	}
+}
+
+async function updateRepoRemote(repoPath, origin, upstream) {
+	let repo
+	try {
+		repo = await Repository.open(repoPath)
+	} catch (e) {
+		if (process.env.NODE_ENV === 'test') {
+			repo = await Repository.init(repoPath, 0)
+		} else {
+			throw new Error(e)
+		}
+	}
+	if (repo) {
+		await Remote.delete(repo, 'origin').catch(() => {})
+		await Remote.delete(repo, 'upstream').catch(() => {})
+		await Remote.create(repo, 'origin', origin)
+		await Remote.create(repo, 'upstream', upstream)
+		console.log(chalk.green(`Successfully created git remote origin ${origin}`))
+		console.log(
+			chalk.green(`Successfully created git remote upstream ${upstream}`)
+		)
 	}
 }
 
@@ -99,16 +169,20 @@ async function copyFile(fromFile, toFile) {
 }
 
 async function yarnInstall(cwd) {
-	try {
-		spawnSync('nvm', ['use'], { cwd, stdio: 'inherit', env: process.env })
-		spawnSync('yarn', ['install', '--ignore-engines'], {
-			cwd,
-			stdio: 'inherit',
-			env: process.env
-		})
+	childProcess.spawnSync('nvm', ['use'], {
+		cwd,
+		stdio: 'inherit',
+		env: process.env
+	})
+	const cmd = childProcess.spawnSync('yarn', ['install', '--ignore-engines'], {
+		cwd,
+		stdio: 'inherit',
+		env: process.env
+	})
+
+	if (cmd.status === 0) {
 		console.log(chalk.green('Successfully installed project dependencies'), cwd)
-	} catch (e) {
-		console.error(e)
+	} else {
 		console.log(
 			chalk.bold.red(`Crap, I had trouble installing with yarn ${cwd}`)
 		)
@@ -156,93 +230,52 @@ async function writeEnvs(installPath) {
 	}
 }
 
-module.exports = async function init(
-	installPath = `${process.cwd()}/sprucebot`,
-	options
-) {
-	// TODO - Add --select-version option support
-	const cliPath = path.resolve(__dirname, '..', '..')
-	if (cliPath === process.cwd()) {
-		console.error(
-			chalk.bold.red(
-				'You cannot run `sprucebot platform init` from inside the sprucebot-cli directory.'
-			)
-		)
-		throw new Error('Halting...')
-	}
-
-	const promptValues = await prompt({
-		installPath,
-		gitUser: config.get('gitUser')
-	})
-
-	await writeRepos(promptValues.installPath, promptValues.gitUser)
-
-	// Same as `sprucebot platform version` command
-	if (options.selectVersion) {
-		await checkoutVersion(promptValues.installPath, options)
-	}
-
-	const ecoFrom = path.resolve(
-		promptValues.installPath,
-		'./dev-services/ecosystem.config.js'
-	)
-	const ecoTo = path.resolve(promptValues.installPath, './ecosystem.config.js')
-	await copyFile(ecoFrom, ecoTo)
-
-	const packageFrom = path.resolve(
-		promptValues.installPath,
-		'./dev-services/package.json'
-	)
-	const packageTo = path.resolve(promptValues.installPath, './package.json')
-	await copyFile(packageFrom, packageTo)
-
-	await writeEnvs(promptValues.installPath)
-
-	hostile.get(false, (err, lines) => {
-		if (err) {
-			console.error(
-				chalk.bold.red(
-					'Oh sh**, I had an issue reading your hosts file. Google `Sprucebot hosts file` for help.'
+async function checkHostile(promptValues) {
+	return new Promise((resolve, reject) => {
+		hostile.get(false, (err, lines) => {
+			if (err) {
+				console.error(
+					chalk.bold.red(
+						'Oh sh**, I had an issue reading your hosts file. Google `Sprucebot hosts file` for help.'
+					)
 				)
-			)
-			throw new Error('Halting...')
-		}
-
-		const configured = lines.reduce((memo, line) => {
-			if (/sprucebot/.test(line[1])) {
-				memo[line[1]] = true
+				reject(err)
 			}
-			return memo
-		}, {})
-
-		// Help dev cd to correct directory
-		let dir = path.basename(promptValues.installPath)
-
-		if (
-			!configured['local-api.sprucebot.com'] ||
-			!configured['local.sprucebot.com'] ||
-			!configured['local-devtools.sprucebot.com'] ||
-			!configured['sprucebot_postgres'] ||
-			!configured['sprucebot_redis']
-		) {
-			console.log(
-				chalk.green(
-					`Sweet! We're almost done! Last step is configuring your host file.`
+			const configured = lines.reduce((memo, line) => {
+				if (/sprucebot/.test(line[1])) {
+					memo[line[1]] = true
+				}
+				return memo
+			}, {})
+			// Help dev cd to correct directory
+			let dir = path.basename(promptValues.installPath)
+			if (
+				!configured['local-api.sprucebot.com'] ||
+				!configured['local.sprucebot.com'] ||
+				!configured['local-devtools.sprucebot.com'] ||
+				!configured['sprucebot_postgres'] ||
+				!configured['sprucebot_redis']
+			) {
+				console.log(
+					chalk.green(
+						`Sweet! We're almost done! Last step is configuring your host file.`
+					)
 				)
-			)
-			console.log(
-				chalk.yellow(
-					`Don't sweat it though, run \`cd ${dir} && sudo sprucebot platform configure\``
+				console.log(
+					chalk.yellow(
+						`Don't sweat it though, run \`cd ${dir} && sudo sprucebot platform configure\``
+					)
 				)
-			)
-		} else {
-			console.log(
-				chalk.green('Heck yeah! I double checked and everything looks good.')
-			)
-			console.log(
-				chalk.yellow(`Run \`cd ${dir} && sprucebot platform start\`  🌲 🤖`)
-			)
-		}
+			} else {
+				console.log(
+					chalk.green('Heck yeah! I double checked and everything looks good.')
+				)
+				console.log(
+					chalk.yellow(`Run \`cd ${dir} && sprucebot platform start\`  🌲 🤖`)
+				)
+			}
+
+			resolve()
+		})
 	})
 }

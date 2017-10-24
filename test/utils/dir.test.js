@@ -1,6 +1,7 @@
 /* eslint-env jest */
 const fs = require('fs')
 const path = require('path')
+const config = require('config')
 
 const {
 	rmdir,
@@ -10,7 +11,7 @@ const {
 	isProjectInstalled
 } = require('../../utils/dir')
 
-const TEMP = path.join(__dirname, '../../__TEST__')
+const TEMP = `${config.get('TEMP')}/dir.test`
 
 describe('Directory Utility Functions', () => {
 	afterAll(() => {

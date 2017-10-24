@@ -32,8 +32,8 @@ async function prompt(options) {
 	return inquirer.prompt(prompts)
 }
 
-async function setupLoopback() {
-	const cwd = path.join(process.cwd(), './dev-services/scripts/loopbackAlias')
+async function setupLoopback(installPath) {
+	const cwd = path.join(installPath, './dev-services/scripts/loopbackAlias')
 	const cmd = spawnSync('sh', ['setupLoopbackAlias.sh'], {
 		cwd,
 		stdio: 'inherit'
@@ -53,10 +53,10 @@ async function setupLoopback() {
 	}
 }
 
-async function setupHosts() {
+async function setupHosts(installPath) {
 	try {
 		const hostsTemplate = path.join(
-			process.cwd(),
+			installPath,
 			'./dev-services/templates/hosts'
 		)
 		const lines = hostile.getFile(hostsTemplate, false)
@@ -91,9 +91,12 @@ async function setupHosts() {
 	}
 }
 
-async function setupCertificates() {
-	const cwd = path.join(process.cwd(), './dev-services/scripts/certificate')
-	const cmd = spawnSync('sh', ['setupRootCertificate.sh'], { cwd })
+async function setupCertificates(installPath) {
+	const cwd = path.join(installPath, './dev-services/scripts/certificate')
+	const cmd = spawnSync('sh', ['setupRootCertificate.sh'], {
+		cwd,
+		stdio: 'inherit'
+	})
 
 	if (cmd.status !== 0) {
 		console.error(cmd.error)
@@ -111,15 +114,18 @@ async function setupCertificates() {
 	}
 }
 
-module.exports = async function configure(options) {
+module.exports = async function configure(
+	installPath = process.cwd(),
+	options
+) {
 	console.log('Configuring your environment...')
-	if (!isProjectInstalled(process.cwd())) throw new Error('Halting...')
+	if (!isProjectInstalled(installPath)) throw new Error('Halting...')
 
 	const answers = await prompt()
 
-	answers.loopback && (await setupLoopback())
-	answers.hosts && (await setupHosts())
-	answers.certificate && (await setupCertificates())
+	answers.loopback && (await setupLoopback(installPath))
+	answers.hosts && (await setupHosts(installPath))
+	answers.certificate && (await setupCertificates(installPath))
 
 	console.log(
 		chalk.green(

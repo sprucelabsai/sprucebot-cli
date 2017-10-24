@@ -4,6 +4,7 @@ const chalk = require('chalk')
 
 /**
  * Recursively remove dir and containing files/folders
+ * Because Node's rmdir is not recursive
  * @param {string} dirPath base path to recursively remove
  */
 exports.rmdir = function rmdir(dirPath) {
@@ -11,12 +12,11 @@ exports.rmdir = function rmdir(dirPath) {
 		fs.readdirSync(dirPath).forEach(function(entry) {
 			var entryPath = path.join(dirPath, entry)
 			if (fs.lstatSync(entryPath).isDirectory()) {
-				rmdir(entryPath)
-			} else {
-				fs.unlinkSync(entryPath)
+				return rmdir(entryPath)
 			}
+			return fs.unlinkSync(entryPath)
 		})
-		fs.rmdirSync(dirPath)
+		return fs.rmdirSync(dirPath)
 	}
 }
 
@@ -25,7 +25,7 @@ exports.rmdir = function rmdir(dirPath) {
  * @param {string} dir the directory path to create
  */
 exports.createDir = function createDir(dir) {
-	dir.split(path.sep).reduce((parent, child) => {
+	return dir.split(path.sep).reduce((parent, child) => {
 		const curDir = path.join(parent, child)
 		if (!fs.existsSync(curDir)) {
 			fs.mkdirSync(curDir)

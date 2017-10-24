@@ -13,7 +13,6 @@ sure your skill promotes human-to-human connection.
 
 [![Watch Vignette 1](images/video-poster.jpg?raw=true)](https://vimeo.com/196923365)
 
-
 # Skills Development
 Skills are how you give me new... well, skills. A skill is really analogous to
 an app. It needs to be fully featured and create a real world experience people remember.
@@ -34,14 +33,16 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 * `sprucebot skill create "[Skill Name]"`
   * Creates a directory called: skill-${skill-name}
   * Everything is lowercased. [^a-z0-9] are converted to dashes "`-`"
-  * All commands require you to be in the skill's directory
-  * `cd skill-${skill-name}`
+  * All subsequent commands require you to be in the skill's directory
+  * `cd sprucebot-skill-${skill-name}`
 * `sprucebot skill listen [event-name]`
   * Adds a listener to your skill. 
   * Events are lower cased, seperated by dashes "`-`"
   * Creates `./events/event-name.js`
   * Core Events: 
+    * ~~will-enter~~
     * did-enter
+    * ~~will-leave~~
     * did-leave
     * ~~will-message~~
     * ~~did-message~~
@@ -63,19 +64,20 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
         &nbsp;&nbsp;&nbsp;&nbsp;"get /admin/:someVariable/test": (sb, req, res) {<br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('hello world', req.params.someVariable)<br />
       &nbsp;&nbsp;&nbsp;&nbsp;}<br />
-      }
-* `sprucebot skill route "[route/path]" [path/to/page.js]`
+* `sprucebot skill page /path`
   * Creates a react route and corresponding page stubbed with a React component
+  * Example: `/guest/profiles/:profileId/bookings/:bookingId` generates `/pages/guest/profiles/bookings.js`
+
 
 ### Developer Guidelines
 * See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
 
-# Simulating Sprucebot Access Point
+# Simulating an Access Point
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
 
 * `sprucebot ap start`
 
-Once the AP (access point) simulator is running, you can press different keys to simulate events.
+Once the AP (access point) simulator is running, you can press different keys to simulate events. Instructions are displayed after you start the simulator.
 
 #  Platform Development
 This section is only relevant if you've been given permission to work directly on my core systems.

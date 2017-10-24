@@ -8,7 +8,7 @@ function setup(argv) {
 
 	program
 		.command('start')
-		.description('Start the access point simulator')
+		.description('Start the Sprucebot simulator')
 		.action(start)
 
 	program.parse(argv)

@@ -1,6 +1,7 @@
 .DS_Store
 node_modules/
 config/local.*
+package-lock.json
 
 # ***** BEGIN INTELLIJ *****
 # User-specific stuff:

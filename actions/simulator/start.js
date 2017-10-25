@@ -16,22 +16,54 @@ const enterExitEventData = {
 }
 
 const simulateSendMessageEventData = {
-	userId: 'EAEF3EC4-D82F-4367-89F3-E8694A7BD3D4',
+	userId: '78245981-5022-49A7-B2F2-6AC687E0F3D1',
 	locationId: '1975559C-E071-4198-8AB3-ECCBEB00E1D0',
 	message: 'You are the best, dewd!'
+}
+
+const simulateReceiveMessageEventData = {
+	body: {
+		ToCountry: 'US',
+		ToState: 'CO',
+		SmsMessageSid: 'SM69c4156c31def95b59856ccbfdf2e40b',
+		NumMedia: '0',
+		ToCity: 'DENVER',
+		FromZip: '80104',
+		SmsSid: 'SM69c4156c31def95b59856ccbfdf2e40b',
+		FromState: 'CO',
+		SmsStatus: 'received',
+		FromCity: 'DENVER',
+		Body: 'hey there dude!',
+		FromCountry: 'US',
+		To: '+17204631406',
+		MessagingServiceSid: 'MG655c76664a59df723580f8b4288d9600',
+		ToZip: '80202',
+		NumSegments: '1',
+		MessageSid: 'SM69c4156c31def95b59856ccbfdf2e40b',
+		AccountSid: 'AC036cf2da1f4be9b4063e64939327acdb',
+		From: '+17202535250',
+		ApiVersion: '2010-04-01'
+	}
 }
 
 class Controller {
 	constructor(socket) {
 		this.socket = socket
+		this.firstRun = true
 	}
 
 	onConnection() {
-		console.log(chalk.green('Simulator running...'))
+		console.log(
+			chalk.green(
+				this.firstRun ? 'Simulator running...' : 'Simulator recovered'
+			)
+		)
 		console.log('enter: ⬆️')
 		console.log('leave: ⬇️')
 		console.log('send message: ➡️')
-		console.log('recieve message: ⬅️')
+		console.log('receive message: ⬅️')
+
+		this.firstRun = false
 	}
 
 	onError(err) {
@@ -52,6 +84,11 @@ class Controller {
 			this.socket.emit('didLeave', enterExitEventData)
 		} else if (key.name === 'right') {
 			this.socket.emit('simulateSendMessage', simulateSendMessageEventData)
+		} else if (key.name == 'left') {
+			this.socket.emit(
+				'simulateReceiveMessage',
+				simulateReceiveMessageEventData
+			)
 		}
 	}
 }

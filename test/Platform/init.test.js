@@ -121,7 +121,7 @@ describe('Init Action', () => {
 			})
 		})
 
-		// does these tests depend on a previous ones?
+		// These tests rely on above tests (some commented out) - all setup/teardown needs to happen each test
 		// test('sets git remote upstream', async () => {
 		// 	for (let key in platforms) {
 		// 		const repo = platforms[key].repo

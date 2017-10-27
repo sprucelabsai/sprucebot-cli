@@ -6,8 +6,9 @@ const inquirer = require('inquirer')
 
 const { isProjectInstalled, directoryExists } = require('../../utils/dir')
 
+//logic in here should move to utility so it can be used outside this action
 module.exports = async function version(platform = 'all', options) {
-	const installPath = process.cwd()
+	const installPath = options.cwd || process.cwd()
 
 	//assume we are running in single platform deployment (web or api only)
 	const useRepoPath = isProjectInstalled(installPath)
@@ -45,7 +46,7 @@ module.exports = async function version(platform = 'all', options) {
 					prompts.push({
 						type: 'list',
 						name: key,
-						message: `Select the version to use for ${repo.name}`,
+						message: `Select the version to use for ${key}`,
 						choices: versions
 					})
 				}
@@ -56,9 +57,9 @@ module.exports = async function version(platform = 'all', options) {
 	return inquirer.prompt(prompts).then(async answers => {
 		for (let key in answers) {
 			const repo = repos[key]
-			await repo.repository.checkoutBranch(answers[version])
+			await repo.repository.checkoutBranch(answers[key])
 		}
-		console.log(chalk.green('All done!'))
+		console.log(chalk.green('Version set!'))
 		return answers
 	})
 }

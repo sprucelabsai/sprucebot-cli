@@ -98,8 +98,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 
 			// Same as `sprucebot platform version` command
 			if (options.selectVersion) {
-				console.log('You want a version select?')
-				await checkoutVersion(key, options)
+				await checkoutVersion(key, { ...options, cwd: platformPath })
 			} else if (options.branch) {
 				console.log(`Checking out ${options.branch} branch`)
 

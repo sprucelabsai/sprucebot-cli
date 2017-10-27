@@ -23,16 +23,13 @@ module.exports = function remove(platform = 'all', options) {
 		}
 	}
 
-	args.push('--lines')
-	args.push(options.lines)
-
 	const cmd = spawnSync('./node_modules/.bin/pm2', args, {
 		cwd: process.cwd()
 	})
 
 	console.log(
 		chalk.bold.green(
-			all
+			platform === 'all'
 				? `Cool, everything is shut down! 🛌`
 				: `Alrighty, ${platform} is shutdown. 😴`
 		)

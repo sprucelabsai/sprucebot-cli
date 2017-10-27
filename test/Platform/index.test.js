@@ -8,7 +8,7 @@ const { createDir, rmdir } = require('../../utils/dir')
 const { bin: { sprucebotProgram } } = require('../../package.json')
 
 const binFile = path.resolve(sprucebotProgram)
-const program = require('../../actions/platform/index')
+// const program = require('../../actions/platform/index')
 
 const TEMP = `${config.get('TEMP')}/index.test`
 
@@ -42,42 +42,31 @@ describe('Platform bin execution', () => {
 		// Need to figure out how to mock user input
 		const output = runCommand(['init'])
 		expect(output.stderr.toString()).toEqual('')
-		expect(output.status).toEqual(null)
+		expect(output.status).toEqual(0)
 	})
 
-	test('`sprucebot platform configure` should be okay', () => {
-		const output = runCommand(['configure'])
-		expect(output.stderr.toString()).toContain(
-			"Crap! I can't find a valid ecosystem.config.js"
-		)
-		expect(output.status).toEqual(1)
-	})
+	// test('`sprucebot platform configure` should be okay', () => {
+	// 	const output = runCommand(['configure'])
+	// 	expect(output.stderr.toString()).toContain(
+	// 		"Crap! I can't find a valid ecosystem.config.js"
+	// 	)
+	// 	expect(output.status).toEqual(1)
+	// })
 
-	test('`sprucebot platform start` should be okay', () => {
-		const output = runCommand(['start'])
-		expect(output.stderr.toString()).toContain(
-			"Crap! I can't find a valid ecosystem.config.js"
-		)
-		expect(output.status).toEqual(1)
-	})
+	// test('`sprucebot platform start` should be okay', () => {
+	// 	const output = runCommand(['start'])
+	// 	expect(output.stderr.toString()).toContain(
+	// 		"Crap! I can't find a valid ecosystem.config.js"
+	// 	)
+	// 	expect(output.status).toEqual(1)
+	// })
 
-	test('`sprucebot platform version` should be okay', () => {
-		const output = runCommand(['version'])
-		expect(output.stderr.toString()).toContain(
-			"Crap! I can't find a valid ecosystem.config.js"
-		)
-		expect(output.status).toEqual(1)
-	})
-})
-
-describe('Platform commander configuration', () => {
-	test('program contains expected commands', () => {
-		program(['node', sprucebotProgram]).commands.forEach(command => {
-			expect(command._name).toEqual(
-				expect.stringMatching(
-					/configure|init|version|start|rebuild|remove|owner:create/
-				)
-			)
-		})
-	})
+	// Don't check against copy
+	// test('`sprucebot platform version` should be okay', () => {
+	// 	const output = runCommand(['version'])
+	// 	expect(output.stderr.toString()).toContain(
+	// 		"Crap! I can't find a valid ecosystem.config.js"
+	// 	)
+	// 	expect(output.status).toEqual(1)
+	// })
 })

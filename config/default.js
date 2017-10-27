@@ -9,22 +9,46 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
-	repositories: [
-		{
-			name: 'com-sprucebot-web',
-			path: './web'
+	platforms: {
+		api: {
+			repo: {
+				name: 'com-sprucebot-api',
+				env: './app',
+				path: './api'
+			},
+			pm2: {
+				name: 'Sprucebot API'
+			}
 		},
-		{
-			name: 'com-sprucebot-api',
-			path: './api'
+		web: {
+			repo: {
+				name: 'com-sprucebot-web',
+				env: './',
+				path: './web'
+			},
+			pm2: {
+				name: 'Sprucebot Web'
+			}
 		},
-		{
-			name: 'sprucebot-dev-services',
-			path: './sprucebot-dev-services'
+		dev: {
+			repo: {
+				name: 'sprucebot-dev-services',
+				path: './dev-services',
+				env: false
+			},
+			pm2: {
+				name: 'Sprucebot Dev Services'
+			}
 		},
-		{
-			name: 'sprucebot-relay',
-			path: './sprucebot-relay'
+		relay: {
+			repo: {
+				name: 'sprucebot-relay',
+				path: './relay',
+				env: false
+			},
+			pm2: {
+				name: 'Sprucebot Relay'
+			}
 		}
-	]
+	}
 }

@@ -2,7 +2,8 @@ const chalk = require('chalk')
 const { spawnSync } = require('child_process')
 const { isProjectInstalled } = require('../../utils/dir')
 
-module.exports = function start(installPath = process.cwd(), options) {
+module.exports = function start(options) {
+	const installPath = process.cwd()
 	if (!isProjectInstalled(installPath)) throw new Error('Halting...')
 
 	const cmd = spawnSync('yarn', ['run', 'start'], {

@@ -23,7 +23,8 @@ It's the ultimate social network, and with your skills giving me the power to
 facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long into the future. 🌲🤖
 
 ### Prerequisites
-* TBD
+* [nvm](https://github.com/creationix/nvm/blob/master/README.md)
+* [git](https://git-scm.com/downloads)
 
 ### Installation
 * ~~`yarn add -g sprucebot-cli`~~
@@ -72,12 +73,12 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 ### Developer Guidelines
 * See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
 
-# Simulating an Access Point
+# Simulating Real World Events
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
 
-* `sprucebot ap start`
+* `sprucebot simulator start`
 
-Once the AP (access point) simulator is running, you can press different keys to simulate events. Instructions are displayed after you start the simulator.
+Once the simulator is running, you can press different keys to simulate events. Instructions are displayed after you start the simulator.
 
 #  Platform Development
 This section is only relevant if you've been given permission to work directly on my core systems.
@@ -101,24 +102,25 @@ This section is only relevant if you've been given permission to work directly o
 
 ### Platform Commands
 
-* `sprucebot platform init`
-  * Use option `--select-version` to checkout specific versions once cloned
+* `sprucebot platform install [path]`
+  * `path` defaults to `./sprucebot`
+  * `-p --platform` to select `web`, `api`, or defaults `all`
+  * `--s --select-version` to checkout specific versions once cloned
+  * `-b --branch` the branch to checkout, defaults to `dev`
   * *REQUIRED* You need to fork the following projects:
     * `com-sprucebot-api`
     * `com-sprucebot-web`
     * `sprucebot-dev-services`
-  * Clones platform repositories and setup local docker build
-  * Creates docker-compose build directory
 * `sudo sprucebot platform configure`
   * Setup dns and hosts configurations.
   * Adds `local.sprucebot.com`, `local-api.sprucebot.com`, and `local-devtools.sprucebot.com` to `hosts`
-* `sprucebot platform start`
-  * Runs docker-compose from sprucebot build directory
-  * Visit [Local Sprucebot](https://local.sprucebot.com) to verify platform is running properly
-* `sudo sprucebot platform remove`
-  * Allows for the removal of platform specific files and configurations
-  * Asks user to `rm -rf sprucebot/*`
-  * Asks user to remove `hosts` redirects (`*.sprucebot.com`)
-  * Asks user to remove Docker images
+* `sprucebot platform start [key]`
+  * Launches the platform
+  * `key` can be `all`, `web`, `api`, `relay`
+  * Default to `all`
+  * Visit your local [Sprucebot](https://local.sprucebot.com) to verify platform is running properly
+* `sudo sprucebot platform logs [key]`
+  * `key` can be `all`, `web`, `api`, `relay`
+  * Default to `all`
 * `sprucebot platform version`
   * Launch the interactive version select prompt

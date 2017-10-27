@@ -7,6 +7,30 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug Platform Install",
+      "program": "${workspaceFolder}/bin/sprucebot-platform.js",
+      "args": [
+        "install",
+        "~/Desktop/all",
+        "-p",
+        "all",
+        "-u",
+        "liquidg3"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Platform Version",
+      "program": "${workspaceFolder}/bin/sprucebot-platform.js",
+      "cwd.disabled": "/Users/taylorromero/Development/SpruceLabs/sprucebot",
+      "args": [
+        "version"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Test Debug File",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
@@ -24,17 +48,6 @@
       "name": "Test Debug All",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "skipFiles": [
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "ap simulator",
-      "program": "${workspaceRoot}/bin/sprucebot.js",
-      "protocol": "inspector",
-      "args": [
-        "ap",
-        "start"
       ]
     }
   ]

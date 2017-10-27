@@ -4,47 +4,61 @@ const Git = require('nodegit')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
 
-const { isProjectInstalled } = require('../../utils/dir')
+const { isProjectInstalled, directoryExists } = require('../../utils/dir')
 
-module.exports = async function version(installPath = process.cwd(), options) {
-	if (!isProjectInstalled(installPath)) throw new Error('Halting...')
+module.exports = async function version(platform = 'all', options) {
+	const installPath = process.cwd()
 
-	const repositories = config.get('repositories')
+	//assume we are running in single platform deployment (web or api only)
+	const useRepoPath = isProjectInstalled(installPath)
+	const platforms = config.get('platforms')
 	const prompts = []
-	for (let repo of repositories) {
-		const repository = await Git.Repository.open(
-			path.join(installPath, repo.path)
-		)
-		const reference = await repository.getCurrentBranch()
-		const versions = await Git.Tag.list(repository)
-		repo.versions = versions
-		repo.repository = repository
-		if (!versions.length) {
-			versions.push(reference.name())
-			console.log(
-				chalk.yellow(
-					`Oops, the ${chalk.underline(
-						repo.name
-					)} repository doesn't have any available versions`
-				)
-			)
-			console.log(chalk.yellow('I can only use the currently active branch'))
+	const repos = {}
+	for (let key in platforms) {
+		if (platform === 'all' || key === platform) {
+			const repo = platforms[key].repo
+			const repoPath = useRepoPath
+				? path.join(installPath, repo.path)
+				: installPath
+
+			if (!directoryExists(repoPath)) {
+				console.log(chalk.yellow(repoPath + ' not found.'))
+			} else {
+				const repository = await Git.Repository.open(repoPath)
+				const reference = await repository.getCurrentBranch()
+				const versions = await Git.Tag.list(repository)
+				repos[key] = {
+					name: repo.name,
+					versions,
+					repository
+				}
+				if (!versions.length) {
+					versions.push(reference.name())
+					console.log(
+						chalk.yellow(
+							`Oops, the ${chalk.underline(
+								repo.name
+							)} repository doesn't have any available versions`
+						)
+					)
+				} else {
+					prompts.push({
+						type: 'list',
+						name: key,
+						message: `Select the version to use for ${repo.name}`,
+						choices: versions
+					})
+				}
+			}
 		}
-		prompts.push({
-			type: 'list',
-			name: `${repo.name}Version`,
-			message: `Select the version to use for ${repo.name}`,
-			choices: versions
-		})
 	}
 
 	return inquirer.prompt(prompts).then(async answers => {
-		for (let repo of repositories) {
-			const version = `${repo.name}Version`
-			console.log(`Checkout out ${repo.name}:${answers[version]}...`)
+		for (let key in answers) {
+			const repo = repos[key]
 			await repo.repository.checkoutBranch(answers[version])
-			console.log(`Finished ${repo.name}:${answers[version]}`)
 		}
+		console.log(chalk.green('All done!'))
 		return answers
 	})
 }

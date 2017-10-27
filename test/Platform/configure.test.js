@@ -13,7 +13,7 @@ jest.mock('child_process')
 const configureAction = require('../../actions/platform/configure')
 
 const TEMP = `${config.get('TEMP')}/configure.test`
-const repositories = config.get('repositories')
+const platforms = config.get('platforms')
 
 describe.only('configure command', () => {
 	beforeEach(async () => {

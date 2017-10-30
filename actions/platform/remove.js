@@ -4,8 +4,5 @@
 // const yo = yeoman.createEnv()
 
 module.exports = function remove(installPath, options) {
-	// yo.registerStub(Remove, 'sprucebot')
-	// yo.run('sprucebot', {
-	// 	path: installPath
-	// })
+	throw new Error('Not built yet!')
 }

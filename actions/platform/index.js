@@ -46,7 +46,7 @@ function setup(argv) {
 	program
 		.command('version [platform]')
 		.action(catchActionErrors(platformVersion))
-	program.command('start').action(catchActionErrors(platformStart))
+	program.command('start [platform]').action(catchActionErrors(platformStart))
 	program.command('stop [platform]').action(catchActionErrors(platformStop))
 	program
 		.command('logs [platform]')

@@ -7,6 +7,9 @@
   "author": "Spruce Labs, inc",
   "license": "None",
   "preferGlobal": true,
+  "engines": {
+    "node" : ">=8.4.0"
+  },
   "config": {
     "strict-ssl": false
   },

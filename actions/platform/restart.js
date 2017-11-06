@@ -32,8 +32,17 @@ module.exports = function remove(platform = 'all', options) {
 
 	console.log(chalk.green(msg))
 
-	//lets not make them restart dev services too
-	if (platform === 'api') {
+	console.log(
+		chalk.yellow(
+			'Hint: Run `sprucebot platform logs' +
+				(platform === 'all' ? '' : ` ${platform}`) +
+				'` to check progress.'
+		)
+	)
+
+	//lets restart dev services for them
+	// for some reason this is not working
+	if (false && platform === 'api') {
 		const cmd = spawnSync(
 			'./node_modules/.bin/pm2',
 			['restart', config.get(`platforms.dev.pm2.name`)],

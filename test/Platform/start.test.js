@@ -33,8 +33,7 @@ test('spawns npm start command', () => {
 		'yarn',
 		['run', 'start'],
 		{
-			cwd: process.cwd(),
-			stdio: 'inherit'
+			cwd: process.cwd()
 		}
 	)
 })
@@ -46,8 +45,7 @@ test('spawns in cwd', () => {
 		'yarn',
 		['run', 'start'],
 		{
-			cwd: process.cwd(),
-			stdio: 'inherit'
+			cwd: process.cwd()
 		}
 	)
 })

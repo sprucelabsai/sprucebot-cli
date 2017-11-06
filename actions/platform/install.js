@@ -269,11 +269,14 @@ async function copyFile(fromFile, toFile) {
 }
 
 function yarnInstall(cwd) {
+	// this does not work, does it?
 	childProcess.spawnSync('nvm', ['use'], {
 		cwd,
 		stdio: 'inherit',
 		env: process.env
 	})
+
+	// HOLY SHIT --ignore-engines!!! TODO: honor .nvmrc
 	const cmd = childProcess.spawnSync('yarn', ['install', '--ignore-engines'], {
 		cwd,
 		stdio: 'inherit',

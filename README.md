@@ -71,7 +71,7 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 
 
 ### Developer Guidelines
-* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around skill development.
+* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/docs/CONTRIBUTING.md) for the rules around skill development.
 
 # Simulating Real World Events
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.

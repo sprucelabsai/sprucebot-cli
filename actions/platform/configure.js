@@ -114,11 +114,9 @@ async function setupCertificates(installPath) {
 	}
 }
 
-module.exports = async function configure(
-	installPath = process.cwd(),
-	options
-) {
+module.exports = async function configure(options) {
 	console.log('Configuring your environment...')
+	const installPath = process.cwd()
 	if (!isProjectInstalled(installPath)) throw new Error('Halting...')
 
 	const answers = await prompt()

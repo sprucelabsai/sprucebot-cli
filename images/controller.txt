@@ -1,0 +1,78 @@
+m` :ooooooooooooooooooooooooooooooooooooooooooooooo+.      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMMNysssssssdMMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMMo        `mMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMM+        `mMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMM+        `mMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMM+        `mMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMy++++++++-         /ooo++++sNMMMMMMMMMMMMMs      /
+m``mMMMMMm`                           oMMMMMMMMMMMMMy      /
+m``mMMMMMm`                           /MMMMMMMMMMMMMy      /
+m``mMMMMMm`                           /MMMMMMMMMMMMMy      /
+m``mMMMMMm.                           +MMMMMMMMMMMMMy      /
+m``mMMMMMMdssssssss-        `ossssssssmMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMM+        `NMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMM+        .NMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMM+        `NMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMs`       .NMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMNhyyyyyyydMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMNNNMMMMMMMNNMMMMMMMMMMMs      /
+m` :::/yMMd/:://++/::::hMMMs::::+mMMd/:::/hMMNo:::::.      /
+m`     :MM+  -ymNNmy.  +MMN-     dMMo     /MMm`            /
+m`     :MM+  yMMMMMMs  +MMN.     dMMo     /MMm`            /
+m`     :MM+  yMMMMMMy  +MMN.     dMMo     /MMm`            /
+m`     :MM+  yMMMMMMy  +MMN.     dMMo     /MMm`            /
+m`     :MM+  yMMMMMMy  +MMN.     dMMo     /MMm`            /
+m`     :MM+  yMMMMMMh  +MMN.     dMMo     /MMm`            /
+m`     :MM+  +NMMMMMo  +MMN.     dMMo     /MMm`            /
+m`     :MM+   -oyys:   +MMN.     dMMo     /MMm`            /
+m`     :MM+            +MMN.     dMMo     /MMm`            /
+m`     :MM+     ``     +MMN.     dMMo     /MMm`            /
+m`     :MM+  .sdNNms`  +MMN.     dMMo     /MMm`            /
+m`     :MM+  sMMMMMMs  +MMN.     dMMo     /MMm`            /
+m`     :MM+  sMMMMMMy  +MMN.     dMMo     /MMm`            /
+m`     :MM+  sMMMMMMh  +MMN.     dMMo     /MMm`            /
+m`     :MM+  sMMMMMMh` +MMN.     dMMo     /MMm`            /
+m`     :MM+  sMMMMMMh` +MMN.     dMMo     /MMm`            /
+m`     :MM+  +MMMMMMs  +MMN.     dMMo     /MMm`            /
+m`     :MMo   :shhy/`  /MMN-     dMMs     /MMm`            /
+m` :/:/yMMd/:::::::--:/hMMMs::::+NMMm/:::/hMMMo/:://-      /
+m``mMMMMMMMMMNMMMMNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMs      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMdo+ooooooooooo+++hMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMN.    `.-::-.     .NMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`  .+dNNMMNmh/`  `mMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm` -dMMMMMMMMMMh. `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm``dMMMMMMMMMMMMy `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`.NMMMMMMMMMMMMm``dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm``yMMMMMMMMMMMMs `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm` .sNMMMMMMMMNs` `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`   -ohdmmdho-   `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`      `..`      `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`                `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`                `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`   `./+oo+:.    `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`  :yNMMMMMMNy-  `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm` +NMMMMMMMMMMm: `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm``mMMMMMMMMMMMMh `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`.NMMMMMMMMMMMMd``dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMd` oMMMMMMMMMMMN+ `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMd`  +dNMMMMMMNd/  `dMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMm`   `:oyhhyo:`   `mMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMo.``````..``````.oMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMNNNNNNNNNNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+m``mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy      /
+d``hNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNMMMMN+      /
+m`  `````````````````````````````````````````````.``       +

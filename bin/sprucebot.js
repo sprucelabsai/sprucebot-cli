@@ -19,17 +19,22 @@ function setup(argv) {
 	const program = new Command()
 
 	/**
-   * General tool options and usage help
-   */
+	 * General tool options and usage help
+	 */
 	program
 		.version(version)
 		.description(description)
 		// Commands are registered without .action callback. This tells `commander`
 		// that we use separate executables in ./bin/ for sub-commands
 		// registering `platform` will execute `./bin/sprucebot-platform.js`
-		.command('platform [options]', 'Setup and deploy the Sprucebot platform')
+		.command(
+			'remote [options]',
+			'Setup your remote environment (dev|qa|alpha|prod|etc)'
+		)
 		.command('skill [options]', 'Create and edit Sprucebot skills')
 		.command('simulator [options]', 'Simulate Sprucebot locally')
+		.command('user [options]', 'Login to begin skill development')
+		.command('platform [options]', 'Setup and deploy the Sprucebot platform')
 
 	program.parse(process.argv)
 }

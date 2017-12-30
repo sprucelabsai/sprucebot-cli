@@ -2,7 +2,7 @@
 const { Command } = require('commander')
 
 const platformInstall = require('./install')
-const platformConfigure = require('./configure')
+const platformDevelopment = require('./development')
 const platformLogs = require('./logs')
 const platformStart = require('./start')
 const platformStop = require('./stop')
@@ -10,14 +10,13 @@ const platformBuild = require('./rebuild')
 const platformRestart = require('./restart')
 const platformRemove = require('./remove')
 const platformVersion = require('./version')
-const platformOwnerCreate = require('./ownerCreate')
 
 const catchActionErrors = action => {
 	async function wrapper(...args) {
 		try {
 			await action(...args)
-		} catch (e) {
-			console.error(e.stack)
+		} catch (err) {
+			console.error(err.stack)
 			process.exitCode = 1
 		}
 	}
@@ -27,7 +26,7 @@ const catchActionErrors = action => {
 function setup(argv) {
 	const program = new Command()
 
-	program.command('configure').action(catchActionErrors(platformConfigure))
+	program.command('development').action(catchActionErrors(platformDevelopment))
 
 	program
 		.command('install [path]')
@@ -57,10 +56,6 @@ function setup(argv) {
 	program
 		.command('restart [platform]')
 		.action(catchActionErrors(platformRestart))
-
-	program
-		.command('owner:create [cellphone]')
-		.action(catchActionErrors(platformOwnerCreate))
 
 	program.parse(argv)
 

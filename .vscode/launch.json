@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Platform Install",
+      "name": "Platform Install",
       "program": "${workspaceFolder}/bin/sprucebot-platform.js",
       "args": [
         "install",
@@ -21,7 +21,42 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Platform Version",
+      "name": "Login",
+      "program": "${workspaceFolder}/bin/sprucebot-user.js",
+      "cwd": "${workspaceFolder}/../sprucebot-skill-vip-alert",
+      "args": [
+        "login",
+        "7202535250"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Create Skill",
+      "program": "${workspaceFolder}/bin/sprucebot-skill.js",
+      "cwd": "${workspaceFolder}/../",
+      "args": [
+        "create",
+        "--name",
+        "Little Black Book",
+        "--slug",
+        "sprucebot-little-black-book"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Env",
+      "program": "${workspaceFolder}/bin/sprucebot-env.js",
+      "cwd": "${workspaceFolder}/../sprucebot-skill-vip-alert",
+      "args": [
+        "dev"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Platform Version",
       "program": "${workspaceFolder}/bin/sprucebot-platform.js",
       "cwd.disabled": "/Users/taylorromero/Development/SpruceLabs/sprucebot",
       "args": [
@@ -31,7 +66,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test Debug File",
+      "name": "Test File",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
         "${file}"
@@ -45,7 +80,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test Debug All",
+      "name": "Test All",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "skipFiles": [
       ]

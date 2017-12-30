@@ -1,6 +1,6 @@
 {
   "name": "sprucebot-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A command-line tool to manage sprucebot projects",
   "main": "sprucebot.js",
   "repository": "git@github.com:sprucelabsai/sprucebot-cli.git",

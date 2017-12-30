@@ -9,6 +9,7 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
+	skillsKitRepo: 'git@github.com:sprucelabsai/sprucebot-skills-kit.git',
 	platforms: {
 		api: {
 			repo: {
@@ -50,5 +51,52 @@ module.exports = {
 				name: 'Sprucebot Relay'
 			}
 		}
-	}
+	},
+	skillRemotes: [
+		{
+			label: 'hello.sprucebot.com',
+			name: 'prod',
+			url: 'https://api.sprucebot.com'
+		},
+		{
+			label: 'alpha-hello.sprucebot.com',
+			name: 'alpha',
+			url: 'https://alpha-api.sprucebot.com'
+		},
+		{
+			label: 'staging-hello.sprucebot.com',
+			name: 'staging',
+			url: 'https://staging-api.sprucebot.com'
+		},
+		{
+			label: 'qa-hello.sprucebot.com',
+			name: 'qa',
+			url: 'https://qa-api.sprucebot.com'
+		},
+		{
+			label: 'dev-hello.sprucebot.com',
+			name: 'dev',
+			url: 'https://dev-api.sprucebot.com'
+		},
+		{
+			label: 'local.sprucebot.com',
+			name: 'local',
+			url: 'https://local-api.sprucebot.com',
+			allowSelfSignedCerts: true
+		}
+	],
+	skillProps: [
+		{
+			key: 'NAME',
+			name: "Skill's name"
+		},
+		{
+			key: 'SLUG',
+			name: "Skill's slug"
+		},
+		{
+			key: 'DESCRIPTION',
+			name: 'Describe your skill in 144 characters'
+		}
+	]
 }

@@ -10,7 +10,7 @@ jest.mock('inquirer')
 jest.mock('hostile')
 jest.mock('child_process')
 
-const configureAction = require('../../actions/platform/configure')
+const configureAction = require('../../actions/platform/development')
 
 const TEMP = `${config.get('TEMP')}/configure.test`
 const platforms = config.get('platforms')

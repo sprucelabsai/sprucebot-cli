@@ -41,7 +41,7 @@ module.exports = function remove(platform = 'all', options) {
 	)
 
 	//lets restart dev services for them
-	// for some reason this is not working
+	// for some reason this is not working, api is never able to connect to postgres after restart
 	if (false && platform === 'api') {
 		const cmd = spawnSync(
 			'./node_modules/.bin/pm2',

@@ -10,7 +10,8 @@ const endpoint = process.env.API_URL || 'https://local-api.sprucebot.com'
 // Defaulting to Taylor's info for now.
 const enterExitEventData = {
 	apId: '6F42B9D0-8160-40C2-B442-95B7F573362F',
-	macAddress: 'e0:5:3d:ei:24:f0',
+	macAddress: 'e4:9a:79:dd:dc:b5',
+	// macAddress: 'e0:5:3d:ei:24:f0',
 	ipAddress: '192.168.2.95',
 	force: true
 }

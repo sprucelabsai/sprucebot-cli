@@ -1,23 +1,21 @@
 # sprucebot-cli
-Hey, I'm Sprucebot! This CLI was designed to give you the tools you need
-to help brick-and-mortar businesses thrive in the Internet age. Once I'm
-up and running in a store, you'll be able to react to real world events, such
-as guests entering or leaving.
+Hey, I'm Sprucebot! This CLI was designed to give you the tools you need to begin building skills to help brick-and-mortar businesses thrive in the Internet age. 
 
-Once your skill is ready and making an impact, you can submit it to the
-Skills Marketplace so other boutiques, bars, retailers, etc. can start
-taking advantage of it.
-
-Remember, our goal is to connect people, not replace them. So make
+Our goal is to connect people, not replace them. So make
 sure your skill promotes human-to-human connection.
 
 [![Watch Vignette 1](images/video-poster.jpg?raw=true)](https://vimeo.com/196923365)
 
-# Skills Development
-Skills are how you give me new... well, skills. A skill is really analogous to
-an app. It needs to be fully featured and create a real world experience people remember.
-Keep in mind as you're out saving small business that the thing that makes
-brick-and-mortar unique is the fact that real people are interacting face-to-face.
+## Skills Development
+First there were desktop applications, then mobile apps, now we are entering the `Decade of the Skill`!  💥💥💥
+
+They are the next step App Evolution. They are interface agnostic. They react to real world events. My skills are different than most. 
+
+Beyond reacting JUST voice commands, I can chat through pretty much any interface (sms, Facebook Messenger, etc.), I know when teammates arrive at work, when guests arrive at local businesses, when business owners ask to borrow a ladder from a neighbor, when guests message a business, EVEN WHEN SOMEONE BOOKS A HAIRCUT!! 💇
+
+*But, to be clear; I take privacy very seriously and as a Skills Developer, I'm not gonna share much  with you. Seriously, all you'll get is the guest's first name and a link to their profile photo in a few sizes. You can only access data your skill collects.*
+
+Anyway, what was I saying before things got all serious?
 
 It's the ultimate social network, and with your skills giving me the power to
 facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long into the future. 🌲🤖
@@ -25,60 +23,60 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 ### Prerequisites
 * [nvm](https://github.com/creationix/nvm/blob/master/README.md)
 * [git](https://git-scm.com/downloads)
+* [node](https://nodejs.org)
+* [yarn](https://github.com/yarnpkg/yarn) (**OPTIONAL**)
 
 ### Installation
-* ~~`yarn add -g sprucebot-cli`~~
+* `yarn add -g sprucebot-cli`
 
 ### Skill Commands
+This is where the magic happens!
 
-* `sprucebot skill create "[Skill Name]"`
+* `sprucebot skill create`
   * Creates a directory called: skill-${skill-name}
   * Everything is lowercased. [^a-z0-9] are converted to dashes "`-`"
   * All subsequent commands require you to be in the skill's directory
   * `cd sprucebot-skill-${skill-name}`
-* `sprucebot skill listen [event-name]`
+* `sprucebot remote set [prod|alpha|stage|qa|dev|alpha]
+  * You probably only have access to `prod`
+  * If you wish test skills at `alpha` locations, eg [Spruce](https://vimeo.com/214239239), email `scientists@sprucelabs.ai`
+  * If you wish to get early access to features on `stage`... you guessed it
+* `sprucebot skill register`
+  * Registers your skill with `remote`
+* `sprucebot skill unregister` **COMING SOON**
+  * Takes your skill entirely off remote
+  * It will be uninstalled from all locations that had it
+  * All meta data will be deleted
+* `sprucebot skill listen [event-name]`**COMING SOON**
   * Adds a listener to your skill. 
   * Events are lower cased, seperated by dashes "`-`"
   * Creates `./events/event-name.js`
-  * Core Events: 
-    * ~~will-enter~~
-    * did-enter
-    * ~~will-leave~~
-    * did-leave
-    * ~~will-message~~
-    * ~~did-message~~
-    * ~~will-update-profile~~
-    * ~~did-update-profile~~
   * Custom events are namespaced, such as `vip:will-send`
     * Creates `./events/vip/will-send.js`
     * Jump in and start editing
-* `sprucebot skill ignore [event-name]`
+* `sprucebot skill ignore [event-name]` **COMING SOON**
   * Removes a listener and moves the callback file.
   * `./events/did-enter.js` -> `./events/disabled/did-enter.js`
-* `sprucebot skill [get|post|patch|delete] "[route/path]"`
-  * Sets up a callback and returns instructions with stub for implimentation
-  * Example: 
-  * `sprucebot skill get "/admin/:someVariable/test"`<br />
-      Route created. <br />
-      Add this to your desired controller (or create one) inside `./controllers/${anything}.js`<br />
-      modules.export = {<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;"get /admin/:someVariable/test": (sb, req, res) {<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('hello world', req.params.someVariable)<br />
-      &nbsp;&nbsp;&nbsp;&nbsp;}<br />
-* `sprucebot skill page /path`
+* `sprucebot skill [get|post|patch|delete] "[route/path]"` **COMING SOON**
+  * Stubs a controller & route
+* `sprucebot skill page /path` **COMING SOON**
   * Creates a react route and corresponding page stubbed with a React component
   * Example: `/guest/profiles/:profileId/bookings/:bookingId` generates `/pages/guest/profiles/bookings.js`
 
+### User Commands
+Auth n' such
 
-### Developer Guidelines
-* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/docs/CONTRIBUTING.md) for the rules around skill development.
+* `sprucebot user login`
+  * Log you in and sets you up to dev at a location of your choosing
+* `sprucebot user logout` *COMING SOON**
+  * Logs you out
 
-# Simulating Real World Events
+### Simulator Commands
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
 
 * `sprucebot simulator start`
 
-Once the simulator is running, you can press different keys to simulate events. Instructions are displayed after you start the simulator.
+Once the simulator is running, you can press different keys to simulate events. You'll see when you get there.
 
 #  Platform Development
 This section is only relevant if you've been given permission to work directly on my core systems.
@@ -88,17 +86,6 @@ This section is only relevant if you've been given permission to work directly o
 * [Docker For Mac](https://www.docker.com/docker-mac)
 * [Git](https://git-scm.com)
 * [bash](https://www.gnu.org/software/bash/)
-
-### Installation
-* ~~`yarn add -g sprucebot-cli`~~
-* Clone the repo to your local machine `git clone git@github.com:sprucelabsai/sprucebot-cli.git`
-* Install dependencies `yarn install`
-* Create symlink in global folder `yarn link`
-* Reload your terminal and verify installation with `sprucebot -V`
-
-### Developer Guidelines
-* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/CONTRIBUTING.md) for the rules around platform development.
-
 
 ### Platform Commands
 
@@ -111,8 +98,8 @@ This section is only relevant if you've been given permission to work directly o
     * `com-sprucebot-api`
     * `com-sprucebot-web`
     * `sprucebot-dev-services`
-* `sudo sprucebot platform configure`
-  * Setup dns and hosts configurations.
+* `sudo sprucebot platform development`
+  * Setup dns and hosts configurations for local development.
   * Adds `local.sprucebot.com`, `local-api.sprucebot.com`, and `local-devtools.sprucebot.com` to `hosts`
 * `sprucebot platform start [key]`
   * Launches the platform
@@ -124,3 +111,6 @@ This section is only relevant if you've been given permission to work directly o
   * Default to `all`
 * `sprucebot platform version`
   * Launch the interactive version select prompt
+
+### Developer Guidelines
+* See [CONTRIBUTING](https://github.com/sprucelabsai/sprucebot-cli/blob/dev/docs/CONTRIBUTING.md) for the rules around skill development.

@@ -29,9 +29,9 @@ function setup(argv) {
 		// registering `platform` will execute `./bin/sprucebot-platform.js`
 		.command(
 			'remote [options]',
-			'Setup your remote environment (dev|qa|alpha|prod|etc)'
+			'Set your remote environment (dev|qa|alpha|prod|etc)'
 		)
-		.command('skill [options]', 'Create and edit Sprucebot skills')
+		.command('skill [options]', 'Build skills')
 		.command('simulator [options]', 'Simulate Sprucebot locally')
 		.command('user [options]', 'Login to begin skill development')
 		.command('platform [options]', 'Setup and deploy the Sprucebot platform')

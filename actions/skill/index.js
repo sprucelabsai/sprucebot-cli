@@ -40,6 +40,32 @@ const requireSkill = (requireSkill, action) => {
 	return wrapper
 }
 
+const requireLogin = (requireSkill, action) => {
+	async function wrapper(...args) {
+		try {
+			// require skill
+			requireSkill &&
+				assert(
+					skillUtil.isSkill(),
+					'You are not in a skill! cd to a skill and try again.'
+				)
+
+			// make sure logged in
+			requireSkill &&
+				assert(
+					configUtil.user(),
+					'You must be logged in! Try `sprucebot user login`'
+				)
+
+			await action(...args)
+		} catch (err) {
+			console.log(chalk.bold.red(err.message))
+			console.error(err.stack)
+		}
+	}
+	return wrapper
+}
+
 function setup(argv) {
 	const program = new Command()
 
@@ -54,7 +80,7 @@ function setup(argv) {
 		.command('register')
 		.option('-n --name [name]', 'Name of your skill')
 		.description('Register your skill so you can begin development')
-		.action(requireSkill(true, register))
+		.action(requireLogin(true, register))
 
 	program
 		.command('unregister')

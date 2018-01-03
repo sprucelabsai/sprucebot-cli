@@ -1,8 +1,24 @@
 const request = require('request')
 const configUtil = require('./config')
+const skillUtil = require('./skill')
+const assert = require('assert')
 
 exports.endpoint = env => {
-	return configUtil.remote().url + '/api/1.0'
+	// check skill first, fallback to remote
+	const endpoint = skillUtil.readEnv('API_HOST') || configUtil.remote().url
+
+	// normalize http(s)
+	const endpointMatches = endpoint.match(
+		/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i
+	)
+	assert(
+		endpointMatches && endpointMatches[1],
+		'Invalid remote. Try `sprucebot remote set`.'
+	)
+	const cleanedEndpoint = endpointMatches[1]
+
+	// must be https
+	return 'https://' + cleanedEndpoint + '/api/1.0'
 }
 
 exports.auth = user => {

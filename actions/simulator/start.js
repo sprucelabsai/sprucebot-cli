@@ -53,8 +53,21 @@ class Controller {
 		try {
 			await this._emit('did-enter')
 		} catch (err) {
-			log.error(err)
+			log.error(err.friendlyMessage || err.message)
 		}
+	}
+
+	async sendMessage() {
+		process.stdin.setRawMode(false)
+		this.listeningToKeyPress = false
+		const answer = await inquirer.prompt({
+			type: 'input',
+			message: 'Message to send',
+			name: 'message'
+		})
+		console.log(answer)
+		process.stdin.setRawMode(true)
+		this.listeningToKeyPress = true
 	}
 
 	async _emit(eventName) {

@@ -99,11 +99,11 @@ module.exports = async function(commander) {
 					.toString()
 			}
 		)
-		console.log('registerResponse', registerResponse)
 		// set env variables
 		skillUtil.writeEnv('ID', registerResponse.id)
 		skillUtil.writeEnv('SLUG', registerResponse.slug)
 		skillUtil.writeEnv('API_KEY', registerResponse.apiKey)
+		skillUtil.writeEnv('DESCRIPTION', registerResponse.description)
 	} catch (err) {
 		log.error("Well that didn't go as I expected 🚨")
 		log.error(err.message)

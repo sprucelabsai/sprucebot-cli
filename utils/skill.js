@@ -35,3 +35,11 @@ exports.readEnv = (key, env = process.cwd() + '/.env') => {
 		return undefined
 	}
 }
+
+exports.skill = (env = process.cwd() + '/.env') => {
+	return {
+		id: this.readEnv('ID'),
+		name: this.readEnv('NAME'),
+		slug: this.readEnv('SLUG')
+	}
+}

@@ -25,6 +25,12 @@ const requireSkill = (requireSkill, action) => {
 					'You must be logged in! Try `sprucebot user login`'
 				)
 
+			requireSkill &&
+				assert(
+					skillUtil.readEnv('ID'),
+					'You must have registered your skill to run this command. Try `sprucebot skill register`'
+				)
+
 			await action(...args)
 		} catch (err) {
 			console.log(chalk.bold.red(err.message))
@@ -48,6 +54,12 @@ function setup(argv) {
 		.command('register')
 		.option('-n --name [name]', 'Name of your skill')
 		.description('Register your skill so you can begin development')
+		.action(requireSkill(true, register))
+
+	program
+		.command('unregister')
+		.option('-c --confirm', 'Auto-confirm')
+		.description('Unregister your skill so you can begin development')
 		.action(requireSkill(true, register))
 
 	program.parse(argv)

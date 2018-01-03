@@ -38,7 +38,6 @@
     "pg": "^7.3.0",
     "request": "^2.83.0",
     "sleep": "^5.1.1",
-    "socket.io-client": "^2.0.3",
     "untildify": "^3.0.2",
     "wrap-ansi": "^3.0.1",
     "yeoman-environment": "^2.0.3",

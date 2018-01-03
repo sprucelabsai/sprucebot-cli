@@ -9,13 +9,13 @@ exports.endpoint = env => {
 
 	// normalize http(s)
 	const endpointMatches = endpoint.match(
-		/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i
+		/(^https?\:\/\/|)([^\/:?#]+)(?:[\/:?#]|$)/i
 	)
 	assert(
-		endpointMatches && endpointMatches[1],
+		endpointMatches && endpointMatches[2],
 		'Invalid remote. Try `sprucebot remote set`.'
 	)
-	const cleanedEndpoint = endpointMatches[1]
+	const cleanedEndpoint = endpointMatches[2]
 
 	// must be https
 	return 'https://' + cleanedEndpoint + '/api/1.0'

@@ -9,7 +9,7 @@ exports.endpoint = env => {
 
 	// normalize http(s)
 	const endpointMatches = endpoint.match(
-		/(^https?\:\/\/|)([^\/:?#]+)(?:[\/:?#]|$)/i
+		/^(https?\:\/\/|)([^\/:?#]+)(?:[\/:?#]|$)/i
 	)
 	assert(
 		endpointMatches && endpointMatches[2],
@@ -43,7 +43,7 @@ exports.post = async (path, data) => {
 			{
 				method: 'POST',
 				uri: uri,
-				json: data,
+				json: data || true,
 				headers: this.headers(),
 				agentOptions: {
 					rejectUnauthorized: !configUtil.remote().allowSelfSignedCerts
@@ -75,6 +75,7 @@ exports.get = async (path, options) => {
 		request.get(
 			{
 				url: uri,
+				json: true,
 				headers: this.headers(),
 				agentOptions: {
 					rejectUnauthorized: !configUtil.remote().allowSelfSignedCerts
@@ -86,11 +87,10 @@ exports.get = async (path, options) => {
 					return
 				}
 				try {
-					const json = JSON.parse(body)
 					if (response.statusCode === 200) {
-						accept(json)
+						accept(body)
 					} else {
-						reject(new Error(json.friendlyReason))
+						reject(new Error(body.friendlyReason))
 					}
 				} catch (err) {
 					reject(new Error('Invalid response from Sprucebot.'))

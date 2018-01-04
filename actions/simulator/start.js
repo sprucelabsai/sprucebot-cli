@@ -15,6 +15,7 @@ class Controller {
 		this.user = user
 		this.skill = skill
 		this.listeningToKeyPress = true
+		this.lastMessage
 
 		requestUtil.auth(user)
 	}
@@ -24,8 +25,12 @@ class Controller {
 		process.stdin.on('keypress', this.onKeyPress.bind(this))
 		process.stdin.setRawMode(true)
 		process.stdin.resume()
-
 		log.success('Simulator running...')
+
+		this.drawMenu()
+	}
+
+	drawMenu() {
 		log.line('enter: ⬆️')
 		log.line('leave: ⬇️')
 		log.line('send message: ➡️')
@@ -43,9 +48,9 @@ class Controller {
 				} else if (key.name === 'down') {
 					await this._emit('did-leave')
 				} else if (key.name === 'right') {
-					this.sendMessage()
+					await this.sendMessage()
 				} else if (key.name == 'left') {
-					this.receiveMessage()
+					await this.receiveMessage()
 				}
 			} catch (err) {
 				log.error(err.friendlyMessage || err.message)
@@ -58,15 +63,22 @@ class Controller {
 		const answer = await inquirer.prompt({
 			type: 'input',
 			message: 'Message to send',
-			name: 'message'
+			name: 'message',
+			default: this.lastMessage
 		})
-		console.log(answer)
+		this.lastMessage = answer.message
 		this.listeningToKeyPress = true
+		await process.stdin.setRawMode(true)
+		process.stdin.resume()
+		this.drawMenu()
+
+		await this._emit('did-message', { message: this.lastMessage })
 	}
 
-	async _emit(eventName) {
+	async _emit(eventName, data = {}) {
 		await requestUtil.post(
-			`/dev/${this.location.id}/skill/${this.skill.id}/emit/${eventName}`
+			`/dev/${this.location.id}/skill/${this.skill.id}/emit/${eventName}`,
+			data
 		)
 	}
 }

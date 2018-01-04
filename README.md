@@ -87,6 +87,7 @@ This section is only relevant if you've been given permission to work directly o
 * Access to the platform repositories
 * [Docker For Mac](https://www.docker.com/docker-mac)
 * [Git](https://git-scm.com)
+* [Postgresql on Host machine](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/)
 * [bash](https://www.gnu.org/software/bash/)
 
 ### Platform Commands

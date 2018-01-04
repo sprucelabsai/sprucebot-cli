@@ -1,6 +1,6 @@
 const chalk = require('chalk')
 const log = require('../../utils/log')
-const keypress = require('keypress')
+const readline = require('readline')
 const skillUtil = require('../../utils/skill')
 const configUtil = require('../../utils/config')
 const requestUtil = require('../../utils/request')
@@ -20,7 +20,7 @@ class Controller {
 	}
 
 	start() {
-		keypress(process.stdin)
+		readline.emitKeypressEvents(process.stdin)
 		process.stdin.on('keypress', this.onKeyPress.bind(this))
 		process.stdin.setRawMode(true)
 		process.stdin.resume()
@@ -82,7 +82,6 @@ class Controller {
 	}
 
 	async sendMessage() {
-		process.stdin.setRawMode(false)
 		this.listeningToKeyPress = false
 		const answer = await inquirer.prompt({
 			type: 'input',
@@ -90,7 +89,6 @@ class Controller {
 			name: 'message'
 		})
 		console.log(answer)
-		process.stdin.setRawMode(true)
 		this.listeningToKeyPress = true
 	}
 

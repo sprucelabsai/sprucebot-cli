@@ -32,52 +32,24 @@ class Controller {
 		log.line('receive message: ⬅️')
 	}
 
-	onKeyPress(ch, key) {
+	async onKeyPress(ch, key) {
 		if (key && this.listeningToKeyPress) {
-			if (key.ctrl && key.name === 'c') {
-				console.log(chalk.green('Killing simulator...'))
-				process.exit()
-			} else if (key.name === 'up') {
-				this.didEnter()
-			} else if (key.name === 'down') {
-				this.didLeave()
-			} else if (key.name === 'right') {
-				this.sendMessage()
-			} else if (key.name == 'left') {
-				this.receiveMessage()
+			try {
+				if (key.ctrl && key.name === 'c') {
+					console.log(chalk.green('Killing simulator...'))
+					process.exit()
+				} else if (key.name === 'up') {
+					await this._emit('did-enter')
+				} else if (key.name === 'down') {
+					await this._emit('did-leave')
+				} else if (key.name === 'right') {
+					this.sendMessage()
+				} else if (key.name == 'left') {
+					this.receiveMessage()
+				}
+			} catch (err) {
+				log.error(err.friendlyMessage || err.message)
 			}
-		}
-	}
-
-	async didEnter() {
-		try {
-			await this._emit('did-enter')
-		} catch (err) {
-			log.error(err.friendlyMessage || err.message)
-		}
-	}
-
-	async didSignup() {
-		try {
-			await this._emit('did-signup')
-		} catch (err) {
-			log.error(err.friendlyMessage || err.message)
-		}
-	}
-
-	async didAddDevice() {
-		try {
-			await this._emit('did-add-device')
-		} catch (err) {
-			log.error(err.friendlyMessage || err.message)
-		}
-	}
-
-	async didLeave() {
-		try {
-			await this._emit('did-leave')
-		} catch (err) {
-			log.error(err.friendlyMessage || err.message)
 		}
 	}
 

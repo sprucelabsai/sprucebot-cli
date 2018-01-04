@@ -35,6 +35,8 @@ module.exports = async function init(startingPath = false, options = {}) {
 
 	const platforms = config.get('platforms')
 
+	yarnInstall(promptValues.installPath)
+
 	for (let key in platforms) {
 		if (platform === 'all' || key == platform) {
 			// if we are installing everything, they each go in their own subdir

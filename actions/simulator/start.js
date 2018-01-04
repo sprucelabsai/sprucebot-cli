@@ -57,6 +57,30 @@ class Controller {
 		}
 	}
 
+	async didSignup() {
+		try {
+			await this._emit('did-signup')
+		} catch (err) {
+			log.error(err.friendlyMessage || err.message)
+		}
+	}
+
+	async didAddDevice() {
+		try {
+			await this._emit('did-add-device')
+		} catch (err) {
+			log.error(err.friendlyMessage || err.message)
+		}
+	}
+
+	async didLeave() {
+		try {
+			await this._emit('did-leave')
+		} catch (err) {
+			log.error(err.friendlyMessage || err.message)
+		}
+	}
+
 	async sendMessage() {
 		process.stdin.setRawMode(false)
 		this.listeningToKeyPress = false
@@ -72,7 +96,7 @@ class Controller {
 
 	async _emit(eventName) {
 		await requestUtil.post(
-			`/dev/${this.location.id}/skill/${this.skill.id}/emit/did-signup`
+			`/dev/${this.location.id}/skill/${this.skill.id}/emit/${eventName}`
 		)
 	}
 }

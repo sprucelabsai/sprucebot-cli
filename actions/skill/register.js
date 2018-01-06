@@ -35,12 +35,14 @@ module.exports = async function(commander) {
 		log.instructions(`Just kidding, I don't feel.`)
 		await log.enterToContinue('...')
 		log.instructions(
-			`But, you can put those feels away, because it's the last step 🤓.`
+			`But, you can put those feels away, because it's the last step 🤓. But, I'm not gonna lie, it's a big one.`
 		)
 
 		log.instructions(
-			`I'm gonna have you confirm a few things, give me a short description, then you're off 🚀!`
+			`I'm gonna have you confirm a few things, grab a short description from you... then, we gotta talk about how you want to tunnel requests to your skill.😬`
 		)
+
+		log.instructions('But, lets start with the easy stuff.')
 
 		log.hint(
 			'Pro tip: Make your description short and sweet... and good, make it good. If you seek examples, tap the profile link I sent you, then tap "' +
@@ -63,7 +65,7 @@ module.exports = async function(commander) {
 	const answers = await inquirer.prompt(prompts)
 	let slugTaken = false
 
-	log.line(`Checking ${answers.SLUG}`)
+	log.line(`Checking ${answers.SLUG}...`)
 
 	do {
 		const slugResponse = await requestUtil.get(
@@ -84,6 +86,36 @@ module.exports = async function(commander) {
 			answers.SLUG = slugAnswer.slug
 		}
 	} while (slugTaken)
+
+	if (storyMode) {
+		log.instructions(
+			"\n\nOk, lets talk about your tunnel situation. See, in order for me to reach your local skill, I will need a publicly accessible url or IP and it'll need to be secure (https)."
+		)
+	}
+
+	const hasTunnelAnswer = await inquirer.prompt({
+		type: 'confirm',
+		name: 'hasTunnel',
+		message: 'Do you have a tunnel ready to configure (e.g. ngrok.io)'
+	})
+
+	if (hasTunnelAnswer.hasTunnel) {
+		const port = skillUtil.readEnv('PORT')
+		log.hint(
+			'\n\nPoint your tunnel to `http://localhost:' +
+				port +
+				"`. I'll hang here while you do that."
+		)
+		await log.enterToContinue()
+
+		const tunnelAnswer = await inquirer.prompt({
+			name: 'url',
+			message: 'Tunnel url (https://my-skill.ngrok.io)',
+			required: true
+		})
+		skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
+		skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)
+	}
 
 	console.log('Registering skill')
 

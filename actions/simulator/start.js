@@ -34,7 +34,7 @@ class Controller {
 		log.line('enter: ⬆️')
 		log.line('leave: ⬇️')
 		log.line('send message: ➡️')
-		log.line('receive message: ⬅️')
+		log.line('signup: ⬅️')
 	}
 
 	async onKeyPress(ch, key) {
@@ -44,13 +44,13 @@ class Controller {
 					console.log(chalk.green('Killing simulator...'))
 					process.exit()
 				} else if (key.name === 'up') {
-					await this._emit('did-enter')
+					await this.emit('did-enter')
 				} else if (key.name === 'down') {
-					await this._emit('did-leave')
+					await this.emit('did-leave')
 				} else if (key.name === 'right') {
 					await this.sendMessage()
 				} else if (key.name == 'left') {
-					await this.receiveMessage()
+					await this.emit('did-signup')
 				}
 			} catch (err) {
 				log.error(err.friendlyMessage || err.message)
@@ -68,14 +68,16 @@ class Controller {
 		})
 		this.lastMessage = answer.message
 		this.listeningToKeyPress = true
-		await process.stdin.setRawMode(true)
+
+		process.stdin.setRawMode(true)
 		process.stdin.resume()
+
 		this.drawMenu()
 
-		await this._emit('did-message', { message: this.lastMessage })
+		await this.emit('did-message', { message: this.lastMessage })
 	}
 
-	async _emit(eventName, data = {}) {
+	async emit(eventName, data = {}) {
 		await requestUtil.post(
 			`/dev/${this.location.id}/skill/${this.skill.id}/emit/${eventName}`,
 			data

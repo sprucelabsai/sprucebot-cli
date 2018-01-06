@@ -52,14 +52,14 @@ module.exports = async function create(commander) {
 		log.instructions(
 			'Sweet! Lets do this! Before we venture into code 👾, we have to define some basic information about your skill.'
 		)
-		log.instructions("We'll start by giving your skill a name and a slug. ")
+		log.instructions("We'll start by giving your skill a name and a slug.")
 
 		log.instructions(
 			'Pick a good, hardy, memorable name. But, also make sure it reflects the nature of your skill. Oh, and make it fun! Examples are Vip Alerts 💥, Scratch & Win, Little Black Book 📓.'
 		)
 
 		log.instructions(
-			"Slugs must be unique and can only contain [a-z] and hyphens. They are simplified versions or your name, like vip-alerts, scratch-and-win, little-black-book. Keep in mind these are global, so you'll want to prefix yours with something (liquidg3-my-first-skill)."
+			"Slugs must be unique and can only contain [a-z] and hyphens. They are simplified versions of your name, like vip-alerts, scratch-and-win, little-black-book. Keep in mind these are global, so you'll want to prefix yours with something (liquidg3-my-first-skill)."
 		)
 
 		log.instructions('But, you read the docs, so you knew all that. 🙇‍♂️')
@@ -160,7 +160,14 @@ module.exports = async function create(commander) {
 		log.instructions(
 			"To get the skill running, you have to log in and register it with homebase. Don't sweat it, it's easy!"
 		)
-		log.hint('Run the following: `cd ' + slug + ' && sprucebot user login`')
+		log.hint(
+			'To skip story mode in the future, run `sprucebot skill create -n "' +
+				name +
+				'"`'
+		)
+		log.hint(
+			'Run the following to continue: `cd ' + slug + ' && sprucebot user login`'
+		)
 	} else {
 		log.hint('Run: `cd ' + slug + ' && sprucebot user login`')
 	}

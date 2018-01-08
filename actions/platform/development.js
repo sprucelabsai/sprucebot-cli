@@ -50,6 +50,7 @@ async function setupLoopback(installPath) {
 		console.log(
 			chalk.green('Successfully setup the loopback alias 10.200.10.1 ↫')
 		)
+		console.log(chalk.green('Successfully setup the loopback alias 10.0.2.2 ↫'))
 	}
 }
 

@@ -13,6 +13,21 @@ const untildify = require('untildify')
 const { directoryExists, fileExists } = require('../../utils/dir')
 
 module.exports = async function init(startingPath = false, options = {}) {
+	// Check okay status on following commands
+	checkDependenciesInstalled([
+		{
+			exectable: 'psql',
+			args: ['-V'],
+			message:
+				'I work better with friends! 🤖. Please install Postgres. https://www.postgresql.org/download/'
+		},
+		{
+			exectable: 'docker',
+			args: ['-v'],
+			message:
+				'I work better with friends! 🤖. Please install Docker. https://docs.docker.com/docker-for-mac/install/'
+		}
+	])
 	const platform = options.platform || 'all'
 	const cliPath = path.resolve(__dirname, '..', '..')
 
@@ -216,6 +231,26 @@ async function fetchPlatform(installPath, repoName, gitUser) {
 	if (upstream !== origin) {
 		await updateRepoRemote(installPath, origin, upstream)
 	}
+}
+
+/**
+ * Checks if the supplied commands are available in PATH
+ * and makes sure they return status === 0
+ * 
+ * @param {Array} commands 
+ * @returns {void} Exits if any command returns status >=1
+ */
+async function checkDependenciesInstalled(commands) {
+	commands.forEach(({ exectable, args, message }) => {
+		const cmd = childProcess.spawnSync(exectable, args, {
+			stdio: 'inherit',
+			env: process.env
+		})
+		if (cmd.status !== 0) {
+			console.log(chalk.red(message))
+			process.exit(1)
+		}
+	})
 }
 
 async function cloneRepo(repo, localPath) {

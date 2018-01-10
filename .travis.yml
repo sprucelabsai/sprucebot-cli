@@ -2,7 +2,7 @@ language: node_js
 before_script: 
   - npm link
 after_success: 
-  - ./bin/travis-version-bump.js
+  - bash <(curl -s https://codecov.io/bash) # Upload code coverage reports
 addons:
   apt:
     sources:

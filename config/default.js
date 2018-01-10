@@ -50,6 +50,13 @@ module.exports = {
 			pm2: {
 				name: 'Sprucebot Relay'
 			}
+		},
+		'teammate-app': {
+			repo: {
+				name: 'sprucebot-teammate-app',
+				path: './teammate-app',
+				env: false
+			}
 		}
 	},
 	skillRemotes: [

@@ -14,20 +14,22 @@ const { directoryExists, fileExists } = require('../../utils/dir')
 
 module.exports = async function init(startingPath = false, options = {}) {
 	// Check okay status on following commands
-	checkDependenciesInstalled([
-		{
-			exectable: 'psql',
-			args: ['-V'],
-			message:
-				'I work better with friends! 🤖. Please install Postgres. https://www.postgresql.org/download/'
-		},
-		{
-			exectable: 'docker',
-			args: ['-v'],
-			message:
-				'I work better with friends! 🤖. Please install Docker. https://docs.docker.com/docker-for-mac/install/'
-		}
-	])
+	if (process.env.NODE_ENV !== 'test') {
+		checkDependenciesInstalled([
+			{
+				exectable: 'psql',
+				args: ['-V'],
+				message:
+					'I work better with friends! 🤖. Please install Postgres. https://www.postgresql.org/download/'
+			},
+			{
+				exectable: 'docker',
+				args: ['-v'],
+				message:
+					'I work better with friends! 🤖. Please install Docker. https://docs.docker.com/docker-for-mac/install/'
+			}
+		])
+	}
 	const platform = options.platform || 'all'
 	const cliPath = path.resolve(__dirname, '..', '..')
 

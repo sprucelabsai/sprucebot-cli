@@ -1,8 +1,8 @@
 const path = require('path')
 const config = require('config')
-const Git = require('nodegit')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
+const Git = require('../../utils/Git')
 
 const { isProjectInstalled, directoryExists } = require('../../utils/dir')
 
@@ -25,16 +25,13 @@ module.exports = async function version(platform = 'all', options) {
 			if (!directoryExists(repoPath)) {
 				console.log(chalk.yellow(repoPath + ' not found.'))
 			} else {
-				const repository = await Git.Repository.open(repoPath)
-				const reference = await repository.getCurrentBranch()
-				const versions = await Git.Tag.list(repository)
+				const versions = Git.listTags(repoPath)
 				repos[key] = {
 					name: repo.name,
-					versions,
-					repository
+					versions: versions.split('\n'),
+					repoPath
 				}
 				if (!versions.length) {
-					versions.push(reference.name())
 					console.log(
 						chalk.yellow(
 							`Oops, the ${chalk.underline(
@@ -57,7 +54,7 @@ module.exports = async function version(platform = 'all', options) {
 	return inquirer.prompt(prompts).then(async answers => {
 		for (let key in answers) {
 			const repo = repos[key]
-			await repo.repository.checkoutBranch(answers[key])
+			Git.checkoutBranch(repo.repoPath, answers[key])
 		}
 		console.log(chalk.green('Version set!'))
 		return answers

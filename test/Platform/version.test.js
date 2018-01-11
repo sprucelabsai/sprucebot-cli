@@ -3,7 +3,6 @@ const fs = require('fs-extra')
 const path = require('path')
 const config = require('config')
 const { createDir, rmdir } = require('../../utils/dir')
-// const { Repository, Tag, Signature } = require('nodegit')
 const inquirer = require('inquirer')
 // jest.mock('inquirer')
 

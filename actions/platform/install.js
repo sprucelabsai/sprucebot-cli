@@ -5,8 +5,8 @@ const chalk = require('chalk')
 const childProcess = require('child_process')
 const inquirer = require('inquirer')
 const hostile = require('hostile')
-const { Remote, Repository } = require('nodegit')
 
+const Git = require('../../utils/Git')
 const checkoutVersion = require('./version')
 const untildify = require('untildify')
 
@@ -271,21 +271,19 @@ async function cloneRepo(repo, localPath) {
 }
 
 async function updateRepoRemote(repoPath, origin, upstream) {
-	let repo
-	try {
-		repo = await Repository.open(repoPath)
-	} catch (e) {
-		if (process.env.NODE_ENV === 'test') {
-			repo = await Repository.init(repoPath, 0)
-		} else {
-			throw new Error(e)
-		}
-	}
-	if (repo) {
-		await Remote.delete(repo, 'origin').catch(() => {})
-		await Remote.delete(repo, 'upstream').catch(() => {})
-		await Remote.create(repo, 'origin', origin)
-		await Remote.create(repo, 'upstream', upstream)
+	Git.Remote.delete(repoPath, 'origin')
+	Git.Remote.delete(repoPath, 'upstream')
+	const errors = [
+		Git.Remote.create(repoPath, 'origin', origin),
+		Git.Remote.create(repoPath, 'upstream', upstream)
+	].filter(cmd => cmd instanceof Error)
+	if (errors.length) {
+		console.log(
+			chalk.red('CRAP, I had an issue updating the repo remotes'),
+			repoPath,
+			chalk.red(errors)
+		)
+	} else {
 		console.log(chalk.green(`Successfully created git remote origin ${origin}`))
 		console.log(
 			chalk.green(`Successfully created git remote upstream ${upstream}`)

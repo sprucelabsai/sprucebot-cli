@@ -50,6 +50,54 @@ module.exports = {
 			pm2: {
 				name: 'Sprucebot Relay'
 			}
+		},
+		'react-sprucebot': {
+			repo: {
+				name: 'react-sprucebot',
+				path: './react-sprucebot',
+				env: false
+			},
+			pm2: null
+		},
+		'sprucebot-cli': {
+			repo: {
+				name: 'sprucebot-cli',
+				path: './sprucebot-cli',
+				env: false
+			},
+			pm2: null
+		},
+		'sprucebot-node': {
+			repo: {
+				name: 'sprucebot-node',
+				path: './sprucebot-node',
+				env: false
+			},
+			pm2: null
+		},
+		'teammate-app': {
+			repo: {
+				name: 'sprucebot-teammate-app',
+				path: './teammate-app',
+				env: false
+			},
+			pm2: null
+		},
+		'sprucebot-skills-kit-server': {
+			repo: {
+				name: 'sprucebot-skills-kit-server',
+				path: './sprucebot-skills-kit-server',
+				env: false
+			},
+			pm2: null
+		},
+		'sprucebot-skills-kit': {
+			repo: {
+				name: 'sprucebot-skills-kit',
+				path: './sprucebot-skills-kit',
+				env: './'
+			},
+			pm2: null
 		}
 	},
 	skillRemotes: [

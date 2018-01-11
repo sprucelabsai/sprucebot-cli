@@ -6,11 +6,4 @@ script:
   - npm test
 after_success: 
   - bash <(curl -s https://codecov.io/bash) # Upload code coverage reports
-addons:
-  apt:
-    sources:
-      # Nodegit dependency fix
-      - ubuntu-toolchain-r-test
-    packages:
-      # Nodegit dependency fix
-      - libstdc++-4.9-dev
+  

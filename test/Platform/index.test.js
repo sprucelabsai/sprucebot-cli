@@ -13,22 +13,26 @@ const binFile = path.resolve(sprucebotProgram)
 const TEMP = `${config.get('TEMP')}/index.test`
 
 const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout))
-// Override the NODE_CONFIG DIR if not set
-// This allows us to use the cli from any directory
-process.env.NODE_CONFIG_DIR =
-	process.env.NODE_CONFIG_DIR || path.join(__dirname, '../../config')
 
 describe('Platform bin execution', () => {
 	beforeEach(() => {
 		createDir(TEMP)
 	})
-	afterAll(() => rmdir(TEMP))
+	afterAll(() => {
+		rmdir(TEMP)
+	})
 	// Sleep because these are running after each `test()` finishes
 	// TODO determine why spawnSync doesn't seem to be sync
 	afterEach(() => sleep(100))
 
 	const runCommand = (argv = []) => {
-		return spawnSync(binFile, argv, { cwd: TEMP })
+		return spawnSync(binFile, argv, {
+			cwd: TEMP,
+			env: {
+				...process.env,
+				NODE_CONFIG_DIR: path.join(__dirname, '../../config')
+			}
+		})
 	}
 
 	test('`sprucebot platform -h` should be okay', () => {

@@ -10,7 +10,11 @@ function spawnSync(cmd, argv, { cwd = process.cwd() }) {
 					const repoParts = remote.split('/')
 					const repo = repoParts[repoParts.length - 1]
 					const frmPath = path.join(__dirname, `repos/${repo}`)
-					fs.copySync(frmPath, cpyPath)
+					if (fs.existsSync(frmPath)) {
+						fs.copySync(frmPath, cpyPath)
+					} else {
+						fs.mkdirSync(cpyPath)
+					}
 					return { status: 0, error: null }
 				default:
 					const error = `Missing git subcommand handler ${cmd} ${subCMD}`

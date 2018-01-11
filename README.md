@@ -1,4 +1,6 @@
 # sprucebot-cli
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/sprucelabsai/sprucebot-cli.svg)](https://greenkeeper.io/)
 Hey, I'm Sprucebot! This CLI was designed to give you the tools you need to begin building skills to help brick-and-mortar businesses thrive in the Internet age. 
 
 Our goal is to connect people, not replace them. So make

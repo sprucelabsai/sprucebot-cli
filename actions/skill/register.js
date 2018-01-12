@@ -110,8 +110,8 @@ module.exports = async function(commander) {
 
 		const tunnelAnswer = await inquirer.prompt({
 			name: 'url',
-			message: 'Tunnel url (https://my-skill.ngrok.io)',
-			required: true
+			message: 'Tunnel url (https://my-skill.ngrok.io):',
+			validate: val => val.length && val.length > 0
 		})
 		skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
 		skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)

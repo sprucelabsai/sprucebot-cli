@@ -9,7 +9,7 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
-	skillsKitRepo: 'git@github.com:sprucelabsai/sprucebot-skills-kit.git',
+	skillsKitRepo: 'https://github.com/sprucelabsai/sprucebot-skills-kit.git',
 	platforms: {
 		api: {
 			repo: {

@@ -78,6 +78,7 @@ Auth n' such. Requires you to have an account at your chosen `remote` (probably 
 ### Simulator Commands
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
 
+* `cd my-skill-dir #Run the simulator in your skill`
 * `sprucebot simulator start`
 
 Once the simulator is running, you can press different keys to simulate events. You'll see when you get there.

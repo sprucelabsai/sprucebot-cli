@@ -1,6 +1,6 @@
 {
   "name": "sprucebot-cli",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A command-line tool for Sprucebot 🌲🤖 (retail.bot).",
   "main": "sprucebot.js",
   "repository": "git@github.com:sprucelabsai/sprucebot-cli.git",

@@ -2,6 +2,7 @@
 node_modules/
 config/local.*
 package-lock.json
+yarn-error.log
 
 # ***** BEGIN INTELLIJ *****
 # User-specific stuff:

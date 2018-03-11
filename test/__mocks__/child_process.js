@@ -13,7 +13,7 @@ function spawnSync(cmd, argv, { cwd = process.cwd() }) {
 					if (fs.existsSync(frmPath)) {
 						fs.copySync(frmPath, cpyPath)
 					} else {
-						fs.mkdirSync(cpyPath)
+						fs.ensureDirSync(cpyPath)
 					}
 					return { status: 0, error: null }
 				default:

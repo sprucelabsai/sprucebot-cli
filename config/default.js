@@ -15,7 +15,7 @@ module.exports = {
 			repo: {
 				name: 'com-sprucebot-api',
 				env: './app',
-				path: './api'
+				path: './platform/api'
 			},
 			pm2: {
 				name: 'Sprucebot API'
@@ -25,7 +25,7 @@ module.exports = {
 			repo: {
 				name: 'com-sprucebot-web',
 				env: './',
-				path: './web'
+				path: './platform/web'
 			},
 			pm2: {
 				name: 'Sprucebot Web'
@@ -34,7 +34,7 @@ module.exports = {
 		dev: {
 			repo: {
 				name: 'sprucebot-dev-services',
-				path: './dev-services',
+				path: './platform/dev-services',
 				env: false
 			},
 			pm2: {
@@ -44,7 +44,7 @@ module.exports = {
 		relay: {
 			repo: {
 				name: 'sprucebot-relay',
-				path: './relay',
+				path: './platform/relay',
 				env: false
 			},
 			pm2: {
@@ -54,7 +54,7 @@ module.exports = {
 		'react-sprucebot': {
 			repo: {
 				name: 'react-sprucebot',
-				path: './react-sprucebot',
+				path: './kit/react-sprucebot',
 				env: false
 			},
 			pm2: null
@@ -62,7 +62,7 @@ module.exports = {
 		'sprucebot-cli': {
 			repo: {
 				name: 'sprucebot-cli',
-				path: './sprucebot-cli',
+				path: './kit/sprucebot-cli',
 				env: false
 			},
 			pm2: null
@@ -70,7 +70,7 @@ module.exports = {
 		'sprucebot-node': {
 			repo: {
 				name: 'sprucebot-node',
-				path: './sprucebot-node',
+				path: './kit/sprucebot-node',
 				env: false
 			},
 			pm2: null
@@ -78,7 +78,7 @@ module.exports = {
 		'teammate-app': {
 			repo: {
 				name: 'sprucebot-teammate-app',
-				path: './teammate-app',
+				path: './platform/teammate-app',
 				env: false
 			},
 			pm2: null
@@ -86,7 +86,7 @@ module.exports = {
 		'sprucebot-skills-kit-server': {
 			repo: {
 				name: 'sprucebot-skills-kit-server',
-				path: './sprucebot-skills-kit-server',
+				path: './kit/sprucebot-skills-kit-server',
 				env: false
 			},
 			pm2: null
@@ -94,12 +94,15 @@ module.exports = {
 		'sprucebot-skills-kit': {
 			repo: {
 				name: 'sprucebot-skills-kit',
-				path: './sprucebot-skills-kit',
+				path: './kit/sprucebot-skills-kit',
 				env: './'
 			},
 			pm2: null
 		}
 	},
+	// Performs yarn install on yarn workspace
+	// https://yarnpkg.com/lang/en/docs/workspaces/
+	yarnWorkspaces: ['./kit', './skills'],
 	skillRemotes: [
 		{
 			label: 'hello.sprucebot.com',

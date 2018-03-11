@@ -52,7 +52,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 
 	const platforms = config.get('platforms')
 
-	yarnInstall(promptValues.installPath)
+	let command = 'sprucebot platform start' // the final command to be suggested at the end
 
 	for (let key in platforms) {
 		if (platform === 'all' || key == platform) {
@@ -89,10 +89,13 @@ module.exports = async function init(startingPath = false, options = {}) {
 			if (!yarnInstall(platformPath)) {
 				console.log(
 					chalk.bold.red(
-						`Crap, I had trouble with ${'`yarn install --ignore-engines`'} in ${platformPath}. See error above for more deets.`
+						`Crap, I had trouble with \`yarn install\` in ${platformPath}. See error above for more deets.`
 					)
 				)
-				return // what do we do here?
+				console.log(
+					'Once the problem has been resolved, rerun `sprucebot platform install`'
+				)
+				throw new Error('Error installing project dependencies')
 			} else {
 				console.log(
 					chalk.green(
@@ -104,15 +107,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 			//copy some environment files
 			let envPath = config.get(`platforms.${key}.repo.env`)
 			if (envPath) {
-				let success = await writeEnv(path.join(platformPath, envPath))
-				if (success) {
-				} else {
-					console.warn(
-						chalk.yellow(
-							`Wait, a .env already exists! Why the shit didn't you just run ${'`sprucebot platform update`'}?`
-						)
-					)
-				}
+				await writeEnv(path.join(platformPath, envPath))
 			}
 
 			// Same as `sprucebot platform version` command
@@ -142,10 +137,10 @@ module.exports = async function init(startingPath = false, options = {}) {
 			}
 
 			console.log('Moving on.')
+		} else {
+			console.warn('Unknown platform', platform)
 		}
 	}
-
-	let command = 'sprucebot platform start' // the final command to be suggested at the end
 
 	// only do dev services if we are install "all" - otherwise assume on-premise hosting
 	if (platform === 'all') {
@@ -154,30 +149,35 @@ module.exports = async function init(startingPath = false, options = {}) {
 		)
 		const devServicesPath = config.get('platforms.dev.repo.path')
 
-		yarnInstall(promptValues.installPath)
-
 		const ecoFrom = path.resolve(
 			promptValues.installPath,
-			`${devServicesPath}/ecosystem.config.js`
+			`${devServicesPath}/workspace`
 		)
-		const ecoTo = path.resolve(
-			promptValues.installPath,
-			'./ecosystem.config.js'
-		)
+		const ecoTo = path.resolve(promptValues.installPath, './')
+		console.log('Copying workspace..', ecoFrom)
 		await copyFile(ecoFrom, ecoTo)
-
-		const packageFrom = path.resolve(
-			promptValues.installPath,
-			`${devServicesPath}/package.json`
-		)
-		const packageTo = path.resolve(promptValues.installPath, './package.json')
-		await copyFile(packageFrom, packageTo)
 
 		console.log(chalk.green('Checking hosts to determine next step.'))
 		let hasHostFile = await checkHostile(promptValues)
 
 		if (!hasHostFile) {
 			command = 'sprucebot platform config'
+		}
+	}
+
+	yarnInstall(promptValues.installPath)
+
+	// Yarn workspaces to share dependencies
+	const workspaces = config.get('yarnWorkspaces') || []
+	for (let key in workspaces) {
+		const workspace = path.resolve(promptValues.installPath, workspaces[key])
+		console.log(workspace)
+		if (directoryExists(workspace)) {
+			yarnInstall(workspace)
+		} else {
+			console.warn(
+				chalk.yellow('Missing configured yarn workspace. Skipping...')
+			)
 		}
 	}
 
@@ -205,7 +205,7 @@ async function prompt(options) {
 		prompts.push({
 			type: 'input',
 			name: 'gitUser',
-			message: `Github username. (Developers should use their own. You should fork the repo.)`,
+			message: `Github username. (This will create an "origin" and "upstream" remotes in each repo cloned)`,
 			default: config.get('gitUser')
 		})
 	}
@@ -298,23 +298,21 @@ async function copyFile(fromFile, toFile) {
 	} catch (e) {
 		console.error(e)
 		console.log(
-			chalk.bold.red(
-				`CRAP, I had trouble copying your ecosystem file ${fromFile}`
-			)
+			chalk.bold.red(`CRAP, I had trouble copying your file ${fromFile}`)
 		)
+		throw e
 	}
 }
 
 function yarnInstall(cwd) {
-	// this does not work, does it?
+	// If .nvmrc is present lets use it
 	childProcess.spawnSync('nvm', ['use'], {
 		cwd,
 		stdio: 'inherit',
 		env: process.env
 	})
 
-	// HOLY SHIT --ignore-engines!!! TODO: honor .nvmrc
-	const cmd = childProcess.spawnSync('yarn', ['install', '--ignore-engines'], {
+	const cmd = childProcess.spawnSync('yarn', ['install'], {
 		cwd,
 		stdio: 'inherit',
 		env: process.env

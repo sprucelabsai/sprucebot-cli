@@ -108,13 +108,29 @@ module.exports = async function(commander) {
 		)
 		await log.enterToContinue()
 
-		const tunnelAnswer = await inquirer.prompt({
-			name: 'url',
-			message: 'Tunnel url (https://my-skill.ngrok.io)',
-			required: true
-		})
-		skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
-		skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)
+		log.hint(
+			`Reminder: Don't forget to make sure your tunnel is secure (https)!`
+		)
+
+		let unsecureTunnel = false
+		do {
+			const tunnelAnswer = await inquirer.prompt({
+				name: 'url',
+				message: 'Tunnel url (https://my-skill.ngrok.io)',
+				required: true
+			})
+
+			unsecureTunnel = !tunnelAnswer.url.includes('https://')
+
+			if (unsecureTunnel) {
+				log.instructions(
+					'Oops!  I think you forgot to make your tunnel secure.  Try again and make sure it has https!'
+				)
+			} else {
+				skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
+				skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)
+			}
+		} while (unsecureTunnel)
 	}
 
 	console.log('Registering skill')

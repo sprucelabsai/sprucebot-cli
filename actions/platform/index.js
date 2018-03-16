@@ -30,7 +30,10 @@ function setup(argv) {
 
 	program
 		.command('install [path]')
-		.option('-p --platform [platform]', 'all|web|api|relay')
+		.option(
+			'-p --platform [platform]',
+			'all|web|api|relay|sprucebot-skills-kit'
+		)
 		.option('-u --username [gitUser]', 'Your github username')
 		.option(
 			'-b --branch [branch]',

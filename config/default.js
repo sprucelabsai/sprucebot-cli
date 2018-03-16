@@ -51,11 +51,11 @@ module.exports = {
 				name: 'Sprucebot Relay'
 			}
 		},
-		'react-sprucebot': {
+		'sprucebot-skills-kit': {
 			repo: {
-				name: 'react-sprucebot',
-				path: './react-sprucebot',
-				env: false
+				name: 'workspace.sprucebot-skills-kit',
+				path: './workspace.sprucebot-skills-kit',
+				env: './packages/sprucebot-skills-kit'
 			},
 			pm2: null
 		},
@@ -67,35 +67,11 @@ module.exports = {
 			},
 			pm2: null
 		},
-		'sprucebot-node': {
-			repo: {
-				name: 'sprucebot-node',
-				path: './sprucebot-node',
-				env: false
-			},
-			pm2: null
-		},
 		'teammate-app': {
 			repo: {
 				name: 'sprucebot-teammate-app',
 				path: './teammate-app',
 				env: false
-			},
-			pm2: null
-		},
-		'sprucebot-skills-kit-server': {
-			repo: {
-				name: 'sprucebot-skills-kit-server',
-				path: './sprucebot-skills-kit-server',
-				env: false
-			},
-			pm2: null
-		},
-		'sprucebot-skills-kit': {
-			repo: {
-				name: 'sprucebot-skills-kit',
-				path: './sprucebot-skills-kit',
-				env: './'
 			},
 			pm2: null
 		}

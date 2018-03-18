@@ -100,7 +100,10 @@ module.exports = async function(commander) {
 	})
 
 	if (hasTunnelAnswer.hasTunnel) {
-		const port = skillUtil.readEnv('PORT')
+		let port = skillUtil.readEnv('PORT')
+		if (!port) {
+			port = skillUtil.writeEnv('PORT', 3006)
+		}
 		log.hint(
 			'\n\nPoint your tunnel to `http://localhost:' +
 				port +
@@ -148,10 +151,12 @@ module.exports = async function(commander) {
 			}
 		)
 		// set env variables
+		skillUtil.writeEnv('NAME', registerResponse.name)
 		skillUtil.writeEnv('ID', registerResponse.id)
-		skillUtil.writeEnv('SLUG', registerResponse.slug)
 		skillUtil.writeEnv('API_KEY', registerResponse.apiKey)
+		skillUtil.writeEnv('SLUG', registerResponse.slug)
 		skillUtil.writeEnv('DESCRIPTION', registerResponse.description)
+		skillUtil.writeEnv('ICON', registerResponse.icon)
 	} catch (err) {
 		log.error("Well that didn't go as I expected 🚨")
 		log.error(err.message)

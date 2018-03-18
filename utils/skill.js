@@ -1,4 +1,5 @@
 const fs = require('fs')
+const os = require('os')
 
 exports.isSkill = (cwd = process.cwd()) => {
 	try {
@@ -18,12 +19,17 @@ exports.isSkill = (cwd = process.cwd()) => {
 
 exports.writeEnv = (key, value, env = process.cwd() + '/.env') => {
 	const contents = fs.readFileSync(env).toString()
-	const newContents = contents.replace(
-		new RegExp(`${key}=(.*)`),
-		`${key}=${value}`
-	)
+	const target = new RegExp(`${key}=(.*)`)
+	const newVal = `${key}=${value}`
+	let newContents
+	if (contents.match(target)) {
+		newContents = contents.replace(target, newVal)
+	} else {
+		newContents = `${contents}${os.EOL}${newVal}`
+	}
 
 	fs.writeFileSync(env, newContents)
+	return value
 }
 
 exports.readEnv = (key, env = process.cwd() + '/.env') => {

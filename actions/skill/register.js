@@ -120,7 +120,7 @@ module.exports = async function(commander) {
 				required: true
 			})
 
-			unsecureTunnel = !tunnelAnswer.url.includes('https://')
+			unsecureTunnel = !tunnelAnswer.url.toLowerCase().includes('https://')
 
 			if (unsecureTunnel) {
 				log.instructions(

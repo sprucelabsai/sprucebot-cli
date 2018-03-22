@@ -9,10 +9,11 @@ function spawnGit(cwd, args, options) {
 	})
 
 	if (cmd.status !== 0) {
-		cmd.stderr &&
-			cmd.stderr.toString &&
-			console.error(chalk.yellow(cmd.stderr.toString()))
-		return new Error(cmd.stderr.toString())
+		const message =
+			(cmd.stderr && cmd.stderr.toString && cmd.stderr.toString()) ||
+			'Unknown Git Error'
+		console.error(chalk.yellow(message))
+		return new Error(message)
 	}
 
 	return Buffer.isBuffer(cmd.stdout) ? cmd.stdout.toString() : ''

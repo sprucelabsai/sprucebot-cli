@@ -120,15 +120,15 @@ module.exports = async function(commander) {
 				required: true
 			})
 
-			unsecureTunnel = !tunnelAnswer.url.includes('https://')
+			unsecureTunnel = !tunnelAnswer.url.toLowerCase().includes('https://')
 
 			if (unsecureTunnel) {
 				log.instructions(
 					'Oops!  I think you forgot to make your tunnel secure.  Try again and make sure it has https!'
 				)
 			} else {
-				skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
-				skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)
+				skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url.toLowerCase())
+				skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url.toLowerCase())
 			}
 		} while (unsecureTunnel)
 	}

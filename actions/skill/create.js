@@ -5,19 +5,64 @@ const config = require('config')
 const path = require('path')
 const childProcess = require('child_process')
 const fs = require('fs-extra')
+const request = require('request')
+const tar = require('tar-fs')
+const gunzip = require('gunzip-maybe')
 const sleep = require('sleep')
 const log = require('../../utils/log')
+const debug = require('debug')('sprucebot-cli')
 
-async function clone(to) {
-	const cmd = childProcess.spawnSync(
-		'git',
-		['clone', config.get('skillsKitRepo'), to],
-		{
-			env: process.env
-		}
-	)
+async function extractPackage(pkg, version, to) {
+	if (version === 'latest') {
+		version = childProcess
+			.spawnSync('npm', ['view', pkg, 'version'])
+			.stdout.toString()
+			.trim()
+		log.line(`Determined the latest ${pkg} version is ${version}`)
+	}
+	const pkgUrl = `${config.get('registry')}${pkg}/-/${pkg}-${version}.tgz`
+	debug(pkgUrl)
+	// Wait for package to download and unpack into `to` directory
+	await new Promise((resolve, reject) => {
+		request
+			.get(pkgUrl)
+			.on('response', res => {
+				res.statusCode !== 200 && reject(res)
+			})
+			.on('error', res => reject(res))
+			.pipe(gunzip())
+			.pipe(
+				tar.extract(to, {
+					finish: resolve,
+					map: header => {
+						// Replace leading `/package/` folder
+						header.name = header.name.replace(/^package\//, '')
+						return header
+					}
+				})
+			)
+	})
 
-	return cmd.status === 0
+	return true
+}
+
+async function pkgVersions(pkg) {
+	const cmd = childProcess.spawnSync('npm', ['view', pkg, 'versions'], {
+		env: process.env
+	})
+
+	if (cmd.status !== 0) {
+		cmd.stderr &&
+			cmd.stderr.toString &&
+			console.error(chalk.yellow(cmd.stderr.toString()))
+		throw new Error(
+			Buffer.isBuffer(cmd.stderr) ? cmd.stderr.toString : 'Unknown spawn error'
+		)
+	}
+
+	// string containt brackets "[ '1.0.0', '1.0.1' ]"
+	const output = Buffer.isBuffer(cmd.stdout) ? cmd.stdout.toString() : '[]'
+	return JSON.parse(output.replace(/'/g, '"')) // Remove leading and trailing brackets from string and transform to array
 }
 
 module.exports = async function create(commander) {
@@ -95,6 +140,19 @@ module.exports = async function create(commander) {
 		slug = slugAnswer.slug
 	}
 
+	let version = commander.pkg
+	if (!version) {
+		const versions = await pkgVersions(config.get('skillKitPackage'))
+		const versionAnswer = await inquirer.prompt({
+			type: 'list',
+			name: 'version',
+			message: `Select the version to use`,
+			choices: ['latest'].concat(versions)
+		})
+
+		version = versionAnswer.version
+	}
+
 	// where we are saving to
 	log.line('Downloading Skills Kit... ⌚️')
 	const to = path.join(process.cwd(), slug)
@@ -119,14 +177,15 @@ module.exports = async function create(commander) {
 		log.line('Downloading now!')
 	}
 
-	// clone the repo
-	const cloneSuccess = await clone(to)
-
-	if (!cloneSuccess) {
+	try {
+		// extractPackage the repo
+		await extractPackage(config.get('skillKitPackage'), version, to)
+	} catch (e) {
+		debug(e)
 		log.error(
 			"Crap, I couldn't download the kit. Are you connected to the net? If so, did a botnet of IoT cameras take down DNS again?"
 		)
-		log.hint(`Make sure you have github configured locally and try again.`)
+		log.hint(`Make sure the ${version} package exists in the npm registry`)
 		return
 	}
 
@@ -137,7 +196,15 @@ module.exports = async function create(commander) {
 	const envOld = path.join(to, '.env.example')
 	const envNew = path.join(to, '.env')
 
-	fs.copySync(envOld, envNew)
+	try {
+		fs.copySync(envOld, envNew)
+	} catch (e) {
+		log.hint(
+			'Uh oh. There is no .env.example I can copy. Creating an empty .env'
+		)
+		log.hint('`sprucebot skill register` will help write your .env')
+		fs.openSync(envNew, 'w')
+	}
 
 	// drop in name and slug
 	skillUtil.writeEnv('NAME', name, envNew)

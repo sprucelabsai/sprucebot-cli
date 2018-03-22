@@ -74,6 +74,7 @@ function setup(argv) {
 		.description('Create a new skill')
 		.option('-n --name [name]', 'Name of your skill')
 		.option('-s --slug [name]', 'Slug of your skill')
+		.option('-p --pkg [version]', 'npm package version')
 		.action(requireSkill(false, create))
 
 	program

@@ -217,7 +217,9 @@ async function prompt(options) {
 	}
 	if (!path.isAbsolute(values.installPath)) {
 		throw new Error(
-			`Woops, I can only install in an absolute installPath. You supplied ${values.installPath}`
+			`Woops, I can only install in an absolute installPath. You supplied ${
+				values.installPath
+			}`
 		)
 	}
 	return values
@@ -238,8 +240,8 @@ async function fetchPlatform(installPath, repoName, gitUser) {
 /**
  * Checks if the supplied commands are available in PATH
  * and makes sure they return status === 0
- * 
- * @param {Array} commands 
+ *
+ * @param {Array} commands
  * @returns {void} Exits if any command returns status >=1
  */
 async function checkDependenciesInstalled(commands) {

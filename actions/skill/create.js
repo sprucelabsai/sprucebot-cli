@@ -5,65 +5,13 @@ const config = require('config')
 const path = require('path')
 const childProcess = require('child_process')
 const fs = require('fs-extra')
-const request = require('request')
 const tar = require('tar-fs')
 const gunzip = require('gunzip-maybe')
 const sleep = require('sleep')
 const log = require('../../utils/log')
 const debug = require('debug')('sprucebot-cli')
+const { extractPackage, pkgVersions } = require('../../utils/Npm')
 
-async function extractPackage(pkg, version, to) {
-	if (version === 'latest') {
-		version = childProcess
-			.spawnSync('npm', ['view', pkg, 'version'])
-			.stdout.toString()
-			.trim()
-		log.line(`Determined the latest ${pkg} version is ${version}`)
-	}
-	const pkgUrl = `${config.get('registry')}${pkg}/-/${pkg}-${version}.tgz`
-	debug(pkgUrl)
-	// Wait for package to download and unpack into `to` directory
-	await new Promise((resolve, reject) => {
-		request
-			.get(pkgUrl)
-			.on('response', res => {
-				res.statusCode !== 200 && reject(res)
-			})
-			.on('error', res => reject(res))
-			.pipe(gunzip())
-			.pipe(
-				tar.extract(to, {
-					finish: resolve,
-					map: header => {
-						// Replace leading `/package/` folder
-						header.name = header.name.replace(/^package\//, '')
-						return header
-					}
-				})
-			)
-	})
-
-	return true
-}
-
-async function pkgVersions(pkg) {
-	const cmd = childProcess.spawnSync('npm', ['view', pkg, 'versions'], {
-		env: process.env
-	})
-
-	if (cmd.status !== 0) {
-		cmd.stderr &&
-			cmd.stderr.toString &&
-			console.error(chalk.yellow(cmd.stderr.toString()))
-		throw new Error(
-			Buffer.isBuffer(cmd.stderr) ? cmd.stderr.toString : 'Unknown spawn error'
-		)
-	}
-
-	// string containt brackets "[ '1.0.0', '1.0.1' ]"
-	const output = Buffer.isBuffer(cmd.stdout) ? cmd.stdout.toString() : '[]'
-	return JSON.parse(output.replace(/'/g, '"')) // Remove leading and trailing brackets from string and transform to array
-}
 
 module.exports = async function create(commander) {
 	// make sure we're not already in a skill

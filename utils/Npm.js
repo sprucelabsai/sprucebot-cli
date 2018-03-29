@@ -9,13 +9,18 @@ const log = require('./log')
 
 module.exports = {
 	extractPackage,
-	pkgVersions
+	pkgVersions,
+	getLatestVersion
 }
 
-async function extractPackage(pkg, version, to) {
+async function getLatestVersion(pkg) {
+	const cmd = await execa('npm', ['view', pkg, 'version'])
+	return cmd.stdout
+}
+
+async function extractPackage(pkg, version, to = proces.cwd()) {
 	if (version === 'latest') {
-		const cmd = await execa('npm', ['view', pkg, 'version'])
-		version = cmd.stdout
+		const version = getLatestVersion(pkg)
 		log.line(`Determined the latest ${pkg} version is ${version}`)
 	}
 	const pkgUrl = `${config.get('registry')}${pkg}/-/${pkg}-${version}.tgz`
@@ -49,19 +54,16 @@ async function extractPackage(pkg, version, to) {
 }
 
 async function pkgVersions(pkg) {
-	const cmd = await execa('npm', ['view', pkg, 'versions'], {
+	const cmd = await execa('npm', ['view', pkg, 'versions', '--json'], {
 		env: process.env
 	})
 
 	if (cmd.code !== 0) {
-		
-			console.error(chalk.yellow(cmd.stderr))
-		throw new Error(
-			cmd.stderr || 'Unknown spawn error'
-		)
+		console.error(chalk.yellow(cmd.stderr))
+		throw new Error(cmd.stderr || 'Unknown spawn error')
 	}
 
 	// string containt brackets "[ '1.0.0', '1.0.1' ]"
 	const output = cmd.stdout || '[]'
-	return JSON.parse(output.replace(/'/g, '"')) // Remove leading and trailing brackets from string and transform to array
+	return JSON.parse(output)
 }

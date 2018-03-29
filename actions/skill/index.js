@@ -3,6 +3,7 @@ const { Command } = require('commander')
 
 const create = require('./create')
 const register = require('./register')
+const update = require('./update')
 const assert = require('assert')
 const configUtil = require('../../utils/config')
 const skillUtil = require('../../utils/skill')
@@ -76,6 +77,14 @@ function setup(argv) {
 		.option('-s --slug [name]', 'Slug of your skill')
 		.option('-p --pkg [version]', 'npm package version')
 		.action(requireSkill(false, create))
+
+	program
+		.command('update')
+		.description(
+			'Apply a git patch to update skill from package.json to a newer verion'
+		)
+		.option('-p --pkg [version]', 'npm package version')
+		.action(requireSkill(false, update))
 
 	program
 		.command('register')

@@ -1,9 +1,11 @@
 const fs = require('fs')
 const os = require('os')
+const path = require('path')
+const debug = require('debug')('sprucebot-cli')
 
 exports.isSkill = (cwd = process.cwd()) => {
 	try {
-		const pkg = require(`${cwd}/package.json`)
+		const pkg = getPkg(cwd)
 		if (
 			!pkg ||
 			!pkg.dependencies ||
@@ -13,6 +15,7 @@ exports.isSkill = (cwd = process.cwd()) => {
 		}
 		return true
 	} catch (err) {
+		debug(err)
 		return false
 	}
 }
@@ -49,3 +52,9 @@ exports.skill = (env = process.cwd() + '/.env') => {
 		slug: this.readEnv('SLUG')
 	}
 }
+
+function getPkg(dir = process.cwd()) {
+	return require(path.join(dir, 'package.json'))
+}
+
+exports.getPkg = getPkg

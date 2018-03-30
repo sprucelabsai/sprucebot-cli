@@ -29,6 +29,12 @@ function checkoutBranch(repoPath, branch) {
 	return spawnGit(repoPath, ['checkout', branch])
 }
 
+module.exports.isWorkingClean = isWorkingClean
+function isWorkingClean(repoPath) {
+	const output = spawnGit(repoPath, ['status', '--porcelain'])
+	return !output
+}
+
 module.exports.Remote = {
 	delete: deleteRemote,
 	create: createRemote

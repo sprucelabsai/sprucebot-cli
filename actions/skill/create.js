@@ -5,20 +5,13 @@ const config = require('config')
 const path = require('path')
 const childProcess = require('child_process')
 const fs = require('fs-extra')
+const tar = require('tar-fs')
+const gunzip = require('gunzip-maybe')
 const sleep = require('sleep')
 const log = require('../../utils/log')
+const debug = require('debug')('sprucebot-cli')
+const { extractPackage, pkgVersions } = require('../../utils/Npm')
 
-async function clone(to) {
-	const cmd = childProcess.spawnSync(
-		'git',
-		['clone', config.get('skillsKitRepo'), to],
-		{
-			env: process.env
-		}
-	)
-
-	return cmd.status === 0
-}
 
 module.exports = async function create(commander) {
 	// make sure we're not already in a skill
@@ -95,6 +88,19 @@ module.exports = async function create(commander) {
 		slug = slugAnswer.slug
 	}
 
+	let version = commander.pkg
+	if (!version) {
+		const versions = await pkgVersions(config.get('skillKitPackage'))
+		const versionAnswer = await inquirer.prompt({
+			type: 'list',
+			name: 'version',
+			message: `Select the version to use`,
+			choices: ['latest'].concat(versions)
+		})
+
+		version = versionAnswer.version
+	}
+
 	// where we are saving to
 	log.line('Downloading Skills Kit... ⌚️')
 	const to = path.join(process.cwd(), slug)
@@ -119,14 +125,15 @@ module.exports = async function create(commander) {
 		log.line('Downloading now!')
 	}
 
-	// clone the repo
-	const cloneSuccess = await clone(to)
-
-	if (!cloneSuccess) {
+	try {
+		// extractPackage the repo
+		await extractPackage(config.get('skillKitPackage'), version, to)
+	} catch (e) {
+		debug(e)
 		log.error(
 			"Crap, I couldn't download the kit. Are you connected to the net? If so, did a botnet of IoT cameras take down DNS again?"
 		)
-		log.hint(`Make sure you have github configured locally and try again.`)
+		log.hint(`Make sure the ${version} package exists in the npm registry`)
 		return
 	}
 
@@ -137,7 +144,15 @@ module.exports = async function create(commander) {
 	const envOld = path.join(to, '.env.example')
 	const envNew = path.join(to, '.env')
 
-	fs.copySync(envOld, envNew)
+	try {
+		fs.copySync(envOld, envNew)
+	} catch (e) {
+		log.hint(
+			'Uh oh. There is no .env.example I can copy. Creating an empty .env'
+		)
+		log.hint('`sprucebot skill register` will help write your .env')
+		fs.openSync(envNew, 'w')
+	}
 
 	// drop in name and slug
 	skillUtil.writeEnv('NAME', name, envNew)

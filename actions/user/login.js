@@ -24,7 +24,9 @@ module.exports = async function login(phone, command) {
 		)
 		await log.enterToContinue()
 		log.instructions(
-			`You will need to login for each skill you are developing. Use the phone you setup at ${remote.label}.  Once you log in, you'll be able to generate the your skill's ID & API_KEY.`
+			`You will need to login for each skill you are developing. Use the phone you setup at ${
+				remote.label
+			}.  Once you log in, you'll be able to generate the your skill's ID & API_KEY.`
 		)
 
 		log.instructions(
@@ -92,8 +94,9 @@ module.exports = async function login(phone, command) {
 		location = locations[0].Location
 	} else {
 		log.line(
-			`I see you are owner of ${locations.length ===
-				1} location${locations.length === 1 ? '' : 's'}.`
+			`I see you are owner of ${locations.length === 1} location${
+				locations.length === 1 ? '' : 's'
+			}.`
 		)
 
 		const locationAnswer = await inquirer.prompt({
@@ -124,7 +127,9 @@ module.exports = async function login(phone, command) {
 		)
 
 		log.instructions(
-			`Next step is to register your skill so it's available when you visit ${remote.label}.`
+			`Next step is to register your skill so it's available when you visit ${
+				remote.label
+			}.`
 		)
 	}
 

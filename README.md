@@ -39,14 +39,19 @@ yarn global add sprucebot-cli
 This is where the magic happens!
 
 * `sprucebot skill create`
-  * Downloads the [Skills Kit](https://github.com/sprucelabsai/sprucebot-skills-kit) and helps you get your new skill setup
+  * Downloads the [Skills Kit](https://www.npmjs.com/package/sprucebot-skills-kit) and helps you get your new skill setup
   * All subsequent commands require you to be in the skill's directory
-* `sprucebot remote set [prod|alpha|stage|qa|dev|alpha]
+* `sprucebot remote set [prod|alpha|stage|qa|dev|alpha]`
   * You probably only have access to `prod`
   * If you wish test skills at `alpha` locations, eg [Spruce](https://vimeo.com/214239239), email `scientists@sprucelabs.ai`
   * If you wish to get early access to features on `stage`... you guessed it
 * `sprucebot skill register`
   * Registers your skill with `remote`
+* `sprucebot skill update`
+  * Updates your skill from `package.json#version` to `sprucebot-skills-kit@version`
+  * Requires a clean working directory and git repo
+  * To see what changed, use `git status`
+  * After resolving any conflicts run `yarn install && yarn test`
 * `sprucebot skill unregister` -*COMING SOON*-
   * Takes your skill entirely off remote
   * It will be uninstalled from all locations that had it

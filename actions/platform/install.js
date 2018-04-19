@@ -27,6 +27,12 @@ module.exports = async function init(startingPath = false, options = {}) {
 				args: ['-v'],
 				message:
 					'I work better with friends! 🤖. Please install Docker. https://docs.docker.com/docker-for-mac/install/'
+			},
+			{
+				exectable: 'yarn',
+				args: ['-v'],
+				message:
+					'I work better with friends! 🤖. Please install yarn. https://yarnpkg.com/en/docs/install'
 			}
 		])
 	}
@@ -89,7 +95,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 			if (!yarnInstall(platformPath)) {
 				console.log(
 					chalk.bold.red(
-						`Crap, I had trouble with ${'`yarn install --ignore-engines`'} in ${platformPath}. See error above for more deets.`
+						`Crap, I had trouble with ${'`yarn install`'} in ${platformPath}. See error above for more deets.`
 					)
 				)
 				return // what do we do here?
@@ -154,26 +160,17 @@ module.exports = async function init(startingPath = false, options = {}) {
 		)
 		const devServicesPath = config.get('platforms.dev.repo.path')
 
+		const workspaceFrom = path.resolve(
+			promptValues.installPath,
+			`${devServicesPath}/workspace`
+		)
+		const workspaceTo = path.resolve(promptValues.installPath)
+		await copyFile(workspaceFrom, workspaceTo)
+
 		yarnInstall(promptValues.installPath)
 
-		const ecoFrom = path.resolve(
-			promptValues.installPath,
-			`${devServicesPath}/ecosystem.config.js`
-		)
-		const ecoTo = path.resolve(
-			promptValues.installPath,
-			'./ecosystem.config.js'
-		)
-		await copyFile(ecoFrom, ecoTo)
-
-		const packageFrom = path.resolve(
-			promptValues.installPath,
-			`${devServicesPath}/package.json`
-		)
-		const packageTo = path.resolve(promptValues.installPath, './package.json')
-		await copyFile(packageFrom, packageTo)
-
 		console.log(chalk.green('Checking hosts to determine next step.'))
+
 		let hasHostFile = await checkHostile(promptValues)
 
 		if (!hasHostFile) {
@@ -217,7 +214,9 @@ async function prompt(options) {
 	}
 	if (!path.isAbsolute(values.installPath)) {
 		throw new Error(
-			`Woops, I can only install in an absolute installPath. You supplied ${values.installPath}`
+			`Woops, I can only install in an absolute installPath. You supplied ${
+				values.installPath
+			}`
 		)
 	}
 	return values
@@ -238,8 +237,8 @@ async function fetchPlatform(installPath, repoName, gitUser) {
 /**
  * Checks if the supplied commands are available in PATH
  * and makes sure they return status === 0
- * 
- * @param {Array} commands 
+ *
+ * @param {Array} commands
  * @returns {void} Exits if any command returns status >=1
  */
 async function checkDependenciesInstalled(commands) {
@@ -313,8 +312,7 @@ function yarnInstall(cwd) {
 		env: process.env
 	})
 
-	// HOLY SHIT --ignore-engines!!! TODO: honor .nvmrc
-	const cmd = childProcess.spawnSync('yarn', ['install', '--ignore-engines'], {
+	const cmd = childProcess.spawnSync('yarn', ['install'], {
 		cwd,
 		stdio: 'inherit',
 		env: process.env

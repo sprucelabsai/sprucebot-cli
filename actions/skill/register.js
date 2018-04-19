@@ -100,7 +100,10 @@ module.exports = async function(commander) {
 	})
 
 	if (hasTunnelAnswer.hasTunnel) {
-		const port = skillUtil.readEnv('PORT')
+		let port = skillUtil.readEnv('PORT')
+		if (!port) {
+			port = skillUtil.writeEnv('PORT', 3006)
+		}
 		log.hint(
 			'\n\nPoint your tunnel to `http://localhost:' +
 				port +
@@ -108,13 +111,29 @@ module.exports = async function(commander) {
 		)
 		await log.enterToContinue()
 
-		const tunnelAnswer = await inquirer.prompt({
-			name: 'url',
-			message: 'Tunnel url (https://my-skill.ngrok.io):',
-			validate: val => val.length && val.length > 0
-		})
-		skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
-		skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)
+		log.hint(
+			`Reminder: Don't forget to make sure your tunnel is secure (https)!`
+		)
+
+		let unsecureTunnel = false
+		do {
+			const tunnelAnswer = await inquirer.prompt({
+				name: 'url',
+				message: 'Tunnel url (https://my-skill.ngrok.io)',
+				required: true
+			})
+
+			unsecureTunnel = !tunnelAnswer.url.toLowerCase().includes('https://')
+
+			if (unsecureTunnel) {
+				log.instructions(
+					'Oops!  I think you forgot to make your tunnel secure.  Try again and make sure it has https!'
+				)
+			} else {
+				skillUtil.writeEnv('SERVER_HOST', tunnelAnswer.url)
+				skillUtil.writeEnv('INTERFACE_HOST', tunnelAnswer.url)
+			}
+		} while (unsecureTunnel)
 	}
 
 	console.log('Registering skill')
@@ -132,10 +151,12 @@ module.exports = async function(commander) {
 			}
 		)
 		// set env variables
+		skillUtil.writeEnv('NAME', registerResponse.name)
 		skillUtil.writeEnv('ID', registerResponse.id)
-		skillUtil.writeEnv('SLUG', registerResponse.slug)
 		skillUtil.writeEnv('API_KEY', registerResponse.apiKey)
+		skillUtil.writeEnv('SLUG', registerResponse.slug)
 		skillUtil.writeEnv('DESCRIPTION', registerResponse.description)
+		skillUtil.writeEnv('ICON', registerResponse.icon)
 	} catch (err) {
 		log.error("Well that didn't go as I expected 🚨")
 		log.error(err.message)

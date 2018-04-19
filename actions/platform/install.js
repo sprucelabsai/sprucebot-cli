@@ -5,14 +5,37 @@ const chalk = require('chalk')
 const childProcess = require('child_process')
 const inquirer = require('inquirer')
 const hostile = require('hostile')
-const { Remote, Repository } = require('nodegit')
 
+const Git = require('../../utils/Git')
 const checkoutVersion = require('./version')
 const untildify = require('untildify')
 
 const { directoryExists, fileExists } = require('../../utils/dir')
 
 module.exports = async function init(startingPath = false, options = {}) {
+	// Check okay status on following commands
+	if (process.env.NODE_ENV !== 'test') {
+		checkDependenciesInstalled([
+			{
+				exectable: 'psql',
+				args: ['-V'],
+				message:
+					'I work better with friends! 🤖. Please install Postgres. https://www.postgresql.org/download/'
+			},
+			{
+				exectable: 'docker',
+				args: ['-v'],
+				message:
+					'I work better with friends! 🤖. Please install Docker. https://docs.docker.com/docker-for-mac/install/'
+			},
+			{
+				exectable: 'yarn',
+				args: ['-v'],
+				message:
+					'I work better with friends! 🤖. Please install yarn. https://yarnpkg.com/en/docs/install'
+			}
+		])
+	}
 	const platform = options.platform || 'all'
 	const cliPath = path.resolve(__dirname, '..', '..')
 
@@ -72,7 +95,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 			if (!yarnInstall(platformPath)) {
 				console.log(
 					chalk.bold.red(
-						`Crap, I had trouble with ${'`yarn install --ignore-engines`'} in ${platformPath}. See error above for more deets.`
+						`Crap, I had trouble with ${'`yarn install`'} in ${platformPath}. See error above for more deets.`
 					)
 				)
 				return // what do we do here?
@@ -137,26 +160,17 @@ module.exports = async function init(startingPath = false, options = {}) {
 		)
 		const devServicesPath = config.get('platforms.dev.repo.path')
 
+		const workspaceFrom = path.resolve(
+			promptValues.installPath,
+			`${devServicesPath}/workspace`
+		)
+		const workspaceTo = path.resolve(promptValues.installPath)
+		await copyFile(workspaceFrom, workspaceTo)
+
 		yarnInstall(promptValues.installPath)
 
-		const ecoFrom = path.resolve(
-			promptValues.installPath,
-			`${devServicesPath}/ecosystem.config.js`
-		)
-		const ecoTo = path.resolve(
-			promptValues.installPath,
-			'./ecosystem.config.js'
-		)
-		await copyFile(ecoFrom, ecoTo)
-
-		const packageFrom = path.resolve(
-			promptValues.installPath,
-			`${devServicesPath}/package.json`
-		)
-		const packageTo = path.resolve(promptValues.installPath, './package.json')
-		await copyFile(packageFrom, packageTo)
-
 		console.log(chalk.green('Checking hosts to determine next step.'))
+
 		let hasHostFile = await checkHostile(promptValues)
 
 		if (!hasHostFile) {
@@ -200,7 +214,9 @@ async function prompt(options) {
 	}
 	if (!path.isAbsolute(values.installPath)) {
 		throw new Error(
-			`Woops, I can only install in an absolute installPath. You supplied ${values.installPath}`
+			`Woops, I can only install in an absolute installPath. You supplied ${
+				values.installPath
+			}`
 		)
 	}
 	return values
@@ -216,6 +232,26 @@ async function fetchPlatform(installPath, repoName, gitUser) {
 	if (upstream !== origin) {
 		await updateRepoRemote(installPath, origin, upstream)
 	}
+}
+
+/**
+ * Checks if the supplied commands are available in PATH
+ * and makes sure they return status === 0
+ *
+ * @param {Array} commands
+ * @returns {void} Exits if any command returns status >=1
+ */
+async function checkDependenciesInstalled(commands) {
+	commands.forEach(({ exectable, args, message }) => {
+		const cmd = childProcess.spawnSync(exectable, args, {
+			stdio: 'inherit',
+			env: process.env
+		})
+		if (cmd.status !== 0) {
+			console.log(chalk.red(message))
+			process.exit(1)
+		}
+	})
 }
 
 async function cloneRepo(repo, localPath) {
@@ -234,21 +270,19 @@ async function cloneRepo(repo, localPath) {
 }
 
 async function updateRepoRemote(repoPath, origin, upstream) {
-	let repo
-	try {
-		repo = await Repository.open(repoPath)
-	} catch (e) {
-		if (process.env.NODE_ENV === 'test') {
-			repo = await Repository.init(repoPath, 0)
-		} else {
-			throw new Error(e)
-		}
-	}
-	if (repo) {
-		await Remote.delete(repo, 'origin').catch(() => {})
-		await Remote.delete(repo, 'upstream').catch(() => {})
-		await Remote.create(repo, 'origin', origin)
-		await Remote.create(repo, 'upstream', upstream)
+	Git.Remote.delete(repoPath, 'origin')
+	Git.Remote.delete(repoPath, 'upstream')
+	const errors = [
+		Git.Remote.create(repoPath, 'origin', origin),
+		Git.Remote.create(repoPath, 'upstream', upstream)
+	].filter(cmd => cmd instanceof Error)
+	if (errors.length) {
+		console.log(
+			chalk.red('CRAP, I had an issue updating the repo remotes'),
+			repoPath,
+			chalk.red(errors)
+		)
+	} else {
 		console.log(chalk.green(`Successfully created git remote origin ${origin}`))
 		console.log(
 			chalk.green(`Successfully created git remote upstream ${upstream}`)
@@ -278,8 +312,7 @@ function yarnInstall(cwd) {
 		env: process.env
 	})
 
-	// HOLY SHIT --ignore-engines!!! TODO: honor .nvmrc
-	const cmd = childProcess.spawnSync('yarn', ['install', '--ignore-engines'], {
+	const cmd = childProcess.spawnSync('yarn', ['install'], {
 		cwd,
 		stdio: 'inherit',
 		env: process.env

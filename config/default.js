@@ -19,7 +19,7 @@ module.exports = {
 				path: './api'
 			},
 			pm2: {
-				name: 'Sprucebot API'
+				name: 'SB API'
 			}
 		},
 		web: {
@@ -29,7 +29,7 @@ module.exports = {
 				path: './web'
 			},
 			pm2: {
-				name: 'Sprucebot Web'
+				name: 'SB Web'
 			}
 		},
 		dev: {
@@ -39,7 +39,7 @@ module.exports = {
 				env: false
 			},
 			pm2: {
-				name: 'Sprucebot Dev Services'
+				name: 'SB Dev Services'
 			}
 		},
 		relay: {
@@ -49,7 +49,7 @@ module.exports = {
 				env: false
 			},
 			pm2: {
-				name: 'Sprucebot Relay'
+				name: 'SB Relay'
 			}
 		},
 		'sprucebot-skills-kit': {

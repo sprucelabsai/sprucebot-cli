@@ -20,7 +20,7 @@ async function getLatestVersion(pkg) {
 
 async function extractPackage(pkg, version, to = proces.cwd()) {
 	if (version === 'latest') {
-		const version = getLatestVersion(pkg)
+		version = await getLatestVersion(pkg)
 		log.line(`Determined the latest ${pkg} version is ${version}`)
 	}
 	const pkgUrl = `${config.get('registry')}${pkg}/-/${pkg}-${version}.tgz`

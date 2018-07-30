@@ -27,7 +27,7 @@
   "dependencies": {
     "chalk": "^2.1.0",
     "commander": "^2.11.0",
-    "config": "^1.26.2",
+    "config": "^2.0.1",
     "execa": "^0.10.0",
     "fs-extra": "^5.0.0",
     "gunzip-maybe": "^1.4.1",

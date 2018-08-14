@@ -6,7 +6,8 @@
     "**/coverage": true,
     "**/sprucebot": true
   },
-  "cSpell.words": [
-    "Repo"
-  ]
+  "cSpell.words": ["Repo"],
+  "editor.formatOnSave": true,
+  "prettier.semi": false,
+  "prettier.singleQuote": true
 }

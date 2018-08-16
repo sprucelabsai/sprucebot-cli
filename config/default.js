@@ -9,7 +9,7 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
-	skillKitPackage: 'sprucebot-skills-kit', // npm module name
+	skillKitPackage: '@sprucelabs/sprucebot-skills-kit', // npm module name
 	registry: 'https://registry.npmjs.org/',
 	platforms: {
 		api: {
@@ -52,7 +52,7 @@ module.exports = {
 				name: 'SB Relay'
 			}
 		},
-		'sprucebot-skills-kit': {
+		'@sprucelabs/sprucebot-skills-kit': {
 			repo: {
 				name: 'workspace.sprucebot-skills-kit',
 				path: './workspace.sprucebot-skills-kit',

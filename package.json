@@ -39,6 +39,7 @@
     "keypress": "^0.2.1",
     "pg": "^7.3.0",
     "request": "^2.83.0",
+    "semantic-release": "^15.9.8",
     "sleep": "^5.1.1",
     "tar-fs": "^1.16.0",
     "untildify": "^3.0.2",
@@ -49,6 +50,8 @@
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.0",
     "@semantic-release/git": "^7.0.1",
+    "@sprucelabs/semantic-release": "^1.0.0",
+    "conventional-changelog-sprucelabs": "^1.0.0",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
@@ -56,16 +59,13 @@
     "jest": "^22.0.5",
     "jest-cli": "^22.0.6",
     "prettier": "^1.7.4",
-    "semantic-release": "^15.9.8",
     "sinon": "^4.1.4",
     "yeoman-assert": "^3.0.0",
     "yeoman-test": "^1.7.0"
   },
   "jest": {
     "clearMocks": true,
-    "testPathIgnorePatterns": [
-      "/config/"
-    ],
+    "testPathIgnorePatterns": ["/config/"],
     "collectCoverageFrom": [
       "**/*.js",
       "!**/node_modules/**",

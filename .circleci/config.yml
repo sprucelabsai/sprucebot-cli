@@ -41,11 +41,11 @@ workflows:
   version: 2
   do_build:
     jobs:
-      - test:
-          filters:
-            branches:
-              ignore:
-                - master
+      # - test:
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
       - dev_release:
           requires:
             - test

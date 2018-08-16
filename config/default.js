@@ -52,7 +52,7 @@ module.exports = {
 				name: 'SB Relay'
 			}
 		},
-		'sprucebot-skills-kit': {
+		'@sprucelabs/sprucebot-skills-kit': {
 			repo: {
 				name: 'workspace.sprucebot-skills-kit',
 				path: './workspace.sprucebot-skills-kit',

@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run: npm dist-tag add @sprucelabs/sprucebot-cli@$(npm v . dist-tags.beta) latest'
+      - run: npm dist-tag add @sprucelabs/sprucebot-cli@$(npm v . dist-tags.beta) latest
 workflows:
   version: 2
   do_build:

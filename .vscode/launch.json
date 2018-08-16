@@ -1,0 +1,89 @@
+{
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Platform Install",
+      "program": "${workspaceFolder}/bin/sprucebot-platform.js",
+      "args": [
+        "install",
+        "~/Desktop/all",
+        "-p",
+        "all",
+        "-u",
+        "liquidg3"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Login",
+      "program": "${workspaceFolder}/bin/sprucebot-user.js",
+      "cwd": "${workspaceFolder}/../sprucebot-skill-vip-alert",
+      "args": [
+        "login",
+        "7202535250"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Create Skill",
+      "program": "${workspaceFolder}/bin/sprucebot-skill.js",
+      "cwd": "${workspaceFolder}/../",
+      "args": [
+        "create",
+        "--name",
+        "Little Black Book",
+        "--slug",
+        "sprucebot-little-black-book"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Env",
+      "program": "${workspaceFolder}/bin/sprucebot-env.js",
+      "cwd": "${workspaceFolder}/../sprucebot-skill-vip-alert",
+      "args": [
+        "dev"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Platform Version",
+      "program": "${workspaceFolder}/bin/sprucebot-platform.js",
+      "cwd.disabled": "/Users/taylorromero/Development/SpruceLabs/sprucebot",
+      "args": [
+        "version"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test File",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "${file}"
+      ],
+      "skipFiles": [
+        "node_modules",
+        "async_hooks.js",
+        "inspector_async_hooks.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test All",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "skipFiles": [
+      ]
+    }
+  ]
+}

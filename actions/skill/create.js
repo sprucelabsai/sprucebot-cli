@@ -150,7 +150,10 @@ module.exports = async function create(commander) {
 			`"name": "${slug}"`
 		)
 
-		result = result.replace(/\"version\": \".*\"/g, `"version": "0.1.0"`)
+		result = result.replace(
+			/\"version\": \".*\"/g,
+			`"version": "0.1.0"\n\t"sprucebot-skills-kit-version": "${version}"`
+		)
 
 		fs.writeFile(packageJsonFile, result, 'utf8', err => {
 			if (err) {

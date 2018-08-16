@@ -47,8 +47,8 @@ workflows:
       #         ignore:
       #           - master
       - dev_release:
-          requires:
-            - test
+          # requires:
+          #   - test
           filters:
             branches:
               only:

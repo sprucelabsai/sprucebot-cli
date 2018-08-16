@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "A command-line tool for Sprucebot 🌲🤖 (retail.bot).",
   "main": "sprucebot.js",
   "repository": "git@github.com:sprucelabsai/sprucebot-cli.git",
@@ -68,7 +68,9 @@
   },
   "jest": {
     "clearMocks": true,
-    "testPathIgnorePatterns": ["/config/"],
+    "testPathIgnorePatterns": [
+      "/config/"
+    ],
     "collectCoverageFrom": [
       "**/*.js",
       "!**/node_modules/**",

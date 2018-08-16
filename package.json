@@ -1,7 +1,8 @@
 {
   "name": "@sprucelabs/sprucebot-cli",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "tag": "beta"
   },
   "version": "2.1.0",
   "description": "A command-line tool for Sprucebot 🌲🤖 (retail.bot).",

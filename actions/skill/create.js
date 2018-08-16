@@ -12,7 +12,6 @@ const log = require('../../utils/log')
 const debug = require('debug')('sprucebot-cli')
 const { extractPackage, pkgVersions } = require('../../utils/Npm')
 
-
 module.exports = async function create(commander) {
 	// make sure we're not already in a skill
 	if (skillUtil.isSkill()) {
@@ -138,6 +137,34 @@ module.exports = async function create(commander) {
 	}
 
 	log.success('Download complete!')
+
+	// Change the package.json name and version
+	const packageJsonFile = `${to}/package.json`
+	const changelogFile = `${to}/CHANGELOG.md`
+	fs.readFile(packageJsonFile, 'utf8', function(err, data) {
+		if (err) {
+			return console.log(err)
+		}
+		let result = data.replace(
+			/\"name\": \"@sprucelabs\/sprucebot-skills-kit\"/g,
+			`"name": "${slug}"`
+		)
+
+		result = result.replace(/\"version\": \".*\"/g, `"version": "0.1.0"`)
+
+		fs.writeFile(packageJsonFile, result, 'utf8', err => {
+			if (err) {
+				log.error("I wasn't able to set the package.json version.")
+			}
+		})
+	})
+
+	// Clear CHANGELOG.md
+	fs.truncate(changelogFile, 0, err => {
+		if (err) {
+			log.error("I wasn't able to clear the CHANGELOG.md file.")
+		}
+	})
 
 	// copy .env.example to .env and populate it
 	log.line('Configuring...')

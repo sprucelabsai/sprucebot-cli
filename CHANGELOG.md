@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.1.2...v2.2.0) (2018-08-16)
+
+
+### Features
+
+* upgrade from old package name; support --3way or --reject git apply strategy ([76ff490](https://github.com/sprucelabsai/sprucebot-cli/commit/76ff490))
+
 ## [2.1.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.1.1...v2.1.2) (2018-08-16)
 
 ## [2.1.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.1.0...v2.1.1) (2018-08-16)

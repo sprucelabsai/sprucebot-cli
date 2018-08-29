@@ -39,6 +39,7 @@ module.exports = async function update(commander) {
 		const skillPkg = skillUtil.getPkg()
 		const versions = await pkgVersions(PKG_NAME)
 		const oldVersions = await pkgVersions(OLD_PKG_NAME)
+		const previousVersion = skillPkg['sprucebot-skills-kit-version'] || '6.5.0'
 		let fromPkg
 
 		debug(`Using temp directory: ${TEMP}`)
@@ -47,21 +48,9 @@ module.exports = async function update(commander) {
 		if (versions.indexOf(skillPkg['sprucebot-skills-kit-version']) !== -1) {
 			debug('From: new package name')
 			fromPkg = PKG_NAME
-		} else if (
-			oldVersions.indexOf(skillPkg['sprucebot-skills-kit-version']) !== -1
-		) {
+		} else {
 			debug('From: old package name')
 			fromPkg = OLD_PKG_NAME
-		} else {
-			log.error(
-				`${PKG_NAME}@${
-					skillPkg['sprucebot-skills-kit-version']
-				} does not exist in the npm registry`
-			)
-			log.hint(
-				`If this is your first time updating the skill, you are probably on a very old version. Change your declared version to 0.3.0, and then try updating again`
-			)
-			return 1
 		}
 
 		let version = commander.pkg
@@ -81,9 +70,9 @@ module.exports = async function update(commander) {
 		}
 
 		log.hint(
-			`Updating ${skillPkg.name}@${
-				skillPkg['sprucebot-skills-kit-version']
-			} to ${PKG_NAME}@${version} 👀`
+			`Updating ${
+				skillPkg.name
+			} sprucebot-skills-kit version from ${previousVersion} to ${version} 👀`
 		)
 
 		const confirmAnswer = await inquirer.prompt({
@@ -105,11 +94,8 @@ module.exports = async function update(commander) {
 				skillPkg['sprucebot-skills-kit-version']
 			} | ${TEMP}`
 		)
-		await extractPackage(
-			fromPkg,
-			skillPkg['sprucebot-skills-kit-version'],
-			process.cwd()
-		)
+
+		await extractPackage(fromPkg, previousVersion, process.cwd())
 
 		await execa.shell('git add .')
 		await execa.shell('git commit -m "Old Version" --no-verify --allow-empty')
@@ -159,11 +145,26 @@ module.exports = async function update(commander) {
 			if (err) {
 				return console.log(err)
 			}
-			const result = data.replace(
-				/\"sprucebot-skills-kit-version\": \".*\"/g,
-				`"sprucebot-skills-kit-version": "${version}"`
-			)
+			// Check if sprucebot-skills-kit-version exists in the package.json
+			let result = data
+			if (/\"sprucebot-skills-kit-version\"/.test(data)) {
+				result = data.replace(
+					/\"sprucebot-skills-kit-version\": \".*\"/g,
+					`"sprucebot-skills-kit-version": "${version}"`
+				)
 
+				fs.writeFile(packageJsonFile, result, 'utf8', err => {
+					if (err) {
+						log.error("I wasn't able to set the package.json version.")
+					}
+				})
+			} else {
+				// Create the entry below the "version" tag
+				result = data.replace(
+					/(\"version\": \".*\",)\n/g,
+					`$1\n  "sprucebot-skills-kit-version": "${version}",\n`
+				)
+			}
 			fs.writeFile(packageJsonFile, result, 'utf8', err => {
 				if (err) {
 					log.error("I wasn't able to set the package.json version.")

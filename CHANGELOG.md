@@ -1,3 +1,5 @@
+## [2.2.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.1...v2.2.2) (2018-08-29)
+
 ## [2.2.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.0...v2.2.1) (2018-08-16)
 
 # [2.2.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.1.2...v2.2.0) (2018-08-16)

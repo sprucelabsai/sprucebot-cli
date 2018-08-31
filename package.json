@@ -45,7 +45,7 @@
     "sleep": "^5.1.1",
     "tar-fs": "^1.16.0",
     "untildify": "^3.0.2",
-    "wrap-ansi": "^3.0.1",
+    "wrap-ansi": "^4.0.0",
     "yeoman-environment": "^2.0.3",
     "yeoman-generator": "^2.0.2"
   },

@@ -4,13 +4,17 @@ const config = require('config')
 const request = require('request')
 const tar = require('tar-fs')
 const gunzip = require('gunzip-maybe')
+const inquirer = require('inquirer')
+const _ = require('lodash')
 const debug = require('debug')('sprucebot-cli')
 const log = require('./log')
 
 module.exports = {
 	extractPackage,
 	pkgVersions,
-	getLatestVersion
+	tagVersions,
+	getLatestVersion,
+	getChoices
 }
 
 async function getLatestVersion(pkg) {
@@ -66,4 +70,45 @@ async function pkgVersions(pkg) {
 	// string containt brackets "[ '1.0.0', '1.0.1' ]"
 	const output = cmd.stdout || '[]'
 	return JSON.parse(output)
+}
+
+async function tagVersions(pkg) {
+	const cmd = await execa('npm', ['dist-tag', 'ls', pkg], {
+		env: process.env
+	})
+
+	if (cmd.code !== 0) {
+		console.error(chalk.yellow(cmd.stderr))
+		throw new Error(cmd.stderr || 'Unknown spawn error')
+	}
+	const tags = {}
+	const output = cmd.stdout
+	const lines = output.split('\n')
+	lines.forEach(line => {
+		const matches = line.match(/(\w+):\s?([^\n]+)/)
+		if (matches && matches[1] && matches[2]) {
+			tags[matches[1]] = matches[2]
+		}
+	})
+
+	return tags
+}
+
+function getChoices({ versions, tags }) {
+	let choices = Object.keys(tags).map(k => `${k} (${tags[k]})`)
+	choices.sort((a, b) => {
+		if (/^latest/.test(a)) {
+			return -1
+		} else if (/^latest/.test(b)) {
+			return 1
+		}
+
+		return 0
+	})
+	let versionChoices = versions.reverse().slice(0, 10)
+	const taggedVersions = Object.values(tags)
+	versionChoices = versionChoices.filter(v => !_.includes(taggedVersions, v))
+	choices.push('<Enter Version>')
+	choices.push(new inquirer.Separator())
+	return choices.concat(versionChoices)
 }

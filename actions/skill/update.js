@@ -11,8 +11,10 @@ const log = require('../../utils/log')
 const Git = require('../../utils/Git')
 const {
 	pkgVersions,
+	tagVersions,
 	getLatestVersion,
-	extractPackage
+	extractPackage,
+	getChoices
 } = require('../../utils/Npm')
 
 const PKG_NAME = config.get('skillKitPackage')
@@ -37,6 +39,7 @@ module.exports = async function update(commander) {
 		}
 
 		const skillPkg = skillUtil.getPkg()
+		const tags = await tagVersions(PKG_NAME)
 		const versions = await pkgVersions(PKG_NAME)
 		const oldVersions = await pkgVersions(OLD_PKG_NAME)
 		const previousVersion = skillPkg['sprucebot-skills-kit-version'] || '6.5.0'
@@ -59,14 +62,27 @@ module.exports = async function update(commander) {
 				type: 'list',
 				name: 'version',
 				message: `Select the version to use`,
-				choices: ['latest'].concat(versions.reverse())
+				choices: getChoices({ versions, tags })
 			})
 
-			version = versionAnswer.version
-		}
+			if (versionAnswer.version === '<Enter Version>') {
+				const manualVersionAnswer = await inquirer.prompt({
+					type: 'input',
+					name: 'version',
+					message: `Enter the version to use`
+				})
 
-		if (version === 'latest') {
-			version = await getLatestVersion(PKG_NAME)
+				version = manualVersionAnswer.version
+			} else if (/\s/.test(versionAnswer.version)) {
+				const matches = versionAnswer.version.match(/\(([^\)]+)\)/)
+				if (matches && matches[1]) {
+					version = matches[1]
+				} else {
+					throw new Error('Unable to parse version')
+				}
+			} else {
+				version = versionAnswer.version
+			}
 		}
 
 		log.hint(

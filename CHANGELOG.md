@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.2...v2.3.0) (2018-09-17)
+
+
+### Features
+
+* better choices w/ npm tags; fix skill create ([55daf9a](https://github.com/sprucelabsai/sprucebot-cli/commit/55daf9a))
+
 ## [2.2.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.1...v2.2.2) (2018-08-29)
 
 ## [2.2.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.0...v2.2.1) (2018-08-16)

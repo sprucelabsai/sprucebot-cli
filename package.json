@@ -1,6 +1,10 @@
 {
-  "name": "sprucebot-cli",
-  "version": "1.5.0",
+  "name": "@sprucelabs/sprucebot-cli",
+  "publishConfig": {
+    "access": "public",
+    "tag": "beta"
+  },
+  "version": "2.3.0",
   "description": "A command-line tool for Sprucebot 🌲🤖 (retail.bot).",
   "main": "sprucebot.js",
   "repository": "git@github.com:sprucelabsai/sprucebot-cli.git",
@@ -21,8 +25,7 @@
     "start": "node ./bin/sprucebot.js",
     "lint": "./node_modules/.bin/eslint '**/**/*{.js}'",
     "test": "jest",
-    "precommit": "npm run lint",
-    "prepush": "npm run lint && npm run test"
+    "release": "semantic-release"
   },
   "dependencies": {
     "chalk": "^2.1.0",
@@ -36,8 +39,10 @@
     "inquirer": "^5.0.0",
     "js-yaml": "^3.10.0",
     "keypress": "^0.2.1",
+    "lodash": "^4.17.11",
     "pg": "^7.3.0",
     "request": "^2.83.0",
+    "semantic-release": "^15.9.8",
     "sleep": "^5.1.1",
     "tar-fs": "^1.16.0",
     "untildify": "^3.0.2",
@@ -46,6 +51,10 @@
     "yeoman-generator": "^2.0.2"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.0",
+    "@semantic-release/git": "^7.0.1",
+    "@sprucelabs/semantic-release": "^1.0.0",
+    "conventional-changelog-sprucelabs": "^1.0.0",
     "eslint": "^4.8.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",

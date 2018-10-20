@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.0...v2.3.1) (2018-10-20)
+
+
+### Bug Fixes
+
+* readme update ([2236a03](https://github.com/sprucelabsai/sprucebot-cli/commit/2236a03))
+
 # [2.3.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.2...v2.3.0) (2018-09-17)
 
 

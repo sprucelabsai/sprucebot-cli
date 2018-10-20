@@ -8,6 +8,7 @@ const path = require('path')
 const chalk = require('chalk')
 const log = require('../../utils/log')
 const sleep = require('sleep')
+const opn = require('opn')
 
 module.exports = async function(commander) {
 	const user = configUtil.user()
@@ -17,6 +18,8 @@ module.exports = async function(commander) {
 	let name = typeof commander.name !== 'function' ? commander.name : false
 	const storyMode = !id && !name
 	const remote = configUtil.remote()
+	const destinationSkill = `${remote.web}/bizprofile/${location.id}/skill/${id}`
+	const destinationBizProfile = `${remote.web}/bizprofile/${location.id}`
 
 	if (apiKey) {
 		log.error('Skill already registered!')
@@ -45,9 +48,7 @@ module.exports = async function(commander) {
 		log.instructions('But, lets start with the easy stuff.')
 
 		log.hint(
-			'Pro tip: Make your description short and sweet... and good, make it good. If you seek examples, tap the profile link I sent you, then tap "' +
-				location.name +
-				'" under "My Teams", and scroll down to "Skills Marketplace". 😅'
+			`Pro tip: Make your description short and sweet... and good, make it good. If you seek examples, visit ${destinationBizProfile} and checkout the "Skills Marketplace". 😅`
 		)
 	}
 	// make sure requests are authed
@@ -96,7 +97,7 @@ module.exports = async function(commander) {
 	const hasTunnelAnswer = await inquirer.prompt({
 		type: 'confirm',
 		name: 'hasTunnel',
-		message: 'Do you have a tunnel ready to configure (e.g. ngrok.io)'
+		message: 'Do you have a tunnel ready to configure (e.g. https://ngrok.io)'
 	})
 
 	if (hasTunnelAnswer.hasTunnel) {
@@ -136,7 +137,7 @@ module.exports = async function(commander) {
 		} while (unsecureTunnel)
 	}
 
-	console.log('Registering skill')
+	log.instructions('Registering skill')
 
 	try {
 		const registerResponse = await requestUtil.post(
@@ -171,12 +172,42 @@ module.exports = async function(commander) {
 		log.instructions(
 			'I know, I know, you knew all that, because you read the docs.\n\n🙇‍♂️'
 		)
+
 		await log.enterToContinue()
-		log.hint("But for reals, don't forget to `yarn && yarn run local`")
-		log.hint('Oh, and you def wanna check this out')
+
+		log.instructionsHeading('.env Review')
+		log.instructions('Lets review your .env so you can get familiar with it.')
+
+		await log.enterToContinue()
+
+		opn(`${process.cwd()}/.env`)
+
+		await log.enterToContinue()
+
+		log.instructionsHeading('Starting your skill')
+		log.hint(
+			`Open a new terminal window and run ${'`cd ' +
+				process.cwd() +
+				' && yarn && yarn run local`'}`
+		)
+
+		await log.enterToContinue()
+
+		log.instructionsHeading('Viewing your skill')
+		log.instructions(`Once you're ready I'll take you to your skill!`)
+
+		await log.enterToContinue()
+		opn(destinationSkill)
+		await log.enterToContinue()
+
+		log.instructions('Woohoo! All done!')
+		log.hint('You are def gonna wanna check this out:')
 		log.link(
 			'https://github.com/sprucelabsai/sprucebot-skills-kit/blob/dev/docs/simulator.md'
 		)
 		log.instructionsHeading('🌲🤖✌🏼')
+	} else {
+		log.instructions('Skill succesfully registered!')
+		log.hint('Please run `yarn && yarn run local`')
 	}
 }

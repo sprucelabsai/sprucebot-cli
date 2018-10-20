@@ -82,31 +82,37 @@ module.exports = {
 		{
 			label: 'hello.sprucebot.com',
 			name: 'prod',
+			web: 'https://hello.sprucebot.com',
 			url: 'https://api.sprucebot.com'
 		},
 		{
 			label: 'alpha-hello.sprucebot.com',
 			name: 'alpha',
+			web: 'https://hello-alpha.sprucebot.com',
 			url: 'https://alpha-api.sprucebot.com'
 		},
 		{
 			label: 'staging-hello.sprucebot.com',
 			name: 'staging',
+			web: 'https://hello-staging.sprucebot.com',
 			url: 'https://staging-api.sprucebot.com'
 		},
 		{
 			label: 'qa-hello.sprucebot.com',
 			name: 'qa',
+			web: 'https://hello-qa.sprucebot.com',
 			url: 'https://qa-api.sprucebot.com'
 		},
 		{
 			label: 'dev-hello.sprucebot.com',
 			name: 'dev',
+			web: 'https://hello-dev.sprucebot.com',
 			url: 'https://dev-api.sprucebot.com'
 		},
 		{
 			label: 'local.sprucebot.com',
 			name: 'local',
+			web: 'https://local.sprucebot.com',
 			url: 'https://local-api.sprucebot.com',
 			allowSelfSignedCerts: true
 		}

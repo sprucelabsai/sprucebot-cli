@@ -9,7 +9,8 @@ exports.isSkill = (cwd = process.cwd()) => {
 		if (
 			!pkg ||
 			!pkg.dependencies ||
-			(!pkg.dependencies['@sprucelabs/sprucebot-skills-kit-server'] &&
+			(!pkg.dependencies['@sprucelabs/spruce-skill-server'] &&
+				!pkg.dependencies['@sprucelabs/sprucebot-skills-kit-server'] &&
 				!pkg.dependencies['sprucebot-skills-kit-server'])
 		) {
 			return false

@@ -9,6 +9,7 @@ const inquirer = require('inquirer')
 const skillUtil = require('../../utils/skill')
 const log = require('../../utils/log')
 const Git = require('../../utils/Git')
+const semver = require('semver')
 const {
 	pkgVersions,
 	tagVersions,
@@ -18,7 +19,6 @@ const {
 } = require('../../utils/Npm')
 
 const PKG_NAME = config.get('skillKitPackage')
-const OLD_PKG_NAME = config.get('oldSkillKitPackage')
 const TEMP = path.join(os.tmpdir(), new Date().getTime().toString())
 
 module.exports = async function update(commander) {
@@ -41,8 +41,17 @@ module.exports = async function update(commander) {
 		const skillPkg = skillUtil.getPkg()
 		const tags = await tagVersions(PKG_NAME)
 		const versions = await pkgVersions(PKG_NAME)
-		const oldVersions = await pkgVersions(OLD_PKG_NAME)
+
+		let OLD_PKG_NAME
+
 		const previousVersion = skillPkg['sprucebot-skills-kit-version'] || '6.5.0'
+
+		if (semver.gt(previousVersion, '6.40.0')) {
+			OLD_PKG_NAME = '@sprucelabs/sprucebot-skills-kit'
+		} else {
+			OLD_PKG_NAME = 'sprucebot-skills-kit'
+		}
+
 		let fromPkg
 
 		debug(`Using temp directory: ${TEMP}`)

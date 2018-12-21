@@ -44,6 +44,7 @@
     "pg": "^7.3.0",
     "request": "^2.83.0",
     "semantic-release": "^15.9.8",
+    "semver": "^5.6.0",
     "sleep": "^5.1.1",
     "tar-fs": "^1.16.0",
     "untildify": "^3.0.2",

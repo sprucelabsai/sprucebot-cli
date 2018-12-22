@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.2...v2.4.0) (2018-12-22)
+
+
+### Features
+
+* upgrade skills w/ new naming ([28f57bb](https://github.com/sprucelabsai/sprucebot-cli/commit/28f57bb))
+
 ## [2.3.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.1...v2.3.2) (2018-11-20)
 
 ## [2.3.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.0...v2.3.1) (2018-10-20)

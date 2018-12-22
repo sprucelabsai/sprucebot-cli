@@ -9,8 +9,7 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
-	oldSkillKitPackage: 'sprucebot-skills-kit', // npm module name
-	skillKitPackage: '@sprucelabs/sprucebot-skills-kit', // npm module name
+	skillKitPackage: '@sprucelabs/spruce-skill', // npm module name
 	registry: 'https://registry.npmjs.org/',
 	platforms: {
 		api: {

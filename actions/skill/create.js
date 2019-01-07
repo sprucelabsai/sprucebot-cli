@@ -10,8 +10,12 @@ const gunzip = require('gunzip-maybe')
 const sleep = require('sleep')
 const log = require('../../utils/log')
 const debug = require('debug')('sprucebot-cli')
-const { extractPackage, pkgVersions } = require('../../utils/Npm')
-
+const {
+	extractPackage,
+	tagVersions,
+	pkgVersions,
+	getChoices
+} = require('../../utils/Npm')
 
 module.exports = async function create(commander) {
 	// make sure we're not already in a skill
@@ -87,18 +91,37 @@ module.exports = async function create(commander) {
 		})
 		slug = slugAnswer.slug
 	}
+	const PKG_NAME = config.get('skillKitPackage')
+	const tags = await tagVersions(PKG_NAME)
+	const versions = await pkgVersions(PKG_NAME)
 
 	let version = commander.pkg
 	if (!version) {
-		const versions = await pkgVersions(config.get('skillKitPackage'))
 		const versionAnswer = await inquirer.prompt({
 			type: 'list',
 			name: 'version',
 			message: `Select the version to use`,
-			choices: ['latest'].concat(versions)
+			choices: getChoices({ versions, tags })
 		})
 
-		version = versionAnswer.version
+		if (versionAnswer.version === '<Enter Version>') {
+			const manualVersionAnswer = await inquirer.prompt({
+				type: 'input',
+				name: 'version',
+				message: `Enter the version to use`
+			})
+
+			version = manualVersionAnswer.version
+		} else if (/\s/.test(versionAnswer.version)) {
+			const matches = versionAnswer.version.match(/\(([^\)]+)\)/)
+			if (matches && matches[1]) {
+				version = matches[1]
+			} else {
+				throw new Error('Unable to parse version')
+			}
+		} else {
+			version = versionAnswer.version
+		}
 	}
 
 	// where we are saving to
@@ -138,6 +161,37 @@ module.exports = async function create(commander) {
 	}
 
 	log.success('Download complete!')
+
+	// Change the package.json name and version
+	const packageJsonFile = `${to}/package.json`
+	const changelogFile = `${to}/CHANGELOG.md`
+	fs.readFile(packageJsonFile, 'utf8', function(err, data) {
+		if (err) {
+			return console.log(err)
+		}
+		let result = data.replace(
+			/\"name\": \"@sprucelabs\/sprucebot-skills-kit\"/g,
+			`"name": "${slug}"`
+		)
+
+		result = result.replace(
+			/\"version\": \".*\"/g,
+			`"version": "0.1.0",\n\t"sprucebot-skills-kit-version": "${version}"`
+		)
+
+		fs.writeFile(packageJsonFile, result, 'utf8', err => {
+			if (err) {
+				log.error("I wasn't able to set the package.json version.")
+			}
+		})
+	})
+
+	// Clear CHANGELOG.md
+	fs.truncate(changelogFile, 0, err => {
+		if (err) {
+			log.error("I wasn't able to clear the CHANGELOG.md file.")
+		}
+	})
 
 	// copy .env.example to .env and populate it
 	log.line('Configuring...')

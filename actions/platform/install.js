@@ -91,6 +91,32 @@ module.exports = async function init(startingPath = false, options = {}) {
 				console.log(chalk.green('Fetching successful.'))
 			}
 
+			// Same as `sprucebot platform version` command
+			if (options.selectVersion) {
+				await checkoutVersion(key, { ...options, cwd: platformPath })
+			} else if (options.branch) {
+				console.log(`Checking out ${options.branch} branch`)
+
+				//we need to fetch ustream if we are not sprucelabs
+				if (options.gitUser !== 'sprucelabsai') {
+					const cmd = childProcess.spawnSync('git', ['fetch', 'upstream'], {
+						env: process.env,
+						cwd: platformPath
+					})
+				}
+
+				const cmd = childProcess.spawnSync(
+					'git',
+					['checkout', options.branch],
+					{
+						stdio: 'inherit',
+						env: process.env,
+						cwd: platformPath
+					}
+				)
+				console.log(chalk.green('Done!'))
+			}
+
 			console.log('Installing dependencies.  🤞 ')
 
 			// install the code
@@ -121,32 +147,6 @@ module.exports = async function init(startingPath = false, options = {}) {
 						)
 					)
 				}
-			}
-
-			// Same as `sprucebot platform version` command
-			if (options.selectVersion) {
-				await checkoutVersion(key, { ...options, cwd: platformPath })
-			} else if (options.branch) {
-				console.log(`Checking out ${options.branch} branch`)
-
-				//we need to fetch ustream if we are not sprucelabs
-				if (options.gitUser !== 'sprucelabsai') {
-					const cmd = childProcess.spawnSync('git', ['fetch', 'upstream'], {
-						env: process.env,
-						cwd: platformPath
-					})
-				}
-
-				const cmd = childProcess.spawnSync(
-					'git',
-					['checkout', options.branch],
-					{
-						stdio: 'inherit',
-						env: process.env,
-						cwd: platformPath
-					}
-				)
-				console.log(chalk.green('Done!'))
 			}
 
 			console.log('Moving on.')

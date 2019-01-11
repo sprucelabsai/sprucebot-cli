@@ -36,7 +36,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 			}
 		])
 	}
-	const platform = options.platform || 'all'
+	const platform = options.platform || 'coredev'
 	const cliPath = path.resolve(__dirname, '..', '..')
 
 	const installPath = startingPath || './sprucebot'
@@ -61,11 +61,13 @@ module.exports = async function init(startingPath = false, options = {}) {
 	yarnInstall(promptValues.installPath)
 
 	for (let key in platforms) {
-		if (platform === 'all' || key == platform) {
+		coredev = !!config.get(`platforms.${key}.repo.coredev`)
+
+		if (platform === 'all' || key == platform || (platform == 'coredev' && coredev)) {
 			// if we are installing everything, they each go in their own subdir
 			const platformPath = path.resolve(
 				promptValues.installPath,
-				platform === 'all' ? config.get(`platforms.${key}.repo.path`) : './'
+				platform === 'all' || platform === 'coredev' ? config.get(`platforms.${key}.repo.path`) : './'
 			)
 
 			// do we need to fetch the platform?
@@ -154,7 +156,7 @@ module.exports = async function init(startingPath = false, options = {}) {
 	let command = 'sprucebot platform start' // the final command to be suggested at the end
 
 	// only do dev services if we are install "all" - otherwise assume on-premise hosting
-	if (platform === 'all') {
+	if (platform === 'all' || platform === 'coredev') {
 		console.log(
 			`Ok, since you are clearly a dev, let's get your dev environment ready.`
 		)

@@ -1,3 +1,15 @@
+# [2.5.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.4.0...v2.5.0) (2019-01-14)
+
+
+### Bug Fixes
+
+* checkout branch or version before installing ([c9e4914](https://github.com/sprucelabsai/sprucebot-cli/commit/c9e4914))
+
+
+### Features
+
+* defaultly installing a smaller subset of packages ([a9b4a44](https://github.com/sprucelabsai/sprucebot-cli/commit/a9b4a44))
+
 # [2.4.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.2...v2.4.0) (2018-12-22)
 
 

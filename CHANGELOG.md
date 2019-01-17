@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.5.0...v2.6.0) (2019-01-17)
+
+
+### Features
+
+* show .rej files after update ([12e2a32](https://github.com/sprucelabsai/sprucebot-cli/commit/12e2a32))
+
 # [2.5.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.4.0...v2.5.0) (2019-01-14)
 
 

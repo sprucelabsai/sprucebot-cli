@@ -120,6 +120,9 @@ module.exports = async function update(commander) {
 			} | ${TEMP}`
 		)
 
+		// Remove .rej files
+		await execa.shell("find . -type f -name '*.rej' -delete")
+
 		await extractPackage(fromPkg, previousVersion, process.cwd())
 
 		await execa.shell('git add .')
@@ -151,7 +154,7 @@ module.exports = async function update(commander) {
 			await execa.shell(
 				`git apply ${
 					strategyAnswer.mergeType === 'reject' ? '--reject' : '--3way'
-				} ${patchPath}`
+				} ${patchPath} > /dev/null 2>&1`
 			)
 		} catch (cmd) {
 			log.line(cmd.stderr)
@@ -162,6 +165,14 @@ module.exports = async function update(commander) {
 			log.success('Finished updating the skill')
 			log.hint('To see what changed, use `git status`')
 			log.hint('After resolving any conflicts run `yarn install && yarn test`')
+			if (strategyAnswer.mergeType === 'reject') {
+				const result = await execa.shell("find . -type f -name '*.rej'")
+				log.hint(
+					`Automatic merge could not be performed on the following files. Please manually apply changes:\n${
+						result.stdout
+					}`
+				)
+			}
 		}
 
 		// Update the skills kit version

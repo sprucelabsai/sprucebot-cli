@@ -9,15 +9,15 @@ module.exports = {
 	TEMP,
 	appname: 'sprucebot',
 	gitUser: 'sprucelabsai',
-	oldSkillKitPackage: 'sprucebot-skills-kit', // npm module name
-	skillKitPackage: '@sprucelabs/sprucebot-skills-kit', // npm module name
+	skillKitPackage: '@sprucelabs/spruce-skill', // npm module name
 	registry: 'https://registry.npmjs.org/',
 	platforms: {
 		api: {
 			repo: {
 				name: 'com-sprucebot-api',
-				env: './app',
-				path: './api'
+				env: './src',
+				path: './api',
+				coredev: true
 			},
 			pm2: {
 				name: 'SB API'
@@ -27,7 +27,8 @@ module.exports = {
 			repo: {
 				name: 'com-sprucebot-web',
 				env: './',
-				path: './web'
+				path: './web',
+				coredev: true
 			},
 			pm2: {
 				name: 'SB Web'
@@ -37,7 +38,8 @@ module.exports = {
 			repo: {
 				name: 'sprucebot-dev-services',
 				path: './dev-services',
-				env: false
+				env: false,
+				coredev: true
 			},
 			pm2: {
 				name: 'SB Dev Services'
@@ -47,7 +49,8 @@ module.exports = {
 			repo: {
 				name: 'sprucebot-relay',
 				path: './relay',
-				env: false
+				env: false,
+				coredev: false
 			},
 			pm2: {
 				name: 'SB Relay'
@@ -57,7 +60,8 @@ module.exports = {
 			repo: {
 				name: 'workspace.sprucebot-skills-kit',
 				path: './workspace.sprucebot-skills-kit',
-				env: './packages/sprucebot-skills-kit'
+				env: './packages/sprucebot-skills-kit',
+				coredev: false
 			},
 			pm2: null
 		},
@@ -65,7 +69,8 @@ module.exports = {
 			repo: {
 				name: 'sprucebot-cli',
 				path: './sprucebot-cli',
-				env: false
+				env: false,
+				coredev: false
 			},
 			pm2: null
 		},
@@ -73,7 +78,8 @@ module.exports = {
 			repo: {
 				name: 'sprucebot-teammate-app',
 				path: './teammate-app',
-				env: false
+				env: false,
+				coredev: false
 			},
 			pm2: null
 		}

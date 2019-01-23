@@ -4,7 +4,7 @@
     "access": "public",
     "tag": "beta"
   },
-  "version": "2.3.2",
+  "version": "2.6.0",
   "description": "A command-line tool for Sprucebot 🌲🤖 (retail.bot).",
   "main": "sprucebot.js",
   "repository": "git@github.com:sprucelabsai/sprucebot-cli.git",
@@ -46,6 +46,7 @@
     "pg": "^7.3.0",
     "request": "^2.83.0",
     "semantic-release": "^15.9.8",
+    "semver": "^5.6.0",
     "sleep": "^5.1.1",
     "tar-fs": "^1.16.0",
     "untildify": "^3.0.2",

@@ -79,13 +79,13 @@ module.exports = async function create(commander) {
 			.replace(/[\W_]+/g, ' ')
 			.toLowerCase()
 			.trim()
-			.replace(/ /g, '-')
+			.replace(/ /g, '_')
 
 	if (!commander.slug) {
 		const slugAnswer = await inquirer.prompt({
 			type: 'input',
 			name: 'slug',
-			message: `You skill's slug, e.g. vip-alerts, scratch-and-win:`,
+			message: `You skill's slug, e.g. vip_alerts, scratch_and_win:`,
 			default: slug,
 			validate: val => val.length && val.length > 0
 		})

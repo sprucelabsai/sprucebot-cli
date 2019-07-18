@@ -86,40 +86,40 @@ module.exports = {
 	},
 	skillRemotes: [
 		{
-			label: 'hello.sprucebot.com',
+			label: 'platform.spruce.ai',
 			name: 'prod',
-			web: 'https://hello.sprucebot.com',
-			url: 'https://api.sprucebot.com'
+			web: 'https://platform.spruce.ai',
+			url: 'https://api.spruce.ai'
 		},
 		{
-			label: 'alpha-hello.sprucebot.com',
+			label: 'alpha.platform.spruce.ai',
 			name: 'alpha',
-			web: 'https://hello-alpha.sprucebot.com',
-			url: 'https://alpha-api.sprucebot.com'
+			web: 'https://alpha.platform.spruce.ai',
+			url: 'https://alpha-api.spruce.ai'
 		},
 		{
-			label: 'staging-hello.sprucebot.com',
+			label: 'staging.platform.spruce.ai',
 			name: 'staging',
-			web: 'https://hello-staging.sprucebot.com',
-			url: 'https://staging-api.sprucebot.com'
+			web: 'https://staging.platform.spruce.ai',
+			url: 'https://staging-api.spruce.ai'
 		},
 		{
-			label: 'qa-hello.sprucebot.com',
+			label: 'qa.platform.spruce.ai',
 			name: 'qa',
-			web: 'https://hello-qa.sprucebot.com',
-			url: 'https://qa-api.sprucebot.com'
+			web: 'https://qa.platform.spruce.ai',
+			url: 'https://qa-api.spruce.ai'
 		},
 		{
-			label: 'dev-hello.sprucebot.com',
+			label: 'dev.platform.spruce.ai',
 			name: 'dev',
-			web: 'https://hello-dev.sprucebot.com',
-			url: 'https://dev-api.sprucebot.com'
+			web: 'https://dev.platform.spruce.ai',
+			url: 'https://dev-api.spruce.ai'
 		},
 		{
-			label: 'local.sprucebot.com',
+			label: 'local.platform.spruce.ai',
 			name: 'local',
-			web: 'https://local.sprucebot.com',
-			url: 'https://local-api.sprucebot.com',
+			web: 'https://local.platform.spruce.ai',
+			url: 'https://local-api.spruce.ai',
 			allowSelfSignedCerts: true
 		}
 	],

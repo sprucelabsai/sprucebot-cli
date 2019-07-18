@@ -39,7 +39,7 @@ yarn global add @sprucelabs/sprucebot-cli
 
 Before you build your first Skill, you need to setup a business, lets do that!
 
-1. Visit https://hello.sprucebot.com and login.
+1. Visit https://platform.spruce.ai and login.
 2. Scroll to the bottom of the page and tap **Add My Location**.
 3. Once your location is created, you can start to dev your first skill!
 4. `yarn global add @sprucelabs/sprucebot-cli`
@@ -73,7 +73,7 @@ This is where the magic happens!
 
 ### User Commands
 
-Requires you to have an account at your chosen `remote` (probably hello.sprucebot.com).
+Requires you to have an account at your chosen `remote` (probably platform.spruce.ai).
 
 - `sprucebot user login`
   - Log you in and sets you up to dev at a location of your choosing
@@ -114,12 +114,12 @@ This section is only relevant if you've been given permission to work directly o
     - `sprucebot-dev-services`
 - `sudo sprucebot platform development`
   - Setup dns and hosts configurations for local development.
-  - Adds `local.sprucebot.com`, `local-api.sprucebot.com`, and `local-devtools.sprucebot.com` to `hosts`
+  - Adds `local.spruce.ai`, `local-api.spruce.ai`, and `local-devtools.spruce.ai` to `hosts`
 - `sprucebot platform start [key]`
   - Launches the platform
   - `key` can be `all`, `web`, `api`, `relay`
   - Default to `all`
-  - Visit your local [Sprucebot](https://local.sprucebot.com) to verify platform is running properly
+  - Visit your local [Sprucebot](https://local.spruce.ai) to verify platform is running properly
 - `sudo sprucebot platform logs [key]`
   - `key` can be `all`, `web`, `api`, `relay`
   - Default to `all`

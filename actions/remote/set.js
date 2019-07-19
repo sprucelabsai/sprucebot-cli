@@ -33,7 +33,7 @@ module.exports = async (_remote, command) => {
 		log.instructions(
 			'To request access, you can email `scientists@sprucelabs.ai`. No promises, though 🤞🏼.'
 		)
-		log.hint('Probably best to use "hello.spruce.ai" for now.')
+		log.hint('Probably best to use "platform.spruce.ai" for now.')
 	}
 
 	if (!remote) {

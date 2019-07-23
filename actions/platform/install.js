@@ -63,11 +63,17 @@ module.exports = async function init(startingPath = false, options = {}) {
 	for (let key in platforms) {
 		coredev = !!config.get(`platforms.${key}.repo.coredev`)
 
-		if (platform === 'all' || key == platform || (platform == 'coredev' && coredev)) {
+		if (
+			platform === 'all' ||
+			key == platform ||
+			(platform == 'coredev' && coredev)
+		) {
 			// if we are installing everything, they each go in their own subdir
 			const platformPath = path.resolve(
 				promptValues.installPath,
-				platform === 'all' || platform === 'coredev' ? config.get(`platforms.${key}.repo.path`) : './'
+				platform === 'all' || platform === 'coredev'
+					? config.get(`platforms.${key}.repo.path`)
+					: './'
 			)
 
 			// do we need to fetch the platform?
@@ -354,9 +360,9 @@ async function checkHostile(promptValues) {
 			// Help dev cd to correct directory
 			let dir = path.basename(promptValues.installPath)
 			if (
-				!configured['local-api.sprucebot.com'] ||
-				!configured['local.sprucebot.com'] ||
-				!configured['local-devtools.sprucebot.com'] ||
+				!configured['local-api.spruce.ai'] ||
+				!configured['local.spruce.ai'] ||
+				!configured['local-devtools.spruce.ai'] ||
 				!configured['sprucebot_postgres'] ||
 				!configured['sprucebot_redis']
 			) {

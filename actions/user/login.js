@@ -33,7 +33,7 @@ module.exports = async function login(phone, command) {
 			"You must be the owner of a location in order to build a skill. If you aren't one, checkout our dev resources to get started."
 		)
 
-		log.link('https://dev.sprucebot.com')
+		log.link('https://dev.spruce.ai')
 
 		log.instructions(
 			"Developer access is granted on a per-location basis. I'm assuming your location is your home or office and not an actual shop. But, either works, just be careful in live environments."
@@ -87,7 +87,7 @@ module.exports = async function login(phone, command) {
 	if (locations.length === 0) {
 		console.log(
 			chalk.bold.red(
-				'You need to be owner of at least one location to begin skills development. Visit https://dev.sprucebot.com to get your dev unit shipped today!'
+				'You need to be owner of at least one location to begin skills development. Visit https://dev.spruce.ai to get your dev unit shipped today!'
 			)
 		)
 	} else if (locations.length === 1) {

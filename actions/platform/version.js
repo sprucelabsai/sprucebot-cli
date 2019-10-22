@@ -6,7 +6,7 @@ const Git = require('../../utils/Git')
 
 const { isProjectInstalled, directoryExists } = require('../../utils/dir')
 
-//logic in here should move to utility so it can be used outside this action
+// TODO: logic in here should move to utility so it can be used outside this action
 module.exports = async function version(platform = 'all', options) {
 	const installPath = options.cwd || process.cwd()
 

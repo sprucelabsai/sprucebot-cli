@@ -32,7 +32,7 @@ facilitate amazing experiences, brick-and-mortar, ma and pa shops will live long
 ### Installation
 
 ```bash
-yarn global add @sprucelabs/sprucebot-cli
+npm i -g @sprucelabs/sprucebot-cli
 ```
 
 ### Getting Started Building Your Skill
@@ -42,7 +42,7 @@ Before you build your first Skill, you need to setup a business, lets do that!
 1. Visit https://platform.spruce.ai and login.
 2. Scroll to the bottom of the page and tap **Add My Location**.
 3. Once your location is created, you can start to dev your first skill!
-4. `yarn global add @sprucelabs/sprucebot-cli`
+4. `npm i -g @sprucelabs/sprucebot-cli`
 5. `cd ~/path/to/dev/folder`
 6. `sprucebot skill create`
 7. Follow steps and change the world! 💪

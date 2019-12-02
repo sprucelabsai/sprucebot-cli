@@ -1,3 +1,10 @@
+## [2.6.4](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.3...v2.6.4) (2019-12-02)
+
+
+### Bug Fixes
+
+* **README:** Update yarn -> npm to avoid issues ([377c696](https://github.com/sprucelabsai/sprucebot-cli/commit/377c696))
+
 ## [2.6.3](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.2...v2.6.3) (2019-11-11)
 
 ## [2.6.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.1...v2.6.2) (2019-07-23)

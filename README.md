@@ -97,7 +97,7 @@ To get working fast, you can provision yourself a fully functioning organization
 
 ### **M**ercury Commands ☿
 
-For emitting and listening to events in the digital and physical worlds. ⚡️
+For emitting and listening to events in the digital and physical worlds. ⚡️ Most these commands simply update `config/eventContract.ts`
 
 - `sb m create event` -_COMING SOON_- Introduce a new event into the system. Note: You'll need to define your event's payload and response body in `config/eventContract.ts` once this command is complete
   - `-n` `--name` - The name of the event, must start with your skill's slug i.e. `commerce:did-checkout`
@@ -106,9 +106,9 @@ For emitting and listening to events in the digital and physical worlds. ⚡️
   - `-n` `--name` - The name of the event
 - `sb m enable event` -_COMING SOON_- Enables an event
   - `-n` `--name` - The name of the event
-- `sb m create listener` -_COMING SOON_- Create's an event listener file with a callback strictly typed and ready to roll
+- `sb m create listener` -_COMING SOON_- Create's an event listener file with a callback strictly typed and ready to roll at `server/listeners/{{name}}.ts`
   - `-n` `--name` - The name of the event you want to listen to
-- `sb m disable listener` -_COMING SOON_- Temporarily disable your event listener
+- `sb m disable listener` -_COMING SOON_- Temporarily disable your event listener.
   - `-n` `--name` - The name of the event
 - `sb m enable listener` -_COMING SOON_- Enable your event listener
   - `-n` `--name` - The name of the event
@@ -117,9 +117,9 @@ For emitting and listening to events in the digital and physical worlds. ⚡️
 
 For creating skill views. 🏞
 
-- `sb h create view` - Create a new skill view in `interface/pages/skill-views/`
+- `sb h create view` - Create a new skill view in `interface/pages/skill-views/{{route_path}}.tsx`
   - `-r` `--route` - An enum of (core routes)[https://developer.spruce.ai/#/core-routes], where the skill view will render
-- `sb h create page` - Create a web page that can be rendered outside the platform
+- `sb h create page` - Create a web page that can be rendered outside the platform at `interface/pages/{{path}}.tsx`
   - `-p` `--path` - The path to the page, e.g. `/signup`
 
 ### **R**EST Commands
@@ -146,9 +146,9 @@ For creating GQL endpoints.
 
 For creating Sequelize data models.
 
-- `sb model create` - Create a new data model.
+- `sb model create` - Create a new data model at `server/models/{{name}}.ts`
   - `-n` `--name` - The name of the model, PascalCase
-- `sb model create migration` - Create a new data migration
+- `sb model create migration` - Create a new data migration at `server/migrations/{{name}}.ts`
   - `-n` `--name` - Name the migration, lower-case-hyphen-separated
 
 ### **U**ser Commands
@@ -166,12 +166,12 @@ When your skill needs to respond to different events (enter, leave), you need to
 - `sb sim start` - Starts the simulator in interactive mode
 - `sb sim emit` -_COMING SOON_- Emit an event
   - `-n` `--name` - The name of the event, i.e. "booking:did-book-appointment" or ["did-enter"](https://developer.spruce.ai/#/events?id=core-events).
-  - `-p` `--payload` - A JSON string in "quotes" to be passed with the event (core events come with payloads)
+  - `-p` `--payload` - A JSON payload in "quotes" to be passed with the event (core events come with payloads)
   - `-f` `--file` - A file path to a `.json` file that will be used as the payload
 
 ### Service Commands
 
-Write some code that touches another API or does some other type of async work.
+Write some code that touches another API or does some other async work.
 
 - `sb service create` - Create a service at `server/services/{{name}}.ts`
   - `-n` `--name` - Name the service, PascalCase

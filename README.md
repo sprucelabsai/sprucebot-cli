@@ -106,7 +106,7 @@ For emitting and listening to events in the digital and physical worlds. ⚡️ 
   - `-n` `--name` - The name of the event
 - `sb m enable event` -_COMING SOON_- Enables an event
   - `-n` `--name` - The name of the event
-- `sb m create listener` -_COMING SOON_- Create's an event listener file with a callback strictly typed and ready to roll at `server/listeners/{{name}}.ts`
+- `sb m create listener` -_COMING SOON_- Create's an event listener file with a callback strictly typed and ready to roll at `server/listeners/{{name}}.ts` and a corresponding test file at `server/tests/listeners/{{name}}.ts`
   - `-n` `--name` - The name of the event you want to listen to
 - `sb m disable listener` -_COMING SOON_- Temporarily disable your event listener.
   - `-n` `--name` - The name of the event

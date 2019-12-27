@@ -189,10 +189,9 @@ This section is only relevant if you've been given permission to work directly o
 
 ### Platform Commands
 
-- `sb platform install [path]` -_COMING SOON_- Install the whole or parts of the platform (SL team only)
-  - `path` defaults to `./sprucebot`
-  - `-p --platform` to select `web`, `api`, or defaults `all`
-  - `-b --branch` the branch to checkout, defaults to `dev`
+- `sb platform install [path]` -_COMING SOON_- Install the whole or parts of the platform (SL team only), `path` defaults to `./sprucebot`
+  - `-p --platform` - `all`, `web`, `api`, or defaults `all`
+  - `-b --branch` - the branch to checkout, defaults to `dev`
 - `sb platform start [all|web|api]` -_COMING SOON_- Launches the platform, defaults to `all`
   - Visit your local [Spruce instance](https://local.spruce.ai) to verify platform is running properly
 - `sudo sprucebot platform logs [all|web|api]` -_COMING SOON_- View logs for the platform, defaults to `all`

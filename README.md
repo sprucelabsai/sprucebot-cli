@@ -71,7 +71,7 @@ This is how I start creating a skill for you. I can even register it with the pl
 - `sb skill uninstall` -_COMING SOON_- Uninstall a skill at an org
   - `-s` `--skill` - The skill's slug
   - `-o` `-orgId` - The organization's id
-- `sb skill enable` - Enable a skill at a location
+- `sb skill enable` -_COMING SOON_- Enable a skill at a location
   - `-l` `-locationIds` - Comma separated list of location ids.
 
 ### Seed Commands
@@ -117,16 +117,16 @@ For emitting and listening to events in the digital and physical worlds. ⚡️ 
 
 For creating skill views. 🏞
 
-- `sb h create view` - Create a new skill view in `interface/pages/skill-views/{{route_path}}.tsx`
+- `sb h create view` -_COMING SOON_- Create a new skill view in `interface/pages/skill-views/{{route_path}}.tsx`
   - `-r` `--route` - An enum of (core routes)[https://developer.spruce.ai/#/core-routes], where the skill view will render
-- `sb h create page` - Create a web page that can be rendered outside the platform at `interface/pages/{{path}}.tsx`
+- `sb h create page` -_COMING SOON_- Create a web page that can be rendered outside the platform at `interface/pages/{{path}}.tsx`
   - `-p` `--path` - The path to the page, e.g. `/signup`
 
 ### **R**EST Commands
 
 For creating REST endpoints. 🛌
 
-- `sb r create action` - Create a new action and a cooresponding test at `server/rest/actions/{{method}}/{{last_segment}}.ts` and `server/test/rest/actions/{{method}}{{last_segment}}.ts` respectively, e.g. `server/rest/actions/post/submit-form.ts` and `server/tests/rest/actions/post/submit-form.ts`
+- `sb r create action` -_COMING SOON_- Create a new action and a cooresponding test at `server/rest/actions/{{method}}/{{last_segment}}.ts` and `server/test/rest/actions/{{method}}{{last_segment}}.ts` respectively, e.g. `server/rest/actions/post/submit-form.ts` and `server/tests/rest/actions/post/submit-form.ts`
   - `-p` `--path` - The path to the endpoint e.g. `/rest/v1/submit-form.json`
   - `-m` `--method` - post|get|put|delete
   - `-d` `--desc` - Describe your endpointdf
@@ -135,20 +135,20 @@ For creating REST endpoints. 🛌
 
 For creating GQL endpoints.
 
-- `sb g create endpoint` - Create a new GQL endpoint at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.ts` and corresponding sdl at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.gql` and a corresponding test at `server/tests/gql/{{mutations|queries}}/{{name}}.ts`
+- `sb g create endpoint` -_COMING SOON_- Create a new GQL endpoint at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.ts` and corresponding sdl at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.gql` and a corresponding test at `server/tests/gql/{{mutations|queries}}/{{name}}.ts`
   - `-t` `--type` - mutation|query
   - `-n` `--name` - The name of the mutation or query, camelCase
 - `sb g create type` - Create a new GQL type at `server/gql/types/{{name}}.sdl`
   - `-n` `--name` - The name of the type, PascalCase
-- `sb g regenerate queries` - Regenerates gql query files that can be included in both the front end and back end when making gql requests.
+- `sb g regenerate queries` -_COMING SOON_- Regenerates gql query files that can be included in both the front end and back end when making gql requests.
 
 ### Model Commands
 
 For creating Sequelize data models.
 
-- `sb model create` - Create a new data model at `server/models/{{name}}.ts`
+- `sb model create` -_COMING SOON_- Create a new data model at `server/models/{{name}}.ts`
   - `-n` `--name` - The name of the model, PascalCase
-- `sb model create migration` - Create a new data migration at `server/migrations/{{name}}.ts`
+- `sb model create migration` -_COMING SOON_- Create a new data migration at `server/migrations/{{name}}.ts`
   - `-n` `--name` - Name the migration, lower-case-hyphen-separated
 
 ### **U**ser Commands

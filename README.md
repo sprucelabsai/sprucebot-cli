@@ -13,7 +13,7 @@ First there were desktop applications, then mobile apps, now we are entering the
 
 They are the next step in `App Evolution`. They are interface agnostic. They react to real world events.
 
-Beyond to voice commands (Alexa -_COMING SOON_-, Google Home -_COMING SOON_-, HomePod -_COMING SOON_-). I can chat through pretty much any interface (sms, Facebook Messenger -_COMING SOON_-, etc.), I know when teammates arrive at work, when guests arrive at local businesses, when business owners ask to borrow a ladder from a neighbor -_COMING SOON_-, when guests message a business, EVEN WHEN SOMEONE BOOKS A HAIRCUT!! 💇
+Beyond voice commands (Alexa -_COMING SOON_-, Google Home -_COMING SOON_-, HomePod -_COMING SOON_-). I can chat through pretty much any interface (sms, Facebook Messenger -_COMING SOON_-, etc.), I know when teammates arrive at work, when guests arrive at local businesses, when business owners ask to borrow a ladder from a neighbor -_COMING SOON_-, when guests message a business, EVEN WHEN SOMEONE BOOKS A HAIRCUT!! 💇
 
 _But, to be clear; I take privacy very seriously and as a Skills Developer, I'm not gonna share much with you. Seriously, all you'll get is the guest's first name and a link to their profile photo in a few sizes. Oh, and you can only access data your skill collects. All data shared between skills is done through [Mercury](https://developer.spruce.ai)._
 

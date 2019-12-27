@@ -53,7 +53,7 @@ sb
 
 This is how I start creating a skill for you. I can even register it with the platform when you're ready.
 
-- `sb skill create` - Start creating a skill
+- `sb skill create [name]` - Start creating a skill
   - `-n` `--name` - Give your skill a name "wrapped in quotes".
   - `-s` `--slug` - A machine friendly, human readable identifier (using your skill's name lower-case-and-hyphan-separated)
   - `-d` `--description` - A description of your skill
@@ -78,7 +78,7 @@ This is how I start creating a skill for you. I can even register it with the pl
 
 To get working fast, you can provision yourself a fully functioning organization. How cool is that!? 💪
 
-- `sb seed organization` -_COMING SOON_- Seed an organization (limit 1 per size per environment)
+- `sb seed organization [size]` -_COMING SOON_- Seed an organization (limit 1 per size per environment)
   - `--size` - small|medium|large|huge
     - _small_ - Generates a 1 to 5 location small business
     - _medium_ - A small franchise or expanding family business
@@ -99,34 +99,34 @@ To get working fast, you can provision yourself a fully functioning organization
 
 For emitting and listening to events in the digital and physical worlds. ⚡️ Most these commands simply update `config/eventContract.ts`
 
-- `sb m create event` -_COMING SOON_- Introduce a new event into the system. Note: You'll need to define your event's payload and response body in `config/eventContract.ts` once this command is complete
+- `sb m create event [name]` -_COMING SOON_- Introduce a new event into the system. Note: You'll need to define your event's payload and response body in `config/eventContract.ts` once this command is complete
   - `-n` `--name` - The name of the event, must start with your skill's slug i.e. `commerce:did-checkout`
   - `-d` `--description` - A few more words about your new event
-- `sb m disable event` -_COMING SOON_- Temporarily disables an event
+- `sb m disable event [name]` -_COMING SOON_- Temporarily disables an event
   - `-n` `--name` - The name of the event
-- `sb m enable event` -_COMING SOON_- Enables an event
+- `sb m enable event [name]` -_COMING SOON_- Enables an event
   - `-n` `--name` - The name of the event
-- `sb m create listener` -_COMING SOON_- Create's an event listener file with a callback strictly typed and ready to roll at `server/listeners/{{name}}.ts` and a corresponding test file at `server/tests/listeners/{{name}}.ts`
+- `sb m create listener [name]` -_COMING SOON_- Create's an event listener file with a callback strictly typed and ready to roll at `server/listeners/{{name}}.ts` and a corresponding test file at `server/tests/listeners/{{name}}.ts`
   - `-n` `--name` - The name of the event you want to listen to
-- `sb m disable listener` -_COMING SOON_- Temporarily disable your event listener.
+- `sb m disable listener [name]` -_COMING SOON_- Temporarily disable your event listener.
   - `-n` `--name` - The name of the event
-- `sb m enable listener` -_COMING SOON_- Enable your event listener
+- `sb m enable listener [name]` -_COMING SOON_- Enable your event listener
   - `-n` `--name` - The name of the event
 
 ### **H**eartwood Commands
 
 For creating skill views. 🏞
 
-- `sb h create view` -_COMING SOON_- Create a new skill view in `interface/pages/skill-views/{{route_path}}.tsx`
+- `sb h create view [route]` -_COMING SOON_- Create a new skill view in `interface/pages/skill-views/{{route_path}}.tsx`
   - `-r` `--route` - An enum of (core routes)[https://developer.spruce.ai/#/core-routes], where the skill view will render
-- `sb h create page` -_COMING SOON_- Create a web page that can be rendered outside the platform at `interface/pages/{{path}}.tsx`
+- `sb h create page [path]` -_COMING SOON_- Create a web page that can be rendered outside the platform at `interface/pages/{{path}}.tsx`
   - `-p` `--path` - The path to the page, e.g. `/signup`
 
 ### **R**EST Commands
 
 For creating REST endpoints. 🛌
 
-- `sb r create action` -_COMING SOON_- Create a new action and a cooresponding test at `server/rest/actions/{{method}}/{{last_segment}}.ts` and `server/test/rest/actions/{{method}}{{last_segment}}.ts` respectively, e.g. `server/rest/actions/post/submit-form.ts` and `server/tests/rest/actions/post/submit-form.ts`
+- `sb r create action [path]` -_COMING SOON_- Create a new action and a cooresponding test at `server/rest/actions/{{method}}/{{last_segment}}.ts` and `server/test/rest/actions/{{method}}{{last_segment}}.ts` respectively, e.g. `server/rest/actions/post/submit-form.ts` and `server/tests/rest/actions/post/submit-form.ts`
   - `-p` `--path` - The path to the endpoint e.g. `/rest/v1/submit-form.json`
   - `-m` `--method` - post|get|put|delete
   - `-d` `--desc` - Describe your endpointdf
@@ -135,10 +135,10 @@ For creating REST endpoints. 🛌
 
 For creating GQL endpoints.
 
-- `sb g create endpoint` -_COMING SOON_- Create a new GQL endpoint at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.ts` and corresponding sdl at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.gql` and a corresponding test at `server/tests/gql/{{mutations|queries}}/{{name}}.ts`
+- `sb g create endpoint [type]` -_COMING SOON_- Create a new GQL endpoint at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.ts` and corresponding sdl at `server/gql/{{mutations|queries}}/{{name}}/{{name}}.gql` and a corresponding test at `server/tests/gql/{{mutations|queries}}/{{name}}.ts`
   - `-t` `--type` - mutation|query
   - `-n` `--name` - The name of the mutation or query, camelCase
-- `sb g create type` - Create a new GQL type at `server/gql/types/{{name}}.sdl`
+- `sb g create type [name]` - Create a new GQL type at `server/gql/types/{{name}}.sdl`
   - `-n` `--name` - The name of the type, PascalCase
 - `sb g regenerate queries` -_COMING SOON_- Regenerates gql query files that can be included in both the front end and back end when making gql requests.
 
@@ -146,16 +146,16 @@ For creating GQL endpoints.
 
 For creating Sequelize data models.
 
-- `sb model create` -_COMING SOON_- Create a new data model at `server/models/{{name}}.ts`
+- `sb model create [name]` -_COMING SOON_- Create a new data model at `server/models/{{name}}.ts`
   - `-n` `--name` - The name of the model, PascalCase
-- `sb model create migration` -_COMING SOON_- Create a new data migration at `server/migrations/{{timestamp}}-{{name}}.ts`
+- `sb model create migration [name]` -_COMING SOON_- Create a new data migration at `server/migrations/{{timestamp}}-{{name}}.ts`
   - `-n` `--name` - Name the migration, lower-case-hyphen-separated
 
 ### **U**ser Commands
 
 Login/Signup, the world is yours!
 
-- `sb u login` - Log you in and sets you up to dev at a location of your choosing
+- `sb u login [phone]` - Log you in and sets you up to dev at a location of your choosing
   - `-p` `--phone` - Your phone for sms confirmation
 - `sb u logout` -_COMING SOON_- Logs you out
 
@@ -164,7 +164,7 @@ Login/Signup, the world is yours!
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
 
 - `sb sim start` -_COMING SOON_- Starts the simulator in interactive mode
-- `sb sim emit` -_COMING SOON_- Emit an event
+- `sb sim emit [name]` -_COMING SOON_- Emit an event
   - `-n` `--name` - The name of the event, i.e. "booking:did-book-appointment" or ["did-enter"](https://developer.spruce.ai/#/events?id=core-events).
   - `-p` `--payload` - A JSON payload in "quotes" to be passed with the event (core events come with payloads)
   - `-f` `--file` - Point to a `.json` file that will be used as the payload
@@ -173,14 +173,14 @@ When your skill needs to respond to different events (enter, leave), you need to
 
 Write some code that touches another API or does some other async work.
 
-- `sb service create` -_COMING SOON_- Create a service at `server/services/{{name}}.ts`
+- `sb service create [name]` -_COMING SOON_- Create a service at `server/services/{{name}}.ts`
   - `-n` `--name` - Name the service, PascalCase
 
 ### Utility Commands
 
 Here is code that is reused often and makes our lives easier.
 
-- `sb utility create` -_COMING SOON_- Create a utility at `server/utilities/{{name}}.ts`
+- `sb utility create [name]` -_COMING SOON_- Create a utility at `server/utilities/{{name}}.ts`
   - `-n` `--name` - Name the utility, PascalCase
 
 # Platform Development

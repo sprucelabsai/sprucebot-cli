@@ -163,7 +163,7 @@ Login/Signup, the world is yours!
 
 When your skill needs to respond to different events (enter, leave), you need to simulate them locally.
 
-- `sb sim start` - Starts the simulator in interactive mode
+- `sb sim start` -_COMING SOON_- Starts the simulator in interactive mode
 - `sb sim emit` -_COMING SOON_- Emit an event
   - `-n` `--name` - The name of the event, i.e. "booking:did-book-appointment" or ["did-enter"](https://developer.spruce.ai/#/events?id=core-events).
   - `-p` `--payload` - A JSON payload in "quotes" to be passed with the event (core events come with payloads)
@@ -173,14 +173,14 @@ When your skill needs to respond to different events (enter, leave), you need to
 
 Write some code that touches another API or does some other async work.
 
-- `sb service create` - Create a service at `server/services/{{name}}.ts`
+- `sb service create` -_COMING SOON_- Create a service at `server/services/{{name}}.ts`
   - `-n` `--name` - Name the service, PascalCase
 
 ### Utility Commands
 
 Here is code that is reused often and makes our lives easier.
 
-- `sb utility create` - Create a utility at `server/utilities/{{name}}.ts`
+- `sb utility create` -_COMING SOON_- Create a utility at `server/utilities/{{name}}.ts`
   - `-n` `--name` - Name the utility, PascalCase
 
 # Platform Development
@@ -189,7 +189,7 @@ This section is only relevant if you've been given permission to work directly o
 
 ### Platform Commands
 
-- `sb platform install [path]`
+- `sb platform install [path]` -_COMING SOON_- Install the whole or parts of the platform (SL team only)
   - `path` defaults to `./sprucebot`
   - `-p --platform` to select `web`, `api`, or defaults `all`
   - `-b --branch` the branch to checkout, defaults to `dev`

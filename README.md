@@ -148,7 +148,7 @@ For creating Sequelize data models.
 
 - `sb model create` -_COMING SOON_- Create a new data model at `server/models/{{name}}.ts`
   - `-n` `--name` - The name of the model, PascalCase
-- `sb model create migration` -_COMING SOON_- Create a new data migration at `server/migrations/{{name}}.ts`
+- `sb model create migration` -_COMING SOON_- Create a new data migration at `server/migrations/{{timestamp}}-{{name}}.ts`
   - `-n` `--name` - Name the migration, lower-case-hyphen-separated
 
 ### **U**ser Commands
@@ -167,7 +167,7 @@ When your skill needs to respond to different events (enter, leave), you need to
 - `sb sim emit` -_COMING SOON_- Emit an event
   - `-n` `--name` - The name of the event, i.e. "booking:did-book-appointment" or ["did-enter"](https://developer.spruce.ai/#/events?id=core-events).
   - `-p` `--payload` - A JSON payload in "quotes" to be passed with the event (core events come with payloads)
-  - `-f` `--file` - A file path to a `.json` file that will be used as the payload
+  - `-f` `--file` - Point to a `.json` file that will be used as the payload
 
 ### Service Commands
 
@@ -193,16 +193,9 @@ This section is only relevant if you've been given permission to work directly o
   - `path` defaults to `./sprucebot`
   - `-p --platform` to select `web`, `api`, or defaults `all`
   - `-b --branch` the branch to checkout, defaults to `dev`
-- `sb platform start [key]`
-  - Launches the platform
-  - `key` can be `all`, `web`, `api`
-  - Default to `all`
+- `sb platform start [all|web|api]` -_COMING SOON_- Launches the platform, defaults to `all`
   - Visit your local [Spruce instance](https://local.spruce.ai) to verify platform is running properly
-- `sudo sprucebot platform logs [key]`
-  - `key` can be `all`, `web`, `api`
-  - Default to `all`
-- `sb platform version`
-  - Launch the interactive version select prompt
+- `sudo sprucebot platform logs [all|web|api]` -_COMING SOON_- View logs for the platform, defaults to `all`
 
 ### Learn More
 

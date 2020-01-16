@@ -85,7 +85,7 @@ async function tagVersions(pkg) {
 	const output = cmd.stdout
 	const lines = output.split('\n')
 	lines.forEach(line => {
-		const matches = line.match(/(\w+):\s?([^\n]+)/)
+		const matches = line.match(/([^:]+):\s?([^\n]+)/)
 		if (matches && matches[1] && matches[2]) {
 			tags[matches[1]] = matches[2]
 		}

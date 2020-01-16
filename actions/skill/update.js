@@ -143,12 +143,16 @@ module.exports = async function update(commander) {
 
 		await execa.shell('git reset --hard HEAD~2')
 
-		const strategyAnswer = await inquirer.prompt({
-			type: 'list',
-			name: 'mergeType',
-			message: `Select the merge (git apply --<your choice>) strategy (3way recommended).`,
-			choices: ['3way', 'reject']
-		})
+		// TODO: Determine if we ever want to bring back 3-way merge capabilities
+		// const strategyAnswer = await inquirer.prompt({
+		// 	type: 'list',
+		// 	name: 'mergeType',
+		// 	message: `Select the merge (git apply --<your choice>) strategy (3way recommended).`,
+		// 	choices: ['3way', 'reject']
+		// })
+
+		// Only allow reject
+		const strategyAnswer = { mergeType: 'reject' }
 
 		try {
 			await execa.shell(

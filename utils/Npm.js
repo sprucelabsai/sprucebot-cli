@@ -27,7 +27,10 @@ async function extractPackage(pkg, version, to = proces.cwd()) {
 		version = await getLatestVersion(pkg)
 		log.line(`Determined the latest ${pkg} version is ${version}`)
 	}
-	const pkgUrl = `${config.get('registry')}${pkg}/-/${pkg}-${version}.tgz`
+	const pkgWithoutOrgScope = pkg.replace(/^@sprucelabs\//, '')
+	const pkgUrl = `${config.get(
+		'registry'
+	)}${pkg}/-/${pkgWithoutOrgScope}-${version}.tgz`
 	debug(pkgUrl)
 	// Wait for package to download and unpack into `to` directory
 	await new Promise((resolve, reject) => {

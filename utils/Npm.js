@@ -5,6 +5,7 @@ const request = require('request')
 const tar = require('tar-fs')
 const gunzip = require('gunzip-maybe')
 const inquirer = require('inquirer')
+const chalk = require('chalk')
 const _ = require('lodash')
 const debug = require('debug')('sprucebot-cli')
 const log = require('./log')
@@ -22,7 +23,7 @@ async function getLatestVersion(pkg) {
 	return cmd.stdout
 }
 
-async function extractPackage(pkg, version, to = proces.cwd()) {
+async function extractPackage(pkg, version, to = process.cwd()) {
 	if (version === 'latest') {
 		version = await getLatestVersion(pkg)
 		log.line(`Determined the latest ${pkg} version is ${version}`)

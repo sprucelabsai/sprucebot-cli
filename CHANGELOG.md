@@ -1,3 +1,10 @@
+## [2.6.5](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.4...v2.6.5) (2020-01-23)
+
+
+### Bug Fixes
+
+* some tags missing in selection ([47b64eb](https://github.com/sprucelabsai/sprucebot-cli/commit/47b64eb))
+
 ## [2.6.4](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.3...v2.6.4) (2019-12-02)
 
 

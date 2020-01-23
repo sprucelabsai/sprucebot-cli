@@ -5,6 +5,7 @@ const request = require('request')
 const tar = require('tar-fs')
 const gunzip = require('gunzip-maybe')
 const inquirer = require('inquirer')
+const chalk = require('chalk')
 const _ = require('lodash')
 const debug = require('debug')('sprucebot-cli')
 const log = require('./log')
@@ -22,12 +23,15 @@ async function getLatestVersion(pkg) {
 	return cmd.stdout
 }
 
-async function extractPackage(pkg, version, to = proces.cwd()) {
+async function extractPackage(pkg, version, to = process.cwd()) {
 	if (version === 'latest') {
 		version = await getLatestVersion(pkg)
 		log.line(`Determined the latest ${pkg} version is ${version}`)
 	}
-	const pkgUrl = `${config.get('registry')}${pkg}/-/${pkg}-${version}.tgz`
+	const pkgWithoutOrgScope = pkg.replace(/^@sprucelabs\//, '')
+	const pkgUrl = `${config.get(
+		'registry'
+	)}${pkg}/-/${pkgWithoutOrgScope}-${version}.tgz`
 	debug(pkgUrl)
 	// Wait for package to download and unpack into `to` directory
 	await new Promise((resolve, reject) => {
@@ -85,7 +89,7 @@ async function tagVersions(pkg) {
 	const output = cmd.stdout
 	const lines = output.split('\n')
 	lines.forEach(line => {
-		const matches = line.match(/(\w+):\s?([^\n]+)/)
+		const matches = line.match(/([^:]+):\s?([^\n]+)/)
 		if (matches && matches[1] && matches[2]) {
 			tags[matches[1]] = matches[2]
 		}

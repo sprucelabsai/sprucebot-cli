@@ -25,7 +25,7 @@ module.exports = async (_remote, command) => {
 		)
 		await log.enterToContinue()
 		log.instructions(
-			"Now we have to point to a remote source. This is where you'll be connecting to use your skill. If you setup your own Sprucebot, you should select `hello.sprucebot.com`."
+			"Now we have to point to a remote source. This is where you'll be connecting to use your skill. If you setup your own Sprucebot, you should select `platform.spruce.ai`."
 		)
 		log.instructions(
 			"So check this out: You can access early and un-released features by selecting other environments. BUT, they may break at any time, you won't have access to any locations, and won't have permission to create a skill 😎."
@@ -33,7 +33,7 @@ module.exports = async (_remote, command) => {
 		log.instructions(
 			'To request access, you can email `scientists@sprucelabs.ai`. No promises, though 🤞🏼.'
 		)
-		log.hint('Probably best to use "hello.sprucebot.com" for now.')
+		log.hint('Probably best to use "platform.spruce.ai" for now.')
 	}
 
 	if (!remote) {

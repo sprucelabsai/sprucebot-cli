@@ -1,3 +1,51 @@
+## [2.6.4](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.3...v2.6.4) (2019-12-02)
+
+
+### Bug Fixes
+
+* **README:** Update yarn -> npm to avoid issues ([377c696](https://github.com/sprucelabsai/sprucebot-cli/commit/377c696))
+
+## [2.6.3](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.2...v2.6.3) (2019-11-11)
+
+## [2.6.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.1...v2.6.2) (2019-07-23)
+
+## [2.6.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.6.0...v2.6.1) (2019-02-01)
+
+# [2.6.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.5.0...v2.6.0) (2019-01-17)
+
+
+### Features
+
+* show .rej files after update ([12e2a32](https://github.com/sprucelabsai/sprucebot-cli/commit/12e2a32))
+
+# [2.5.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.4.0...v2.5.0) (2019-01-14)
+
+
+### Bug Fixes
+
+* checkout branch or version before installing ([c9e4914](https://github.com/sprucelabsai/sprucebot-cli/commit/c9e4914))
+
+
+### Features
+
+* defaultly installing a smaller subset of packages ([a9b4a44](https://github.com/sprucelabsai/sprucebot-cli/commit/a9b4a44))
+
+# [2.4.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.2...v2.4.0) (2018-12-22)
+
+
+### Features
+
+* upgrade skills w/ new naming ([28f57bb](https://github.com/sprucelabsai/sprucebot-cli/commit/28f57bb))
+
+## [2.3.2](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.1...v2.3.2) (2018-11-20)
+
+## [2.3.1](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.3.0...v2.3.1) (2018-10-20)
+
+
+### Bug Fixes
+
+* readme update ([2236a03](https://github.com/sprucelabsai/sprucebot-cli/commit/2236a03))
+
 # [2.3.0](https://github.com/sprucelabsai/sprucebot-cli/compare/v2.2.2...v2.3.0) (2018-09-17)
 
 

@@ -62,7 +62,7 @@
     "jest": "^22.0.5",
     "jest-cli": "^22.0.6",
     "prettier": "^1.7.4",
-    "semantic-release": "^16",
+    "semantic-release": "^17",
     "sinon": "^4.1.4",
     "typescript": "3.6.3",
     "yeoman-assert": "^3.0.0",
